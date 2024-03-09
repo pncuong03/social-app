@@ -16,7 +16,9 @@ export default function HomeScreen() {
           <Image source={require("../assets/svg/notification.svg")} />
           <Image source={require("../assets/svg/menu.svg")} />
         </View>
-        <Post />
+       <ScrollView>
+          <Post />
+        </ScrollView>
       </View>
     </View>
   );
