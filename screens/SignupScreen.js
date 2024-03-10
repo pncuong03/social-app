@@ -14,25 +14,26 @@ export default function SignupScreen() {
         source={require("../assets/img/bg-login.png")}
       />
 
-      <View className="h-full w-full flex justify-around pt-30 pb-10">
+      <View className="h-full w-full flex justify-around">
         <View className="flex items-center mt-40">
           <Text className="text-blue-700 font-bold tracking-wide text-5xl">
             Pacebook
           </Text>
         </View>
 
-        <View className="flex items-center mx-4 space-y-4">
-            <View className="bg-black/5 p-5 rounded-2xl w-full">
+        <View className="flex items-center mx-4 space-y-3 pt-10">
+            <View className="bg-black/5 p-2 rounded-2xl w-full">
                 <TextInput placeholder='Username' placeholderTextColor={'gray'} />
             </View>
-            <View className="bg-black/5 p-5 rounded-2xl w-full">
+            <View className="bg-black/5 p-2
+             rounded-2xl w-full">
                 <TextInput placeholder='Email' placeholderTextColor={'gray'}/>
             </View>
-            <View className="bg-black/5 p-5 rounded-2xl w-full mb-3">
+            <View className="bg-black/5 p-2 rounded-2xl w-full mb-3">
                 <TextInput placeholder='Password' placeholderTextColor={'gray'} secureTextEntry/>
             </View>
             <View className="w-full">
-              <TouchableOpacity className="w-full bg-blue-400 p-3 rounded-2xl mb-3" onPress={() => navigation.push('Home')}>
+              <TouchableOpacity className="w-full bg-blue-400 p-1 rounded-2xl mb-3" onPress={() => navigation.push('Home')}>
                   <Text className="text-xl font-bold text-white text-center">Register</Text>
               </TouchableOpacity>
             </View>
@@ -40,7 +41,7 @@ export default function SignupScreen() {
               <Text className="font-bold text-gray-500">OR</Text> 
             </View>
             <View className="w-full">
-              <TouchableOpacity className="w-full p-3 rounded-2xl mb-3 border border-blue-600" onPress={() => navigation.push('Login')}>
+              <TouchableOpacity className="w-full p-1 rounded-2xl mb-3 border border-blue-600" onPress={() => navigation.push('Login')}>
                   <Text className="text-xl font-medium text-black text-center">Already have an account?</Text>
               </TouchableOpacity>
             </View>
