@@ -21,7 +21,6 @@ const Post = () => {
 
 const styles = StyleSheet.create({
     postContainer: {
-        backgroundColor: Colors.white,
         marginTop: 8,
     },
     postImg: {

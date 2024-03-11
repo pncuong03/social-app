@@ -1,8 +1,9 @@
-import { View, Text, TouchableOpacity, Image } from "react-native";
+import { View, Text, TouchableOpacity, Image,ScrollView } from "react-native";
 import React from "react";
 import Post from "../components/Post";
-
+import { useNavigation } from "@react-navigation/native";
 export default function HomeScreen() {
+  const navigation = useNavigation();
   return (
     <View className="">
       <View className="flex pt-12 pl-5">
@@ -16,9 +17,12 @@ export default function HomeScreen() {
           <Image source={require("../assets/svg/notification.svg")} />
           <Image source={require("../assets/svg/menu.svg")} />
         </View>
-       <ScrollView>
+        <TouchableOpacity className="w-full bg-blue-400 p-3 rounded-2xl mb-3" onPress={() => navigation.push('Profile')}>
+                  <Text className="text-xl font-bold text-white text-center">Profile</Text>
+              </TouchableOpacity>
+       {/* <ScrollView>
           <Post />
-        </ScrollView>
+        </ScrollView> */}
       </View>
     </View>
   );
