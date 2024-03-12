@@ -1,4 +1,4 @@
-import {StyleSheet, ScrollView} from 'react-native';
+import { StyleSheet, ScrollView } from 'react-native';
 import React from 'react';
 import SubHeader from '../components/SubHeader';
 import {Colors} from '../utils/Colors';

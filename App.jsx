@@ -6,8 +6,11 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 import RegisterScreen from './src/screens/RegisterScreen';
 import MainScreen from './src/screens/MainScreen';
-import EditProfile from './src/screens/EditProfile';
+import MessageScreen from './src/screens/MessageScreen';
+import GroupMessageScreen from './src/screens/GroupMessageScreen';
 import ProfileScreen from './src/screens/ProfileScreen';
+import EditProfile from './src/screens/EditProfile';
+
 // import auth from '@react-native-firebase/auth';
 
 const Stack = createStackNavigator();
@@ -28,17 +31,18 @@ const App = () => {
       <StatusBar backgroundColor={Colors.white} barStyle='dark-content' />
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         {/* {user ? */}
-          {/* <Stack.Screen name="MainScreen" component={MainScreen} /> */}
-           {/* : */}
-          <>
-          
-            <Stack.Screen name="LoginScreen" component={LoginScreen} />
-            <Stack.Screen name="RegisterScreen" component={RegisterScreen} />
-            <Stack.Screen name="MainScreen" component={MainScreen} />
-            <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
+        {/* <Stack.Screen name="MainScreen" component={MainScreen} /> */}
+        {/* : */}
+        <>
+          <Stack.Screen name="LoginScreen" component={LoginScreen} />
+          <Stack.Screen name="RegisterScreen" component={RegisterScreen} />
+          <Stack.Screen name="MainScreen" component={MainScreen} />
+          <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
             <Stack.Screen name="EditProfile" component={EditProfile} />
-          </>
-        {/* } */}
+          <Stack.Screen name="MessageScreen" component={MessageScreen} />
+          <Stack.Screen name="GroupMessageScreen" component={GroupMessageScreen} />
+        </>
+      
       </Stack.Navigator>
     </NavigationContainer>
   )
