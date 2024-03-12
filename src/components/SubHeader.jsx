@@ -1,13 +1,17 @@
-import {View, TextInput, Image, StyleSheet, Text} from 'react-native';
+import {View, TextInput, Image, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import React from 'react';
 import Profile from '../assets/images/img1.jpeg';
 import CameraRoll from '../assets/images/cameraroll.png';
 import {Colors} from '../utils/Colors';
+import { useNavigation } from "@react-navigation/native";
 
 const SubHeader = () => {
+  const navigation = useNavigation();
   return (
     <View style={styles.container}>
+      <TouchableOpacity onPress={() => navigation.push('Profile')} >
       <Image source={Profile} style={styles.profileStyle} />
+      </TouchableOpacity >
       <View style={styles.inputBox}>
         <Text style={styles.inputStyle}>Write something here...</Text>
         <Text style={styles.inputStyle}>Seven...</Text>
