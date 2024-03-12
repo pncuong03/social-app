@@ -7,15 +7,16 @@ import {
   TouchableOpacity,
   Alert,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import VectorIcon from '../utils/VectorIcon';
-import {Colors} from '../utils/Colors';
+import { Colors } from '../utils/Colors';
 import Logo from '../assets/images/logo.png';
 import login from '../assets/images/login.png';
 import MetaLogo from '../assets/images/meta-logo.png';
+import { fontScale } from 'nativewind';
 // import auth from '@react-native-firebase/auth';
 
-const LoginScreen = ({navigation}) => {
+const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -53,6 +54,7 @@ const LoginScreen = ({navigation}) => {
       /> */}
       <View style={styles.subContainer}>
         <Image source={Logo} style={styles.logoStyle} />
+        <Text style={styles.textLogo}>PaceBook</Text>
         <TextInput
           placeholder="Mobile number or email"
           value={email}
@@ -79,10 +81,16 @@ const LoginScreen = ({navigation}) => {
 };
 
 const styles = StyleSheet.create({
+  textLogo: {
+    color: Colors.primaryColor,
+    fontSize: 20,
+    fontWeight: 'bold',
+    // marginTop: -50
+  },
   logoStyle: {
-    height: 50,
-    width: 50,
-    marginVertical: '20%',
+    height: 125,
+    width: 95,
+    marginVertical: '15%',
   },
   container: {
     padding: 16,

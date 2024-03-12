@@ -1,10 +1,13 @@
-import {View, Image, StyleSheet} from 'react-native';
+import { View, Image, StyleSheet } from 'react-native';
 import React from 'react';
 import FacebookLogo from '../assets/images/fblogo.png';
 import VectorIcon from '../utils/VectorIcon';
-import {Colors} from '../utils/Colors';
+import { Colors } from '../utils/Colors';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { useNavigation } from '@react-navigation/native';
 
 const Header = () => {
+  const navigation = useNavigation()
   return (
     <View style={styles.container}>
       <Image source={FacebookLogo} style={styles.fbLogoStyle} />
@@ -17,13 +20,18 @@ const Header = () => {
             color={Colors.grey}
           />
         </View>
-        <View style={styles.searchBg}>
-          <VectorIcon
-            name="messenger"
-            type="Fontisto"
-            size={22}
-            color={Colors.grey}
-          />
+        <View style={styles.searchBg} >
+          <TouchableOpacity
+            onPress={() => navigation.push('MessageScreen')}
+          >
+            <VectorIcon
+              name="messenger"
+              type="Fontisto"
+              size={22}
+              color={Colors.grey}
+
+            />
+          </TouchableOpacity>
         </View>
       </View>
     </View>
