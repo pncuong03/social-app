@@ -6,10 +6,8 @@ import img2 from '../assets/images/img2.jpeg';
 import { AntDesign, MaterialCommunityIcons } from '@expo/vector-icons';
 import { TextInput } from 'react-native-gesture-handler';
 import { Colors } from '../utils/Colors';
-import { useNavigation } from '@react-navigation/native';
 
-const MessageScreen = () => {
-    const navigation = useNavigation()
+const GroupMessageScreen = () => {
     return (
         <View style={style.container}>
 
@@ -21,12 +19,12 @@ const MessageScreen = () => {
                 />
                 <Text style={style.chatsText}>Chats</Text>
                 <AntDesign name="camera" size={26} color="black" style={style.imgCamera} />
-                <AntDesign onPress={() => navigation.push('GroupMessageScreen')} name="pluscircle" size={24} color="black" style={style.plusIcon} />
+                <AntDesign name="pluscircle" size={24} color="black" style={style.plusIcon} />
             </View >
             <View style={{ flexDirection: 'row' }}>
-                <TouchableOpacity style={style.searchView} >
+                <TouchableOpacity style={style.searchView}>
                     <AntDesign name="search1" size={24} color="black" />
-                    <Text>Search</Text>
+                    <TextInput>Search</TextInput>
                 </TouchableOpacity>
                 <View style={style.unread}>
                     <Text>Unread</Text>
@@ -44,22 +42,6 @@ const MessageScreen = () => {
                 <View>
                     <Text>Phạm Thanh Phúc</Text>
                     <Text>You:OK.Thanks</Text>
-                </View>
-                <MaterialCommunityIcons
-                    name="checkbox-marked-circle-outline" size={20} color="black" style={style.checkBox} />
-            </View>
-            <View style={style.chatView}>
-                <Image style={{
-                    width: 30,
-                    height: 30,
-                    marginLeft: 10,
-                    marginRight: 10
-                }}
-                    source={img1}
-                />
-                <View>
-                    <Text>Đỗ Nam Phú</Text>
-                    <Text>You:How are you?</Text>
                 </View>
                 <MaterialCommunityIcons
                     name="checkbox-marked-circle-outline" size={20} color="black" style={style.checkBox} />
@@ -133,4 +115,4 @@ const style = StyleSheet.create({
 
 })
 
-export default MessageScreen;
+export default GroupMessageScreen;
