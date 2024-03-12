@@ -61,7 +61,7 @@ export default function Profile() {
 
           <View style={{ flex: 1, alignItems: "center" }}>
               <Image
-                  source={{ uri: "https://gravatar.com/avatar/f5cf89b54d6c4eef3bc102862eae46f0?s=400&d=robohash&r=x" }}
+                   source={require("../assets/images/img1.jpeg") }
                   resizeMode="contain"
                   style={{
                       height: 170,

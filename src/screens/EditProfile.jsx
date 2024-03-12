@@ -7,7 +7,7 @@ import * as ImagePicker from "expo-image-picker";
 
 export default function EditProfile() {
     const navigation = useNavigation();
-    const [selectedImage, setSelectedImage] = useState("https://gravatar.com/avatar/f5cf89b54d6c4eef3bc102862eae46f0?s=400&d=robohash&r=x");
+    const [selectedImage, setSelectedImage] = useState(require("../assets/images/img1.jpeg"));
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [phoneNumber, setPhoneNumber] = useState("");
@@ -99,7 +99,7 @@ export default function EditProfile() {
                             }}
                         >
                             <Image
-                                source={{ uri: selectedImage }}
+                                source={selectedImage}
                                 style={{
                                     height: "100%",
                                     width: "100%",
