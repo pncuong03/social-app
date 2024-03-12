@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
-import * as ImagePicker from "expo-image-picker";
+// import * as ImagePicker from "expo-image-picker";
 
 export default function EditProfile() {
     const navigation = useNavigation();
@@ -12,20 +12,20 @@ export default function EditProfile() {
     const [email, setEmail] = useState("");
     const [phoneNumber, setPhoneNumber] = useState("");
     const [password, setPassword] = useState("");
-    const handleImageSelection = async () => {
-        let result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.All,
-            allowsEditing: true,
-            aspect: [4, 4],
-            quality: 1,
-        });
+    // const handleImageSelection = async () => {
+    //     let result = await ImagePicker.launchImageLibraryAsync({
+    //         mediaTypes: ImagePicker.MediaTypeOptions.All,
+    //         allowsEditing: true,
+    //         aspect: [4, 4],
+    //         quality: 1,
+    //     });
 
-        console.log(result);
+    //     console.log(result);
 
-        if (!result.canceled) {
-            setSelectedImage(result.assets[0].uri);
-        }
-    };
+    //     if (!result.canceled) {
+    //         setSelectedImage(result.assets[0].uri);
+    //     }
+    // };
 
 
     return (
@@ -85,7 +85,7 @@ export default function EditProfile() {
                    
                 }}>
                     <TouchableOpacity
-                        onPress={handleImageSelection}
+                        // onPress={handleImageSelection}
                     >
                         <View
                             style={{

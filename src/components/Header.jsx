@@ -9,14 +9,14 @@ const Header = () => {
     <View style={styles.container}>
       <Image source={FacebookLogo} style={styles.fbLogoStyle} />
       <View style={styles.headerIcons}>
-        <View style={styles.searchBg}>
+        {/* <View style={styles.searchBg}>
           <VectorIcon
             name="search"
             type="FontAwesome5"
             size={19}
             color={Colors.grey}
           />
-        </View>
+        </View> */}
         <View style={styles.searchBg}>
           <VectorIcon
             name="messenger"
@@ -35,15 +35,7 @@ const styles = StyleSheet.create({
     height: 25,
     width: 130,
   },
-  searchBg: {
-    backgroundColor: Colors.lightgrey,
-    height: 35,
-    width: 35,
-    borderRadius: 50,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginLeft: 10,
-  },
+
   container: {
     backgroundColor: Colors.white,
     padding: 16,

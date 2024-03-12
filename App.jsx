@@ -6,8 +6,8 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 import RegisterScreen from './src/screens/RegisterScreen';
 import MainScreen from './src/screens/MainScreen';
-import Profile from './src/screens/Profile';
 import EditProfile from './src/screens/EditProfile';
+import ProfileScreen from './src/screens/ProfileScreen';
 // import auth from '@react-native-firebase/auth';
 
 const Stack = createStackNavigator();
@@ -31,10 +31,11 @@ const App = () => {
           {/* <Stack.Screen name="MainScreen" component={MainScreen} /> */}
            {/* : */}
           <>
+          
             <Stack.Screen name="LoginScreen" component={LoginScreen} />
             <Stack.Screen name="RegisterScreen" component={RegisterScreen} />
             <Stack.Screen name="MainScreen" component={MainScreen} />
-            <Stack.Screen name="Profile" component={Profile} />
+            <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
             <Stack.Screen name="EditProfile" component={EditProfile} />
           </>
         {/* } */}
