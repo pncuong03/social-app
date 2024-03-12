@@ -14,7 +14,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { SceneMap, TabBar, TabView } from "react-native-tab-view";
 import Post from "../components/Post";
 import { useNavigation } from "@react-navigation/native";
-export default function Profile() {
+export default function ProfileScreen() {
   const navigation = useNavigation();
   return (
     <SafeAreaView
@@ -44,9 +44,9 @@ export default function Profile() {
             top: 10,
           }}
         >
-          <MaterialIcons name="keyboard-arrow-left" size={35} color={"black"} />
+          {/* <MaterialIcons name="keyboard-arrow-left" size={35} color={"black"} /> */}
         </TouchableOpacity>
-        <Text
+        {/* <Text
           style={{
             fontSize: 18,
             position: "absolute",
@@ -57,7 +57,7 @@ export default function Profile() {
           }}
         >
           Profile
-        </Text>
+        </Text> */}
       </View>
 
       <View style={{ flex: 1, alignItems: "center" }}>
@@ -78,7 +78,7 @@ export default function Profile() {
         />
         <Text
           style={{
-            fontFamily: "bold",
+            // fontFamily: "bold",
             fontSize: 18,
             lineHeight: 22,
             color: "black",
@@ -126,7 +126,7 @@ export default function Profile() {
           >
             <Text
               style={{
-                fontFamily: "bold",
+                // fontFamily: "bold",
                 fontSize: 16,
                 color: "#242760",
               }}
@@ -135,7 +135,7 @@ export default function Profile() {
             </Text>
             <Text
               style={{
-                fontFamily: "bold",
+                // fontFamily: "bold",
                 fontSize: 20,
                 color: "#242760",
               }}
@@ -152,7 +152,7 @@ export default function Profile() {
           >
             <Text
               style={{
-                fontFamily: "bold",
+                // fontFamily: "bold",
                 fontSize: 16,
                 color: "#242760",
               }}
@@ -161,7 +161,7 @@ export default function Profile() {
             </Text>
             <Text
               style={{
-                fontFamily: "bold",
+                // fontFamily: "bold",
                 fontSize: 20,
                 color: "#242760",
               }}
