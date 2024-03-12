@@ -1,9 +1,7 @@
 import FriendScreen from '../screens/FriendScreen';
 import HomeScreen from '../screens/HomeScreen';
-import MarketPlaceScreen from '../screens/MarketPlaceScreen';
 import NotificationScrren from '../screens/NotificationScrren';
 import ProfileScreen from '../screens/ProfileScreen';
-import WatchScreen from '../screens/WatchScreen';
 
 export const TabData = [
   {
