@@ -8,6 +8,8 @@ import RegisterScreen from './src/screens/RegisterScreen';
 import MainScreen from './src/screens/MainScreen';
 import MessageScreen from './src/screens/MessageScreen';
 import GroupMessageScreen from './src/screens/GroupMessageScreen';
+import ProfileScreen from './src/screens/ProfileScreen';
+import EditProfile from './src/screens/EditProfile';
 
 // import auth from '@react-native-firebase/auth';
 
@@ -35,10 +37,12 @@ const App = () => {
           <Stack.Screen name="LoginScreen" component={LoginScreen} />
           <Stack.Screen name="RegisterScreen" component={RegisterScreen} />
           <Stack.Screen name="MainScreen" component={MainScreen} />
+          <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
+            <Stack.Screen name="EditProfile" component={EditProfile} />
           <Stack.Screen name="MessageScreen" component={MessageScreen} />
           <Stack.Screen name="GroupMessageScreen" component={GroupMessageScreen} />
         </>
-        {/* } */}
+      
       </Stack.Navigator>
     </NavigationContainer>
   )
