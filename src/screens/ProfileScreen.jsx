@@ -23,9 +23,9 @@ export default function ProfileScreen() {
         backgroundColor: "white",
       }}
     >
-      <StatusBar backgroundColor={"rgba(36, 39, 96, 0.05)"} />
+      {/* <StatusBar backgroundColor={"rgba(36, 39, 96, 0.05)"} /> */}
 
-      <View style={{ width: "100%" }}>
+      <View>
         <Image
           source={{
             uri: "https://plainbackground.com/download.php?imagename=39569c.png",
@@ -35,7 +35,7 @@ export default function ProfileScreen() {
             width: "100%",
           }}
         />
-        <TouchableOpacity
+        {/* <TouchableOpacity
           onPress={() => navigation.push("Home")}
           style={{
             zIndex: 99,
@@ -44,8 +44,8 @@ export default function ProfileScreen() {
             top: 10,
           }}
         >
-          {/* <MaterialIcons name="keyboard-arrow-left" size={35} color={"black"} /> */}
-        </TouchableOpacity>
+          <MaterialIcons name="keyboard-arrow-left" size={35} color={"black"} />
+        </TouchableOpacity> */}
         {/* <Text
           style={{
             fontSize: 18,
