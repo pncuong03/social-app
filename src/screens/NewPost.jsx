@@ -53,7 +53,7 @@ export default function NewPost() {
                             alignItems: "center",
                             width: "23%",
                             marginTop: 10,
-                            backgroundColor: Colors.borderGrey,
+                            backgroundColor: postContent ? '#4267B2' : Colors.borderGrey, 
                             borderRadius: 15,
                             padding: 8,
                             margin: 5,
@@ -63,7 +63,7 @@ export default function NewPost() {
                         <Text
                             style={{
                                 textAlign: "center",
-                                color: "white",
+                                color: postContent ? 'white' : 'black',
                                 fontWeight: "bold",
                             }}
                         >
