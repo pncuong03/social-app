@@ -10,7 +10,8 @@ import MessageScreen from './src/screens/MessageScreen';
 import GroupMessageScreen from './src/screens/GroupMessageScreen';
 import ProfileScreen from './src/screens/ProfileScreen';
 import EditProfile from './src/screens/EditProfile';
-
+import SearchGroupMessageScreen from './src/screens/SearchGroupMeassageScreen';
+import SearchMessageScreen from './src/screens/SearchMessage';
 // import auth from '@react-native-firebase/auth';
 
 const Stack = createStackNavigator();
@@ -38,11 +39,13 @@ const App = () => {
           <Stack.Screen name="RegisterScreen" component={RegisterScreen} />
           <Stack.Screen name="MainScreen" component={MainScreen} />
           <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
-            <Stack.Screen name="EditProfile" component={EditProfile} />
+          <Stack.Screen name="EditProfile" component={EditProfile} />
           <Stack.Screen name="MessageScreen" component={MessageScreen} />
+          <Stack.Screen name="SearchMessageScreen" component={SearchMessageScreen} />
+          <Stack.Screen name="SearchGroupMessageScreen" component={SearchGroupMessageScreen} />
           <Stack.Screen name="GroupMessageScreen" component={GroupMessageScreen} />
         </>
-      
+
       </Stack.Navigator>
     </NavigationContainer>
   )

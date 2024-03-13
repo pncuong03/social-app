@@ -28,6 +28,7 @@ const MessageScreen = () => {
         </View>
         <View style={style.headerright}>
           <VectorIcon
+            onPress={() => navigation.push('SearchGroupMessageScreen')}
             name="camera"
             type="FontAwesome5"
             size={26}
@@ -43,7 +44,7 @@ const MessageScreen = () => {
         </View>
       </View>
       <View style={style.search}>
-        <TouchableOpacity style={style.searchView}>
+        <TouchableOpacity style={style.searchView} onPress={() => navigation.push('SearchGroupMessageScreen')}>
           <VectorIcon
             name="search1"
             type="AntDesign"
