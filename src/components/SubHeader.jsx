@@ -9,13 +9,15 @@ const SubHeader = () => {
   const navigation = useNavigation();
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={() => navigation.push('Profile')} >
+      <TouchableOpacity onPress={() => navigation.push('ProfileScreen')} >
       <Image source={Profile} style={styles.profileStyle} />
       </TouchableOpacity >
-      <View style={styles.inputBox}>
-        <Text style={styles.inputStyle}>Write something here...</Text>
-        <Text style={styles.inputStyle}>Seven...</Text>
-      </View>
+      <TouchableOpacity style={styles.inputBox} onPress={() => navigation.push('NewPost')} >
+        <View >
+          <Text style={styles.inputStyle}>Write something here...</Text>
+          <Text style={styles.inputStyle}>Seven...</Text>
+        </View>
+      </TouchableOpacity >
       <View style={styles.searchBg}>
           <VectorIcon
             name="search"

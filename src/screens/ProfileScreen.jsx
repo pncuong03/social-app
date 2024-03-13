@@ -35,8 +35,8 @@ export default function ProfileScreen() {
             width: "100%",
           }}
         />
-        {/* <TouchableOpacity
-          onPress={() => navigation.push("Home")}
+        <TouchableOpacity
+          onPress={() => navigation.push("MainScreen")}
           style={{
             zIndex: 99,
             position: "absolute",
@@ -45,8 +45,8 @@ export default function ProfileScreen() {
           }}
         >
           <MaterialIcons name="keyboard-arrow-left" size={35} color={"black"} />
-        </TouchableOpacity> */}
-        {/* <Text
+        </TouchableOpacity>
+        <Text
           style={{
             fontSize: 18,
             position: "absolute",
@@ -57,14 +57,12 @@ export default function ProfileScreen() {
           }}
         >
           Profile
-        </Text> */}
+        </Text>
       </View>
 
       <View style={{ flex: 1, alignItems: "center" }}>
         <Image
-          source={{
-            uri: "https://gravatar.com/avatar/f5cf89b54d6c4eef3bc102862eae46f0?s=400&d=robohash&r=x",
-          }}
+          source={require("../assets/images/img1.jpeg")}
           resizeMode="contain"
           style={{
             height: 170,
