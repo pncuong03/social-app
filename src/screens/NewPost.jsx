@@ -97,8 +97,8 @@ export default function NewPost() {
                         <Menu onSelect={handlePrivacyOption} >
                             <MenuTrigger>
                                 <View style={{
-                                    flexDirection: 'row', // Add this to make the Icon and Text side by side
-                                    alignItems: 'center', // Align items vertically
+                                    flexDirection: 'row', 
+                                    alignItems: 'center', 
                                 }}>
                                     <VectorIcon
                                         name="lock"
