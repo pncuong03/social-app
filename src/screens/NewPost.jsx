@@ -48,7 +48,7 @@ export default function NewPost() {
                     </TouchableOpacity>
                     <Text style={{ fontSize: 20 }}>Create a post</Text>
                     <Pressable
-                        style={{
+                        style={({ pressed }) => ({
                             display: "flex",
                             alignItems: "center",
                             width: "23%",
@@ -57,8 +57,8 @@ export default function NewPost() {
                             borderRadius: 15,
                             padding: 8,
                             margin: 5,
-
-                        }}
+                            opacity: pressed ? 0.5 : 1 
+                        })}
                     >
                         <Text
                             style={{
