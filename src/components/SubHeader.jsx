@@ -9,7 +9,7 @@ const SubHeader = () => {
   const navigation = useNavigation();
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={() => navigation.push('Profile')} >
+      <TouchableOpacity onPress={() => navigation.push('ProfileScreen')} >
       <Image source={Profile} style={styles.profileStyle} />
       </TouchableOpacity >
       <View style={styles.inputBox}>
