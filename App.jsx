@@ -12,6 +12,7 @@ import ProfileScreen from './src/screens/ProfileScreen';
 import EditProfile from './src/screens/EditProfile';
 import SearchGroupMessageScreen from './src/screens/SearchGroupMeassageScreen';
 import SearchMessageScreen from './src/screens/SearchMessage';
+import SplashScreen from './src/screens/SplashScreen';
 // import auth from '@react-native-firebase/auth';
 
 const Stack = createStackNavigator();
@@ -35,6 +36,7 @@ const App = () => {
         {/* <Stack.Screen name="MainScreen" component={MainScreen} /> */}
         {/* : */}
         <>
+          <Stack.Screen name="SplashScreen" component={SplashScreen} />
           <Stack.Screen name="LoginScreen" component={LoginScreen} />
           <Stack.Screen name="RegisterScreen" component={RegisterScreen} />
           <Stack.Screen name="MainScreen" component={MainScreen} />
