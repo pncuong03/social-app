@@ -28,7 +28,7 @@ const MessageScreen = () => {
         </View>
         <View style={style.headerright}>
           <VectorIcon
-            onPress={() => navigation.push('SearchGroupMessageScreen')}
+            onPress={() => navigation.push('SearchMessageScreen')}
             name="camera"
             type="FontAwesome5"
             size={26}
