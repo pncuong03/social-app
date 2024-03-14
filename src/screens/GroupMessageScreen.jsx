@@ -7,7 +7,8 @@ import img3 from "../assets/images/img3.jpeg";
 import { Colors } from "../utils/Colors";
 import { useNavigation } from "@react-navigation/native";
 import VectorIcon from "../utils/VectorIcon";
-import { TextInput } from "react-native-gesture-handler";
+import GroupChatHeader from "../components/GroupChatHeader";
+
 const GroupMessageScreen = () => {
   const navigation = useNavigation();
   return (
@@ -22,33 +23,9 @@ const GroupMessageScreen = () => {
           />
         </TouchableOpacity>
       </View>
-      <View style={style.header}>
-        <View style={style.headerleft}>
-          <TouchableOpacity style={style.headerSearch}>
-            <Text style={{ fontWeight: '600', marginLeft: 10 }}>GroupName:</Text>
-            <TextInput style={{ marginBottom: 8 }}>GroupName</TextInput>
-          </TouchableOpacity>
-        </View>
-        <View style={style.headerright}>
-          <TouchableOpacity style={style.headerOk}>
-            <Text>OK</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-      <View style={style.search}>
-        <TouchableOpacity style={style.searchView}>
-          <VectorIcon
-            name="search1"
-            type="AntDesign"
-            size={24}
-            color={Colors.black}
-          />
-          <TextInput>People</TextInput>
-        </TouchableOpacity>
-        <View style={style.unread}>
-          <Text>Seach</Text>
-        </View>
-      </View>
+
+      <GroupChatHeader />
+
       <View style={style.peopleView}>
         <View style={{ flexDirection: "row", alignItems: "center" }}>
           <Image
@@ -62,7 +39,7 @@ const GroupMessageScreen = () => {
             source={img2}
           />
           <View>
-            <Text style={{ fontWeight: '500' }}>Phạm Thanh Phúc</Text>
+            <Text style={{ fontWeight: "500" }}>Phạm Thanh Phúc</Text>
           </View>
         </View>
         <View style={{ marginRight: 10 }}>
@@ -88,7 +65,7 @@ const GroupMessageScreen = () => {
             source={img3}
           />
           <View>
-            <Text style={{ fontWeight: '500' }}>Phạm Ngọc Cường</Text>
+            <Text style={{ fontWeight: "500" }}>Phạm Ngọc Cường</Text>
           </View>
         </View>
         <View style={{ marginRight: 10 }}>
@@ -100,8 +77,6 @@ const GroupMessageScreen = () => {
           />
         </View>
       </View>
-
-
     </View>
   );
 };
@@ -111,10 +86,11 @@ const style = StyleSheet.create({
     height: "100%",
   },
   header: {
-    marginTop: 10,
+    marginTop: 5,
     padding: 5,
     // width: "100%",
     // height: 60,
+    display: "flex",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
@@ -137,37 +113,41 @@ const style = StyleSheet.create({
     backgroundColor: Colors.borderGrey,
     height: 28,
     borderRadius: 10,
-    flexDirection: 'row',
-    width: '90%',
-    alignContent: 'space-between',
+    flexDirection: "row",
+    width: "90%",
+    alignContent: "space-between",
   },
   headerOk: {
     height: 28,
     borderRadius: 10,
     backgroundColor: Colors.borderGrey,
     width: 32,
-    alignItems: 'center',
-    justifyContent: 'center'
+    alignItems: "center",
+    justifyContent: "center",
   },
   search: {
     flexDirection: "row",
-    width: "100%"
+    width: "100%",
   },
   peopleView: {
     alignItems: "center",
     flexDirection: "row",
     justifyContent: "space-between",
     height: 50,
-    margin: 10,
+    // margin: 10,
+    marginTop: 10,
+    marginLeft: 10,
+    marginRight: 10,
     borderWidth: 2,
     borderColor: Colors.primaryColor,
     borderRadius: 10,
     padding: 5,
   },
+
   unread: {
     display: "flex",
     alignItems: "center",
-    width: "23%",
+    width: "21%",
     marginTop: 10,
     backgroundColor: Colors.borderGrey,
     borderRadius: 15,
@@ -182,7 +162,7 @@ const style = StyleSheet.create({
     borderRadius: 15,
     marginLeft: 10,
     marginTop: 10,
-    padding: 5,
+    padding: 4,
   },
   chatsText: {
     fontWeight: "400",
