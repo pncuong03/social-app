@@ -14,6 +14,7 @@ import NewPost from './src/screens/NewPost';
 import SearchGroupMessageScreen from './src/screens/SearchGroupMeassageScreen';
 import SearchMessageScreen from './src/screens/SearchMessage';
 import SplashScreen from './src/screens/SplashScreen';
+import ChatPrivateScreen from './src/screens/ChatPrivateScreen';
 
 // import auth from '@react-native-firebase/auth';
 
@@ -38,6 +39,7 @@ const App = () => {
         {/* <Stack.Screen name="MainScreen" component={MainScreen} /> */}
         {/* : */}
         <>
+          <Stack.Screen name="ChatPrivate" component={ChatPrivateScreen} />
           <Stack.Screen name="SplashScreen" component={SplashScreen} />
           <Stack.Screen name="LoginScreen" component={LoginScreen} />
           <Stack.Screen name="RegisterScreen" component={RegisterScreen} />
