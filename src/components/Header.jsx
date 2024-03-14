@@ -1,4 +1,4 @@
-import { View, Image, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import React from 'react';
 import FacebookLogo from '../assets/images/fblogo.png';
 import VectorIcon from '../utils/VectorIcon';
@@ -9,7 +9,10 @@ const Header = () => {
   const navigation = useNavigation()
   return (
     <View style={styles.container}>
-      <Image source={FacebookLogo} style={styles.fbLogoStyle} />
+      {/* <Image source={FacebookLogo} style={styles.fbLogoStyle} /> */}
+      <View>
+        <Text style={{ color: Colors.primaryColor, fontWeight: 'bold', fontSize: 25 }}>PaceBook</Text>
+      </View>
       <View style={styles.headerIcons}>
         {/* <View style={styles.searchBg}>
           <VectorIcon
@@ -33,13 +36,13 @@ const Header = () => {
           </TouchableOpacity>
         </View> */}
         <View style={styles.searchBg}>
-        <TouchableOpacity onPress={() => navigation.push('MessageScreen')}>
-          <VectorIcon
-            name="messenger"
-            type="Fontisto"
-            size={22}
-            color={Colors.grey}
-          />
+          <TouchableOpacity onPress={() => navigation.push('MessageScreen')}>
+            <VectorIcon
+              name="messenger"
+              type="Fontisto"
+              size={22}
+              color={Colors.grey}
+            />
           </TouchableOpacity>
         </View>
       </View>
