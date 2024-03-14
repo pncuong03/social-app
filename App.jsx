@@ -13,6 +13,8 @@ import EditProfile from './src/screens/EditProfile';
 import SearchGroupMessageScreen from './src/screens/SearchGroupMeassageScreen';
 import SearchMessageScreen from './src/screens/SearchMessage';
 import SplashScreen from './src/screens/SplashScreen';
+import NewPost from './src/screens/NewPost';
+
 // import auth from '@react-native-firebase/auth';
 
 const Stack = createStackNavigator();
@@ -46,6 +48,7 @@ const App = () => {
           <Stack.Screen name="SearchMessageScreen" component={SearchMessageScreen} />
           <Stack.Screen name="SearchGroupMessageScreen" component={SearchGroupMessageScreen} />
           <Stack.Screen name="GroupMessageScreen" component={GroupMessageScreen} />
+          <Stack.Screen name="NewPost" component={NewPost} />
         </>
 
       </Stack.Navigator>
