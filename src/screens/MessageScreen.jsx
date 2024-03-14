@@ -7,6 +7,7 @@ import { Colors } from "../utils/Colors";
 import { useNavigation } from "@react-navigation/native";
 import VectorIcon from "../utils/VectorIcon";
 import ChatHeader from "../components/ChatHeader";
+import { messageResponse } from "../data/MessageData";
 
 const MessageScreen = () => {
   const navigation = useNavigation();
@@ -26,34 +27,38 @@ const MessageScreen = () => {
         <View>
           <ChatHeader />
         </View>
-        <View style={style.chatView} >
-          <TouchableOpacity onPress={() => navigation.push("ChatPrivate")}>
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
-              <Image
-                style={{
-                  width: 35,
-                  height: 35,
-                  marginLeft: 10,
-                  marginRight: 10,
-                  borderRadius: 10,
-                }}
-                source={img1}
-              />
-              <View>
-                <Text>Đỗ Nam Phú</Text>
-                <Text>You:Hii Guysss</Text>
+        {
+          messageResponse.map((message) => (
+            <View key={message.id} style={style.chatView} >
+              <TouchableOpacity onPress={() => navigation.push("ChatPrivate")}>
+                <View style={{ flexDirection: "row", alignItems: "center" }}>
+                  <Image
+                    style={{
+                      width: 35,
+                      height: 35,
+                      marginLeft: 10,
+                      marginRight: 10,
+                      borderRadius: 10,
+                    }}
+                    source={message.img}
+                  />
+                  <View>
+                    <Text>{message.name}</Text>
+                    <Text>{message.content}</Text>
+                  </View>
+                </View>
+              </TouchableOpacity>
+              <View style={{ marginRight: 10 }}>
+                <VectorIcon
+                  name="checkbox-marked-circle-outline"
+                  type="MaterialCommunityIcons"
+                  size={20}
+                  color={Colors.black}
+                />
               </View>
             </View>
-          </TouchableOpacity>
-          <View style={{ marginRight: 10 }}>
-            <VectorIcon
-              name="checkbox-marked-circle-outline"
-              type="MaterialCommunityIcons"
-              size={20}
-              color={Colors.black}
-            />
-          </View>
-        </View>
+          ))
+        }
       </View>
     </ScrollView>
   );
