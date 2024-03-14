@@ -21,17 +21,16 @@ export default function ProfileScreen() {
       style={{
         flex: 1,
         backgroundColor: "white",
+        marginTop: -11,
       }}
     >
-      {/* <StatusBar backgroundColor={"rgba(36, 39, 96, 0.05)"} /> */}
-
-      <View>
+      <View >
         <Image
           source={{
             uri: "https://plainbackground.com/download.php?imagename=39569c.png",
           }}
           style={{
-            height: 228,
+            height: 180,
             width: "100%",
           }}
         />
@@ -90,11 +89,10 @@ export default function ProfileScreen() {
           onPress={() => navigation.push("EditProfile")}
           style={{
             backgroundColor: "black",
-            height: 44,
+            height: 40,
             borderRadius: 6,
             alignItems: "center",
             justifyContent: "center",
-            marginTop: 20,
             width: 250,
           }}
         >
@@ -169,6 +167,9 @@ export default function ProfileScreen() {
             </Text>
           </View>
         </View>
+        <ScrollView style={{ width: "100%" }}>
+          <Post />
+        </ScrollView>
       </View>
     </SafeAreaView>
   );
