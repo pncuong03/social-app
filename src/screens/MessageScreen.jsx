@@ -28,6 +28,7 @@ const MessageScreen = () => {
         </View>
         <View style={style.headerright}>
           <VectorIcon
+            onPress={() => navigation.push('SearchMessageScreen')}
             name="camera"
             type="FontAwesome5"
             size={26}
@@ -43,7 +44,7 @@ const MessageScreen = () => {
         </View>
       </View>
       <View style={style.search}>
-        <TouchableOpacity style={style.searchView}>
+        <TouchableOpacity style={style.searchView} onPress={() => navigation.push('SearchGroupMessageScreen')}>
           <VectorIcon
             name="search1"
             type="AntDesign"
@@ -57,7 +58,7 @@ const MessageScreen = () => {
         </View>
       </View>
       <View style={style.chatView}>
-        <View style={{flexDirection: "row", alignItems: "center"}}>
+        <View style={{ flexDirection: "row", alignItems: "center" }}>
           <Image
             style={{
               width: 35,
@@ -73,7 +74,7 @@ const MessageScreen = () => {
             <Text>You:OK.Thanks</Text>
           </View>
         </View>
-        <View style={{marginRight: 10}}>
+        <View style={{ marginRight: 10 }}>
           <VectorIcon
             name="checkbox-marked-circle-outline"
             type="MaterialCommunityIcons"
@@ -82,27 +83,32 @@ const MessageScreen = () => {
           />
         </View>
       </View>
-      {/* <View style={style.chatView}>
-        <Image
-          style={{
-            width: 30,
-            height: 30,
-            marginLeft: 10,
-            marginRight: 10,
-          }}
-          source={img1}
-        />
-        <View>
-          <Text>Đỗ Nam Phú</Text>
-          <Text>You:How are you?</Text>
+      <View style={style.chatView}>
+        <View style={{ flexDirection: "row", alignItems: "center" }}>
+          <Image
+            style={{
+              width: 35,
+              height: 35,
+              marginLeft: 10,
+              marginRight: 10,
+              borderRadius: 10,
+            }}
+            source={img1}
+          />
+          <View>
+            <Text>Đỗ Nam Phú</Text>
+            <Text>You:Hii Guysss</Text>
+          </View>
         </View>
-        <VectorIcon
-          name="checkbox-marked-circle-outline"
-          type="MaterialCommunityIcons"
-          size={20}
-          color={Colors.black}
-        />
-      </View> */}
+        <View style={{ marginRight: 10 }}>
+          <VectorIcon
+            name="checkbox-marked-circle-outline"
+            type="MaterialCommunityIcons"
+            size={20}
+            color={Colors.black}
+          />
+        </View>
+      </View>
     </View>
   );
 };
@@ -169,14 +175,6 @@ const style = StyleSheet.create({
     marginTop: 10,
     padding: 5,
   },
-  //   imgCamera: {
-  //     marginTop: 25,
-  //     marginLeft: 120,
-  //   },
-  //   plusIcon: {
-  //     marginTop: 25,
-  //     marginLeft: 10,
-  //   },
   chatsText: {
     fontWeight: "400",
     fontSize: 26,
