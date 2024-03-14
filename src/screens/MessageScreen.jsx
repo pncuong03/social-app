@@ -1,8 +1,15 @@
-import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView,
+} from "react-native";
 import React from "react";
-import Avatar from "../assets/images/avatarChat.png";
+
 import img1 from "../assets/images/img1.jpeg";
-import img2 from "../assets/images/img2.jpeg";
+
 import { Colors } from "../utils/Colors";
 import { useNavigation } from "@react-navigation/native";
 import VectorIcon from "../utils/VectorIcon";
@@ -26,7 +33,7 @@ const MessageScreen = () => {
         <View>
           <ChatHeader />
         </View>
-        <View style={style.chatView} >
+        <View style={style.chatView}>
           <TouchableOpacity onPress={() => navigation.push("ChatPrivate")}>
             <View style={{ flexDirection: "row", alignItems: "center" }}>
               <Image
@@ -66,8 +73,6 @@ const style = StyleSheet.create({
   header: {
     margin: 5,
     padding: 5,
-    // width: "100%",
-    // height: 60,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
@@ -95,7 +100,6 @@ const style = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     height: 50,
-    // margin: 10,
     marginTop: 10,
     marginLeft: 10,
     marginRight: 10,

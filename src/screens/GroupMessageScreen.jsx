@@ -1,7 +1,5 @@
 import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
 import React from "react";
-import Avatar from "../assets/images/avatarChat.png";
-import img1 from "../assets/images/img1.jpeg";
 import img2 from "../assets/images/img2.jpeg";
 import img3 from "../assets/images/img3.jpeg";
 import { Colors } from "../utils/Colors";
@@ -88,8 +86,6 @@ const style = StyleSheet.create({
   header: {
     marginTop: 5,
     padding: 5,
-    // width: "100%",
-    // height: 60,
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
@@ -134,7 +130,6 @@ const style = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     height: 50,
-    // margin: 10,
     marginTop: 10,
     marginLeft: 10,
     marginRight: 10,

@@ -23,7 +23,7 @@ export default function ProfileScreen() {
         backgroundColor: "white",
       }}
     >
-      <View >
+      <View>
         <Image
           source={{
             uri: "https://plainbackground.com/download.php?imagename=39569c.png",
@@ -75,7 +75,6 @@ export default function ProfileScreen() {
         />
         <Text
           style={{
-            // fontFamily: "bold",
             fontSize: 18,
             lineHeight: 22,
             color: "black",
@@ -122,7 +121,6 @@ export default function ProfileScreen() {
           >
             <Text
               style={{
-                // fontFamily: "bold",
                 fontSize: 16,
                 color: "#242760",
               }}
@@ -131,7 +129,6 @@ export default function ProfileScreen() {
             </Text>
             <Text
               style={{
-                // fontFamily: "bold",
                 fontSize: 20,
                 color: "#242760",
               }}
@@ -148,7 +145,6 @@ export default function ProfileScreen() {
           >
             <Text
               style={{
-                // fontFamily: "bold",
                 fontSize: 16,
                 color: "#242760",
               }}
@@ -157,7 +153,6 @@ export default function ProfileScreen() {
             </Text>
             <Text
               style={{
-                // fontFamily: "bold",
                 fontSize: 20,
                 color: "#242760",
               }}

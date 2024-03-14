@@ -56,10 +56,3 @@ const VectorIcon = (props) => {
 };
 
 export default VectorIcon;
-
-  {/* <AntDesign
-          name="camera"
-          size={26}
-          color="black"
-          style={style.imgCamera}
-        /> */}
