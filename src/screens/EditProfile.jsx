@@ -99,7 +99,7 @@ export default function EditProfile() {
                             }}
                         >
                             <Image
-                                source={selectedImage}
+                                source={{ uri: selectedImage}}
                                 style={{
                                     height: "100%",
                                     width: "100%",
