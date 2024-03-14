@@ -21,7 +21,6 @@ export default function ProfileScreen() {
       style={{
         flex: 1,
         backgroundColor: "white",
-        marginTop: -11,
       }}
     >
       <View >
