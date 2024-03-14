@@ -6,6 +6,7 @@ import img2 from "../assets/images/img2.jpeg";
 import { Colors } from "../utils/Colors";
 import { useNavigation } from "@react-navigation/native";
 import VectorIcon from "../utils/VectorIcon";
+import ChatHeader from "../components/ChatHeader";
 
 const MessageScreen = () => {
   const navigation = useNavigation();
@@ -21,43 +22,11 @@ const MessageScreen = () => {
           />
         </TouchableOpacity>
       </View>
-      <View style={style.header}>
-        <View style={style.headerleft}>
-          <Image source={Avatar} style={style.imgHeader} />
-          <Text style={style.chatsText}>Chats</Text>
-        </View>
-        <View style={style.headerright}>
-          <VectorIcon
-            name="camera"
-            type="FontAwesome5"
-            size={26}
-            color={Colors.black}
-          />
-          <VectorIcon
-            onPress={() => navigation.push("GroupMessageScreen")}
-            name="pluscircle"
-            type="AntDesign"
-            size={26}
-            color={Colors.black}
-          />
-        </View>
-      </View>
-      <View style={style.search}>
-        <TouchableOpacity style={style.searchView}>
-          <VectorIcon
-            name="search1"
-            type="AntDesign"
-            size={24}
-            color={Colors.black}
-          />
-          <Text>Search</Text>
-        </TouchableOpacity>
-        <View style={style.unread}>
-          <Text>Unread</Text>
-        </View>
+      <View>
+        <ChatHeader />
       </View>
       <View style={style.chatView}>
-        <View style={{flexDirection: "row", alignItems: "center"}}>
+        <View style={{ flexDirection: "row", alignItems: "center" }}>
           <Image
             style={{
               width: 35,
@@ -73,7 +42,7 @@ const MessageScreen = () => {
             <Text>You:OK.Thanks</Text>
           </View>
         </View>
-        <View style={{marginRight: 10}}>
+        <View style={{ marginRight: 10 }}>
           <VectorIcon
             name="checkbox-marked-circle-outline"
             type="MaterialCommunityIcons"
@@ -82,27 +51,32 @@ const MessageScreen = () => {
           />
         </View>
       </View>
-      {/* <View style={style.chatView}>
-        <Image
-          style={{
-            width: 30,
-            height: 30,
-            marginLeft: 10,
-            marginRight: 10,
-          }}
-          source={img1}
-        />
-        <View>
-          <Text>Đỗ Nam Phú</Text>
-          <Text>You:How are you?</Text>
+      <View style={style.chatView}>
+        <View style={{ flexDirection: "row", alignItems: "center" }}>
+          <Image
+            style={{
+              width: 35,
+              height: 35,
+              marginLeft: 10,
+              marginRight: 10,
+              borderRadius: 10,
+            }}
+            source={img1}
+          />
+          <View>
+            <Text>Đỗ Nam Phú</Text>
+            <Text>You:Hii Guysss</Text>
+          </View>
         </View>
-        <VectorIcon
-          name="checkbox-marked-circle-outline"
-          type="MaterialCommunityIcons"
-          size={20}
-          color={Colors.black}
-        />
-      </View> */}
+        <View style={{ marginRight: 10 }}>
+          <VectorIcon
+            name="checkbox-marked-circle-outline"
+            type="MaterialCommunityIcons"
+            size={20}
+            color={Colors.black}
+          />
+        </View>
+      </View>
     </View>
   );
 };
@@ -112,7 +86,7 @@ const style = StyleSheet.create({
     height: "100%",
   },
   header: {
-    marginTop: 10,
+    margin: 5,
     padding: 5,
     // width: "100%",
     // height: 60,
@@ -136,14 +110,17 @@ const style = StyleSheet.create({
   },
   search: {
     flexDirection: "row",
-    width: "100%"
+    width: "100%",
   },
   chatView: {
     alignItems: "center",
     flexDirection: "row",
     justifyContent: "space-between",
     height: 50,
-    margin: 10,
+    // margin: 10,
+    marginTop: 10,
+    marginLeft: 10,
+    marginRight:10,
     borderWidth: 2,
     borderColor: Colors.borderGrey,
     borderRadius: 10,
@@ -152,7 +129,7 @@ const style = StyleSheet.create({
   unread: {
     display: "flex",
     alignItems: "center",
-    width: "23%",
+    width: "21%",
     marginTop: 10,
     backgroundColor: Colors.borderGrey,
     borderRadius: 15,
@@ -169,14 +146,6 @@ const style = StyleSheet.create({
     marginTop: 10,
     padding: 5,
   },
-  //   imgCamera: {
-  //     marginTop: 25,
-  //     marginLeft: 120,
-  //   },
-  //   plusIcon: {
-  //     marginTop: 25,
-  //     marginLeft: 10,
-  //   },
   chatsText: {
     fontWeight: "400",
     fontSize: 26,

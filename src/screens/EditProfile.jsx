@@ -93,7 +93,8 @@ export default function EditProfile() {
                 </TouchableOpacity>
 
                 <Text style={{
-                    fontSize: 18,
+                    fontSize: 30,
+                    fontWeight: "500",
                     position: "absolute",
                     top: 10,
                     left: 0,

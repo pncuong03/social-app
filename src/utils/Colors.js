@@ -11,4 +11,5 @@ export const Colors = {
   textColor: '#26282b',
   textGrey: '#989FA7',
   headerIconGrey: '#606770',
+  logoPacebook: '#384CFF'
 };

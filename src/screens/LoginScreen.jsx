@@ -45,13 +45,13 @@ const LoginScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       {/* <Image  source={login} style={styles.loginStyle} /> */}
-      {/* <VectorIcon
+      <VectorIcon
         name="arrow-back"
         type="Ionicons"
         color={Colors.black}
         size={20}
-        onPress={() => navigation.navigate('RegisterScreen')}
-      /> */}
+        onPress={() => navigation.navigate('SplashScreen')}
+      />
       <View style={styles.subContainer}>
         <Image source={Logo} style={styles.logoStyle} />
         <Text style={styles.textLogo}>PaceBook</Text>

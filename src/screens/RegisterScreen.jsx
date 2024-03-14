@@ -7,14 +7,14 @@ import {
   TouchableOpacity,
   Alert,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import VectorIcon from '../utils/VectorIcon';
-import {Colors} from '../utils/Colors';
+import { Colors } from '../utils/Colors';
 import Logo from '../assets/images/logo.png';
 import MetaLogo from '../assets/images/meta-logo.png';
 // import auth from '@react-native-firebase/auth';
 
-const RegisterScreen = ({navigation}) => {
+const RegisterScreen = ({ navigation }) => {
   const [fullname, setFullname] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -98,7 +98,7 @@ const RegisterScreen = ({navigation}) => {
 
 const styles = StyleSheet.create({
   logoStyle: {
-    height: 50,
+    height: 68,
     width: 50,
     marginVertical: '20%',
   },
