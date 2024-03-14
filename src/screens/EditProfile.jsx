@@ -1,9 +1,10 @@
 import { View, Text, TouchableOpacity, Image, ScrollView, TextInput } from "react-native";
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import * as ImagePicker from "expo-image-picker";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function EditProfile() {
     const navigation = useNavigation();
@@ -26,6 +27,31 @@ export default function EditProfile() {
             setSelectedImage(result.assets[0].uri);
         }
     };
+    // const handleUpdate = async () => {
+    //     // Save the selected image URI to AsyncStorage
+    //     try {
+    //         await AsyncStorage.setItem('@profile_image', selectedImage);
+    //     } catch (e) {
+    //         // saving error
+    //         console.error(e);
+    //     }
+    // };
+    // useEffect(() => {
+    //     // Load the saved profile image URI from AsyncStorage when the component mounts
+    //     const loadProfileImage = async () => {
+    //         try {
+    //             const value = await AsyncStorage.getItem('@profile_image');
+    //             if (value !== null) {
+    //                 setSelectedImage(value);
+    //             }
+    //         } catch (e) {
+    //             // loading error
+    //             console.error(e);
+    //         }
+    //     };
+    
+    //     loadProfileImage();
+    // }, []);
 
 
     return (
@@ -99,7 +125,7 @@ export default function EditProfile() {
                             }}
                         >
                             <Image
-                                source={{ uri: selectedImage}}
+                                source={typeof selectedImage === 'string' ? {uri: selectedImage} : selectedImage}
                                 style={{
                                     height: "100%",
                                     width: "100%",
@@ -250,6 +276,7 @@ export default function EditProfile() {
 
                
                 <TouchableOpacity
+                // onPress={handleUpdate}
                     style={{
                         backgroundColor: "black",
                         height: 44,
