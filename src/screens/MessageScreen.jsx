@@ -26,49 +26,25 @@ const MessageScreen = () => {
         <View>
           <ChatHeader />
         </View>
-        <View style={style.chatView}>
-          <View style={{ flexDirection: "row", alignItems: "center" }}>
-            <Image
-              style={{
-                width: 35,
-                height: 35,
-                marginLeft: 10,
-                marginRight: 10,
-                borderRadius: 10,
-              }}
-              source={img2}
-            />
-            <View>
-              <Text>Phạm Thanh Phúc</Text>
-              <Text>You:OK.Thanks</Text>
+        <View style={style.chatView} >
+          <TouchableOpacity onPress={() => navigation.push("ChatPrivate")}>
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <Image
+                style={{
+                  width: 35,
+                  height: 35,
+                  marginLeft: 10,
+                  marginRight: 10,
+                  borderRadius: 10,
+                }}
+                source={img1}
+              />
+              <View>
+                <Text>Đỗ Nam Phú</Text>
+                <Text>You:Hii Guysss</Text>
+              </View>
             </View>
-          </View>
-          <View style={{ marginRight: 10 }}>
-            <VectorIcon
-              name="checkbox-marked-circle-outline"
-              type="MaterialCommunityIcons"
-              size={20}
-              color={Colors.black}
-            />
-          </View>
-        </View>
-        <View style={style.chatView} onPress={() => navigation.push('ChatPrivate')}>
-          <View style={{ flexDirection: "row", alignItems: "center" }}>
-            <Image
-              style={{
-                width: 35,
-                height: 35,
-                marginLeft: 10,
-                marginRight: 10,
-                borderRadius: 10,
-              }}
-              source={img1}
-            />
-            <View>
-              <Text>Đỗ Nam Phú</Text>
-              <Text>You:Hii Guysss</Text>
-            </View>
-          </View>
+          </TouchableOpacity>
           <View style={{ marginRight: 10 }}>
             <VectorIcon
               name="checkbox-marked-circle-outline"

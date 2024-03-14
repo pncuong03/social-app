@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView } from "rea
 import { Colors } from "../utils/Colors";
 import { friendRequests } from "../data/FriendData";
 
-const FriendScreen = () => {
+const ChatPrivateScreen = () => {
 
     return (
         <ScrollView style={{ flex: 1 }}>
@@ -20,4 +20,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default FriendScreen;
+export default ChatPrivateScreen;

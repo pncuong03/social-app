@@ -39,7 +39,6 @@ const App = () => {
         {/* <Stack.Screen name="MainScreen" component={MainScreen} /> */}
         {/* : */}
         <>
-          <Stack.Screen name="ChatPrivate" component={ChatPrivateScreen} />
           <Stack.Screen name="SplashScreen" component={SplashScreen} />
           <Stack.Screen name="LoginScreen" component={LoginScreen} />
           <Stack.Screen name="RegisterScreen" component={RegisterScreen} />
@@ -47,6 +46,7 @@ const App = () => {
           <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
           <Stack.Screen name="EditProfile" component={EditProfile} />
           <Stack.Screen name="MessageScreen" component={MessageScreen} />
+          <Stack.Screen name="ChatPrivate" component={ChatPrivateScreen} />
           <Stack.Screen name="SearchMessageScreen" component={SearchMessageScreen} />
           <Stack.Screen name="SearchGroupMessageScreen" component={SearchGroupMessageScreen} />
           <Stack.Screen name="GroupMessageScreen" component={GroupMessageScreen} />
