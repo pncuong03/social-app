@@ -93,7 +93,7 @@ export default function NewPost() {
                             marginBottom: 5,
                             fontSize: 16,
                         }}>
-                            Nguyễn Thị B</Text>
+                            Nguyễn Thị C</Text>
                         <Menu onSelect={handlePrivacyOption} >
                             <MenuTrigger>
                                 <View style={{
