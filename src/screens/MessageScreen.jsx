@@ -6,6 +6,7 @@ import img2 from "../assets/images/img2.jpeg";
 import { Colors } from "../utils/Colors";
 import { useNavigation } from "@react-navigation/native";
 import VectorIcon from "../utils/VectorIcon";
+import ChatHeader from "../components/ChatHeader";
 
 const MessageScreen = () => {
   const navigation = useNavigation();
@@ -21,41 +22,8 @@ const MessageScreen = () => {
           />
         </TouchableOpacity>
       </View>
-      <View style={style.header}>
-        <View style={style.headerleft}>
-          <Image source={Avatar} style={style.imgHeader} />
-          <Text style={style.chatsText}>Chats</Text>
-        </View>
-        <View style={style.headerright}>
-          <VectorIcon
-            onPress={() => navigation.push('SearchMessageScreen')}
-            name="camera"
-            type="FontAwesome5"
-            size={26}
-            color={Colors.black}
-          />
-          <VectorIcon
-            onPress={() => navigation.push("GroupMessageScreen")}
-            name="pluscircle"
-            type="AntDesign"
-            size={26}
-            color={Colors.black}
-          />
-        </View>
-      </View>
-      <View style={style.search}>
-        <TouchableOpacity style={style.searchView} onPress={() => navigation.push('SearchGroupMessageScreen')}>
-          <VectorIcon
-            name="search1"
-            type="AntDesign"
-            size={24}
-            color={Colors.black}
-          />
-          <Text>Search</Text>
-        </TouchableOpacity>
-        <View style={style.unread}>
-          <Text>Unread</Text>
-        </View>
+      <View>
+        <ChatHeader />
       </View>
       <View style={style.chatView}>
         <View style={{ flexDirection: "row", alignItems: "center" }}>
@@ -118,7 +86,7 @@ const style = StyleSheet.create({
     height: "100%",
   },
   header: {
-    marginTop: 10,
+    margin: 5,
     padding: 5,
     // width: "100%",
     // height: 60,
@@ -142,14 +110,17 @@ const style = StyleSheet.create({
   },
   search: {
     flexDirection: "row",
-    width: "100%"
+    width: "100%",
   },
   chatView: {
     alignItems: "center",
     flexDirection: "row",
     justifyContent: "space-between",
     height: 50,
-    margin: 10,
+    // margin: 10,
+    marginTop: 10,
+    marginLeft: 10,
+    marginRight:10,
     borderWidth: 2,
     borderColor: Colors.borderGrey,
     borderRadius: 10,
@@ -158,7 +129,7 @@ const style = StyleSheet.create({
   unread: {
     display: "flex",
     alignItems: "center",
-    width: "23%",
+    width: "21%",
     marginTop: 10,
     backgroundColor: Colors.borderGrey,
     borderRadius: 15,

@@ -41,7 +41,7 @@ const PostFooter = ({data}) => {
       </View>
       <View style={styles.userActionSec}>
         <TouchableOpacity onPress={handleLikePress}>
-          <View style={styles.row}>
+          <View style={styles.row} >
             <VectorIcon
               name={isLiked ? "like1" : "like2"}
               type="AntDesign"

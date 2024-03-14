@@ -49,6 +49,7 @@ const Header = () => {
 
 const styles = StyleSheet.create({
   fbLogoStyle: {
+    marginTop: 20,
     height: 25,
     width: 130,
   },
@@ -61,6 +62,7 @@ const styles = StyleSheet.create({
   },
   headerIcons: {
     flexDirection: 'row',
+    marginTop: 20,
   },
 });
 
