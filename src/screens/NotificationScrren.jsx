@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Image } from 'react-native';
+import { View, Text, StyleSheet, Image, ScrollView } from 'react-native';
 import React from 'react';
 import { Colors } from '../utils/Colors';
 import VectorIcon from '../utils/VectorIcon';
@@ -7,7 +7,7 @@ import { notifyResponses } from '../data/NotifycationData';
 
 const NotificationScrren = () => {
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <View style={styles.subNav}>
         <Text style={{ fontWeight: 'bold', fontSize: 25, marginLeft: 20 }}>Notifications</Text>
         <VectorIcon style={{ marginLeft: 160, marginTop: 6 }}
@@ -34,7 +34,7 @@ const NotificationScrren = () => {
           </View>
         ))}
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
