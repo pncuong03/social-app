@@ -10,10 +10,10 @@ import MessageScreen from './src/screens/MessageScreen';
 import GroupMessageScreen from './src/screens/GroupMessageScreen';
 import ProfileScreen from './src/screens/ProfileScreen';
 import EditProfile from './src/screens/EditProfile';
+import NewPost from './src/screens/NewPost';
 import SearchGroupMessageScreen from './src/screens/SearchGroupMeassageScreen';
 import SearchMessageScreen from './src/screens/SearchMessage';
 import SplashScreen from './src/screens/SplashScreen';
-import NewPost from './src/screens/NewPost';
 
 // import auth from '@react-native-firebase/auth';
 
