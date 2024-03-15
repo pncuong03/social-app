@@ -20,6 +20,7 @@ import {
 import * as ImagePicker from "expo-image-picker";
 import { Colors } from "../utils/Colors";
 import avatar from "../assets/images/img1.jpeg";
+
 export default function NewPost() {
   const navigation = useNavigation();
   const [privacyOption, setPrivacyOption] = useState("public");
@@ -60,17 +61,15 @@ export default function NewPost() {
             alignItems: "center",
           }}
         >
-          <View style={{display:"flex", flexDirection:"row"}}>
-            <TouchableOpacity onPress={() => navigation.push("MainScreen")}>
-              <VectorIcon
-                name="arrowleft"
-                type="AntDesign"
-                size={24}
-                color={"black"}
-              />
-            </TouchableOpacity>
-          <Text style={{ fontSize: 20, marginLeft: 10, }}>Create a post</Text>
-          </View>
+          <TouchableOpacity onPress={() => navigation.push("MainScreen")}>
+            <VectorIcon
+              name="arrowleft"
+              type="AntDesign"
+              size={24}
+              color={"black"}
+            />
+          </TouchableOpacity>
+          <Text style={{ fontSize: 20 }}>Create a post</Text>
           <Pressable
             style={({ pressed }) => ({
               display: "flex",
@@ -89,7 +88,6 @@ export default function NewPost() {
                 textAlign: "center",
                 color: postContent ? "white" : "black",
                 fontWeight: "bold",
-                fontSize: 15,
               }}
             >
               Post
@@ -108,7 +106,6 @@ export default function NewPost() {
           <View
             style={{
               marginRight: 10,
-              marginLeft: 10,
             }}
           >
             <Image
@@ -132,7 +129,7 @@ export default function NewPost() {
                 fontSize: 16,
               }}
             >
-              Nguyễn Thị A
+              Nguyễn Thị C
             </Text>
             <Menu onSelect={handlePrivacyOption}>
               <MenuTrigger>
@@ -152,18 +149,18 @@ export default function NewPost() {
                 </View>
               </MenuTrigger>
               <MenuOptions>
-                <MenuOption value={"Public"}>
-                  <Text>Public</Text>
+                <MenuOption value={"public"}>
+                  <Text>public</Text>
                 </MenuOption>
-                <MenuOption value={"Friends"}>
-                  <Text>Friends</Text>
+                <MenuOption value={"friends"}>
+                  <Text>friends</Text>
                 </MenuOption>
               </MenuOptions>
             </Menu>
           </View>
         </View>
         <TextInput
-          style={{ height: 40, marginTop: 10, marginLeft: 20, fontSize: 20 }}
+          style={{ height: 40, marginTop: 10, fontSize: 20 }}
           onChangeText={(text) => setPostContent(text)}
           value={postContent}
           placeholder="What's on your mind?"

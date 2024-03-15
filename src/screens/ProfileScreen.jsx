@@ -23,15 +23,13 @@ export default function ProfileScreen() {
         backgroundColor: "white",
       }}
     >
-      {/* <StatusBar backgroundColor={"rgba(36, 39, 96, 0.05)"} /> */}
-
       <View>
         <Image
           source={{
             uri: "https://plainbackground.com/download.php?imagename=39569c.png",
           }}
           style={{
-            height: 228,
+            height: 180,
             width: "100%",
           }}
         />
@@ -77,7 +75,6 @@ export default function ProfileScreen() {
         />
         <Text
           style={{
-            // fontFamily: "bold",
             fontSize: 18,
             lineHeight: 22,
             color: "black",
@@ -90,11 +87,10 @@ export default function ProfileScreen() {
           onPress={() => navigation.push("EditProfile")}
           style={{
             backgroundColor: "black",
-            height: 44,
+            height: 40,
             borderRadius: 6,
             alignItems: "center",
             justifyContent: "center",
-            marginTop: 20,
             width: 250,
           }}
         >
@@ -125,7 +121,6 @@ export default function ProfileScreen() {
           >
             <Text
               style={{
-                // fontFamily: "bold",
                 fontSize: 16,
                 color: "#242760",
               }}
@@ -134,7 +129,6 @@ export default function ProfileScreen() {
             </Text>
             <Text
               style={{
-                // fontFamily: "bold",
                 fontSize: 20,
                 color: "#242760",
               }}
@@ -151,7 +145,6 @@ export default function ProfileScreen() {
           >
             <Text
               style={{
-                // fontFamily: "bold",
                 fontSize: 16,
                 color: "#242760",
               }}
@@ -160,7 +153,6 @@ export default function ProfileScreen() {
             </Text>
             <Text
               style={{
-                // fontFamily: "bold",
                 fontSize: 20,
                 color: "#242760",
               }}
@@ -169,6 +161,9 @@ export default function ProfileScreen() {
             </Text>
           </View>
         </View>
+        <ScrollView style={{ width: "100%" }}>
+          <Post />
+        </ScrollView>
       </View>
     </SafeAreaView>
   );

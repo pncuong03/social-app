@@ -1,16 +1,17 @@
-import {View, TextInput, Image, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { View, TextInput, Image, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import React from 'react';
 import Profile from '../assets/images/img1.jpeg';
-import {Colors} from '../utils/Colors';
+import { Colors } from '../utils/Colors';
 import { useNavigation } from "@react-navigation/native";
 import VectorIcon from '../utils/VectorIcon';
+import { MaterialIcons } from "@expo/vector-icons";
 
 const SubHeader = () => {
   const navigation = useNavigation();
   return (
     <View style={styles.container}>
       <TouchableOpacity onPress={() => navigation.push('ProfileScreen')} >
-      <Image source={Profile} style={styles.profileStyle} />
+        <Image source={Profile} style={styles.profileStyle} />
       </TouchableOpacity >
       <TouchableOpacity style={styles.inputBox} onPress={() => navigation.push('NewPost')} >
         <View >
@@ -18,14 +19,17 @@ const SubHeader = () => {
           <Text style={styles.inputStyle}>Seven...</Text>
         </View>
       </TouchableOpacity >
+      <TouchableOpacity style={{ marginLeft: 10 }} onPress={() => navigation.push('NewPost')} >
+        <MaterialIcons name="perm-media" size={24} color="black" />
+      </TouchableOpacity>
       <View style={styles.searchBg}>
-          <VectorIcon
-            name="search"
-            type="FontAwesome5"
-            size={19}
-            color={Colors.grey}
-          />
-        </View>
+        <VectorIcon
+          name="search"
+          type="FontAwesome5"
+          size={19}
+          color={Colors.grey}
+        />
+      </View>
     </View>
   );
 };

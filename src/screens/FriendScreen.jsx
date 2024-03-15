@@ -1,39 +1,78 @@
 import React from "react";
-import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  ScrollView,
+} from "react-native";
 import { Colors } from "../utils/Colors";
 import { friendRequests } from "../data/FriendData";
+import VectorIcon from "../utils/VectorIcon";
 
 const FriendScreen = () => {
-
   return (
     <ScrollView style={styles.container}>
+      <View style={styles.subNav}>
+        <Text style={{ fontWeight: "bold", fontSize: 30 }}>
+          Notifications
+        </Text>
+        <VectorIcon
+          name="search1"
+          type="AntDesign"
+          size={24}
+          color={Colors.black}
+        />
+      </View>
       <View style={styles.headerFriend}>
-        <Text style={{ fontSize: 20, fontWeight: "600", color: Colors.primaryColor }}>
+        <Text
+          style={{
+            fontSize: 20,
+            fontWeight: "600",
+            color: Colors.primaryColor,
+          }}
+        >
           Friend request
         </Text>
-        <Text style={{ fontSize: 20, fontWeight: "700", color: "red" }}>440</Text>
+        <Text style={{ fontSize: 20, fontWeight: "700", color: "red" }}>
+          440
+        </Text>
       </View>
       {friendRequests.map((request) => (
         <View key={request.id} style={styles.friendView}>
-          <Image
-            style={styles.avatar}
-            source={request.image}
-          />
+          <Image style={styles.avatar} source={request.image} />
           <View style={styles.headerBox}>
-            <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+            <View
+              style={{ flexDirection: "row", justifyContent: "space-between" }}
+            >
               <View>
-                <Text style={{ fontWeight: "bold", fontSize: 18 }}>{request.name}</Text>
-                <Text style={{ fontWeight: 400, fontSize: 16, color: "gray" }}>{request.amount} mutual friend</Text>
+                <Text style={{ fontWeight: "bold", fontSize: 18 }}>
+                  {request.name}
+                </Text>
+                <Text style={{ fontWeight: 400, fontSize: 16, color: "gray" }}>
+                  {request.amount} mutual friend
+                </Text>
               </View>
-              <View >
-                <Text style={{ fontWeight: 400, fontSize: 18, color: "gray" }}>{request.time}</Text>
+              <View>
+                <Text style={{ fontWeight: 400, fontSize: 18, color: "gray" }}>
+                  {request.time}
+                </Text>
               </View>
             </View>
-            <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 10 }}>
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                marginTop: 10,
+              }}
+            >
               <TouchableOpacity style={styles.button}>
                 <Text style={styles.buttonText}>Confirm</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={[styles.button, { backgroundColor: "gray" }]}>
+              <TouchableOpacity
+                style={[styles.button, { backgroundColor: "gray" }]}
+              >
                 <Text style={styles.buttonText}>Delete</Text>
               </TouchableOpacity>
             </View>
@@ -87,6 +126,14 @@ const styles = StyleSheet.create({
     height: 80,
     marginRight: 4,
     borderRadius: 10,
+  },
+  subNav: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    padding: 10,
+    borderBottomWidth: 0.5,
+    borderBottomColor: "gray"
   },
 });
 

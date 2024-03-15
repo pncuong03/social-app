@@ -9,32 +9,8 @@ const Header = () => {
   const navigation = useNavigation()
   return (
     <View style={styles.container}>
-      {/* <Image source={FacebookLogo} style={styles.fbLogoStyle} /> */}
-      <View>
-        <Text style={{ color: Colors.primaryColor, fontWeight: 'bold', fontSize: 25 }}>PaceBook</Text>
-      </View>
+      <Image source={FacebookLogo} style={styles.fbLogoStyle} />
       <View style={styles.headerIcons}>
-        {/* <View style={styles.searchBg}>
-          <VectorIcon
-            name="search"
-            type="FontAwesome5"
-            size={19}
-            color={Colors.grey}
-          />
-        </View>
-        <View style={styles.searchBg} >
-          <TouchableOpacity
-            onPress={() => navigation.push('MessageScreen')}
-          >
-            <VectorIcon
-              name="messenger"
-              type="Fontisto"
-              size={22}
-              color={Colors.grey}
-
-            />
-          </TouchableOpacity>
-        </View> */}
         <View style={styles.searchBg}>
           <TouchableOpacity onPress={() => navigation.push('MessageScreen')}>
             <VectorIcon
@@ -52,7 +28,7 @@ const Header = () => {
 
 const styles = StyleSheet.create({
   fbLogoStyle: {
-    marginTop: 20,
+    marginTop: 30,
     height: 25,
     width: 130,
   },
@@ -62,6 +38,7 @@ const styles = StyleSheet.create({
     padding: 16,
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: "center",
   },
   headerIcons: {
     flexDirection: 'row',
