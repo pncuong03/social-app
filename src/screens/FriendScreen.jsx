@@ -16,7 +16,7 @@ const FriendScreen = () => {
     <ScrollView style={styles.container}>
       <View style={styles.subNav}>
         <Text style={{ fontWeight: "bold", fontSize: 30 }}>
-          Notifications
+          Friends
         </Text>
         <VectorIcon
           name="search1"
