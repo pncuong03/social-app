@@ -2,10 +2,9 @@ import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
 import React from "react";
 import { Colors } from "../utils/Colors";
 import { useNavigation } from "@react-navigation/native";
-import VectorIcon from "../utils/VectorIcon";
-import { TextInput } from "react-native-gesture-handler";
 import bglogin from '../assets/images/bg-login.png';
 import logo from '../assets/images/logoPacebook.png';
+
 const SplashScreen = () => {
     const navigation = useNavigation();
     return (

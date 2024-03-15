@@ -5,20 +5,16 @@ import {
   StyleSheet,
   TextInput,
   TouchableOpacity,
-  Alert,
-} from 'react-native';
-import React, { useState } from 'react';
-import VectorIcon from '../utils/VectorIcon';
-import { Colors } from '../utils/Colors';
-import Logo from '../assets/images/logo.png';
-import login from '../assets/images/login.png';
-import MetaLogo from '../assets/images/meta-logo.png';
-import { fontScale } from 'nativewind';
-// import auth from '@react-native-firebase/auth';
+} from "react-native";
+import React, { useState } from "react";
+import VectorIcon from "../utils/VectorIcon";
+import { Colors } from "../utils/Colors";
+import Logo from "../assets/images/logo.png";
+
 
 const LoginScreen = ({ navigation }) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   // const onCreateAccount = () => {
   //   navigation.navigate('RegisterScreen');
@@ -44,13 +40,12 @@ const LoginScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      {/* <Image  source={login} style={styles.loginStyle} /> */}
       <VectorIcon
         name="arrow-back"
         type="Ionicons"
         color={Colors.black}
         size={20}
-        onPress={() => navigation.navigate('SplashScreen')}
+        onPress={() => navigation.navigate("SplashScreen")}
       />
       <View style={styles.subContainer}>
         <Image source={Logo} style={styles.logoStyle} />
@@ -58,20 +53,26 @@ const LoginScreen = ({ navigation }) => {
         <TextInput
           placeholder="Mobile number or email"
           value={email}
-          onChangeText={value => setEmail(value)}
+          onChangeText={(value) => setEmail(value)}
           style={styles.inputBox}
         />
         <TextInput
           placeholder="Password"
           value={password}
-          onChangeText={value => setPassword(value)}
+          onChangeText={(value) => setPassword(value)}
           style={styles.inputBox}
         />
-        <TouchableOpacity style={styles.loginButton} onPress={() => navigation.navigate('MainScreen')}>
+        <TouchableOpacity
+          style={styles.loginButton}
+          onPress={() => navigation.navigate("MainScreen")}
+        >
           <Text style={styles.login}>Log in</Text>
         </TouchableOpacity>
         <Text style={styles.forgotPass}>OR</Text>
-        <TouchableOpacity style={styles.newAccount} onPress={() => navigation.navigate('RegisterScreen')}>
+        <TouchableOpacity
+          style={styles.newAccount}
+          onPress={() => navigation.navigate("RegisterScreen")}
+        >
           <Text style={styles.newAccountText}>Create new account</Text>
         </TouchableOpacity>
         {/* <Image source={MetaLogo} style={styles.metaLogoStyle} /> */}
@@ -84,46 +85,46 @@ const styles = StyleSheet.create({
   textLogo: {
     color: Colors.primaryColor,
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     // marginTop: -50
   },
   logoStyle: {
     height: 125,
     width: 95,
-    marginVertical: '15%',
+    marginVertical: "15%",
   },
   container: {
     padding: 16,
   },
   subContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   inputBox: {
     borderWidth: 1,
     borderColor: Colors.borderGrey,
     padding: 10,
     borderRadius: 12,
-    width: '95%',
+    width: "95%",
     marginTop: 12,
   },
   loginButton: {
     backgroundColor: Colors.primaryColor,
     padding: 10,
     borderRadius: 20,
-    width: '95%',
-    alignItems: 'center',
+    width: "95%",
+    alignItems: "center",
     marginTop: 12,
   },
   login: {
     color: Colors.white,
     fontSize: 15,
-    fontWeight: '500',
+    fontWeight: "500",
   },
   forgotPass: {
     color: Colors.grey,
     fontSize: 14,
-    fontWeight: '500',
+    fontWeight: "500",
     marginTop: 25,
   },
   newAccount: {
@@ -131,14 +132,14 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 10,
     borderRadius: 18,
-    width: '95%',
-    alignItems: 'center',
-    marginTop: '10%',
+    width: "95%",
+    alignItems: "center",
+    marginTop: "10%",
   },
   newAccountText: {
     color: Colors.primaryColor,
     fontSize: 14,
-    fontWeight: '400',
+    fontWeight: "400",
   },
   metaLogoStyle: {
     height: 15,
