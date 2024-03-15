@@ -19,7 +19,6 @@ import MenuScreen from './src/screens/MenuSreen';
 import GroupScreen from './src/screens/GroupScreen';
 import ChatPrivateScreen from './src/screens/ChatPrivateScreen';
 
-
 // import auth from '@react-native-firebase/auth';
 
 const Stack = createStackNavigator();
