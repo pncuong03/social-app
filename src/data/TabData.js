@@ -1,7 +1,8 @@
 import FriendScreen from '../screens/FriendScreen';
 import HomeScreen from '../screens/HomeScreen';
 import NotificationScrren from '../screens/NotificationScrren';
-import ProfileScreen from '../screens/ProfileScreen';
+import MenuScreen from '../screens/MenuSreen';
+
 
 export const TabData = [
   {
@@ -37,15 +38,16 @@ export const TabData = [
     size: 25,
     unFocusSize: 25,
   },
-  // {
-  //   id: 4,
-  //   route: ProfileScreen,
-  //   name: 'Profile',
-  //   activeIconName: 'person',
-  //   activeiconType: 'Ionicons',
-  //   inactiveIconName: 'person-outline',
-  //   inactiveIconType: 'Ionicons',
-  //   size: 24,
-  //   unFocusSize: 24,
-  // },
+  {
+    id: 4,
+    route: MenuScreen,
+    name: 'Menu',
+    activeIconName: 'menu-sharp',
+    activeiconType: 'Ionicons',
+    inactiveIconName: 'menu-outline',
+    inactiveIconType: 'Ionicons',
+    size: 25,
+    unFocusSize: 25,
+  },
+
 ];
