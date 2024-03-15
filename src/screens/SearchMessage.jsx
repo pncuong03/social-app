@@ -9,7 +9,7 @@ const SearchMessageScreen = () => {
   return (
     <View style={style.container}>
       <View style={{ borderBottomWidth: 1, marginTop: 40 }}>
-        <TouchableOpacity onPress={() => navigation.push("MessageScreen")}>
+        <TouchableOpacity onPress={() => navigation.push("ChatPrivate")}>
           <VectorIcon
             name="arrowleft"
             type="AntDesign"

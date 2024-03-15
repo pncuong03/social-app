@@ -15,7 +15,6 @@ import SearchGroupMessageScreen from './src/screens/SearchGroupMeassageScreen';
 import SearchMessageScreen from './src/screens/SearchMessage';
 import SplashScreen from './src/screens/SplashScreen';
 import ChatPrivateScreen from './src/screens/ChatPrivateScreen';
-
 // import auth from '@react-native-firebase/auth';
 
 const Stack = createStackNavigator();
