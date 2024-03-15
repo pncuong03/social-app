@@ -22,14 +22,14 @@ const SubHeader = () => {
       <TouchableOpacity style={{ marginLeft: 10 }} onPress={() => navigation.push('NewPost')} >
         <MaterialIcons name="perm-media" size={24} color="black" />
       </TouchableOpacity>
-      <View style={styles.searchBg}>
+      {/* <View style={styles.searchBg}>
         <VectorIcon
           name="search"
           type="FontAwesome5"
           size={19}
           color={Colors.grey}
         />
-      </View>
+      </View> */}
     </View>
   );
 };

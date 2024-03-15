@@ -24,9 +24,9 @@ import { TextInput } from "react-native-gesture-handler";
 const ChatPrivateScreen = () => {
   const navigation = useNavigation();
   return (
-    <View style={{ flex: 1 }}>
       <View style={styles.container}>
         <View style={styles.headerChat}>
+          <View style={styles.headerUser}>
           <TouchableOpacity onPress={() => navigation.push("MessageScreen")}>
             <VectorIcon
               name="arrowleft"
@@ -37,14 +37,15 @@ const ChatPrivateScreen = () => {
           </TouchableOpacity>
           <Image
             style={{
-              width: 50,
-              height: 50,
+              width: 30,
+              height: 30,
               marginLeft: 10,
               marginRight: 10,
-              borderRadius: 10,
+              borderRadius: 20,
             }}
             source={img1} />
           <Text style={{ fontWeight: 'bold' }}>Phạm Thanh Phúc </Text>
+          </View>
           <TouchableOpacity
             style={{ marginLeft: 100 }}
             onPress={() => navigation.push("SearchMessageScreen")}
@@ -60,15 +61,15 @@ const ChatPrivateScreen = () => {
 
         <View style={{ flex: 1 }}>
           <ScrollView style={styles.chatContent}>
-            <Text style={{ alignSelf: 'center', fontSize: 10, fontStyle: 'italic' }}>16:30</Text>
+            <Text style={{ alignSelf: 'center', fontSize: 15, fontStyle: 'italic' }}>16:30</Text>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <Image
                 style={{
-                  width: 24,
-                  height: 24,
+                  width: 26,
+                  height: 26,
                   marginLeft: 10,
                   marginRight: 10,
-                  borderRadius: 5,
+                  borderRadius: 20,
                 }} source={img1} />
               <View style={{ flex: 1 }}>
                 <View style={styles.detail}>
@@ -81,13 +82,13 @@ const ChatPrivateScreen = () => {
           </ScrollView>
         </View>
 
-        <View style={{ justifyContent: 'space-between', borderRadius: 10, flexDirection: 'row', borderWidth: 1, borderColor: Colors.borderGrey, height: 50, alignItems: 'center' }}>
+        <View style={{ justifyContent: 'space-between', borderRadius: 10, flexDirection: 'row', borderColor: Colors.borderGrey, height: 50, alignItems: 'center', padding:10, marginBottom:20}}>
           <Image source={action} />
           <Image source={photo} />
           <Image source={gallery} />
           <Image source={audio} />
-          <View style={{ borderRadius: 6, flexDirection: 'row', backgroundColor: Colors.borderGrey }}>
-            <TextInput style={{ width: 150, marginLeft: 10 }}>Hello</TextInput>
+          <View style={{ borderRadius: 20, flexDirection: 'row', backgroundColor: Colors.borderGrey }}>
+            <TextInput style={{ width: 150, height:30, marginLeft: 10 }} placeholder="Aa"></TextInput>
 
           </View>
           <Image style={{ backgroundColor: Colors.borderGrey }} source={emoji} />
@@ -95,7 +96,6 @@ const ChatPrivateScreen = () => {
 
         </View>
       </View>
-    </View>
   );
 };
 
@@ -105,12 +105,18 @@ const styles = StyleSheet.create({
   },
   headerChat: {
     flexDirection: 'row',
-    marginTop: 20,
+    marginTop: 25,
     alignItems: 'center',
-
+    justifyContent: 'space-between',
+    padding: 10,
+  },
+  headerUser: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   detail: {
     flexDirection: 'column',
+    paddingTop: 20,
   },
   chatContent: {
     margin: 10,
