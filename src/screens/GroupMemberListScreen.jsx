@@ -27,7 +27,11 @@ export default function GroupMemberListScreen({ route }) {
                     fontWeight: 'bold',
                 }}>Admin: {group.admin.name}</Text>
             </View>
-            <Text style={styles.membersText}>Members:</Text>
+            <Text style={{
+                fontSize: 16,
+                fontWeight: 'bold',
+                marginBottom: 10,
+            }}>Members:</Text>
             {group.members.map((member) => (
                 <View key={member.id} style={{
                     flexDirection: 'row',
