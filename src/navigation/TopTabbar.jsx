@@ -1,8 +1,8 @@
 import React from 'react';
-import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import VectorIcon from '../utils/VectorIcon';
-import {Colors} from '../utils/Colors';
-import {TabData} from '../data/TabData';
+import { Colors } from '../utils/Colors';
+import { TabData } from '../data/TabData';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -21,7 +21,7 @@ const TopTabbar = () => {
             name={tab.name}
             component={tab.route}
             options={{
-              tabBarIcon: ({color, focused}) => (
+              tabBarIcon: ({ color, focused }) => (
                 <VectorIcon
                   type={focused ? tab.activeiconType : tab.inactiveIconType}
                   name={focused ? tab.activeIconName : tab.inactiveIconName}
