@@ -34,8 +34,8 @@ const MessageScreen = () => {
         </View>
         {
           messageResponse.map((message) => (
-            <View key={message.id} style={style.chatView} >
-              <TouchableOpacity onPress={() => navigation.push("ChatPrivate")}>
+            <TouchableOpacity key={message.id} onPress={() => navigation.push("ChatPrivate")}>
+              <View style={style.chatView} >
                 <View style={{ flexDirection: "row", alignItems: "center" }}>
                   <Image
                     style={{
@@ -52,16 +52,16 @@ const MessageScreen = () => {
                     <Text>{message.content}</Text>
                   </View>
                 </View>
-              </TouchableOpacity>
-              <View style={{ marginRight: 10 }}>
-                <VectorIcon
-                  name="checkbox-marked-circle-outline"
-                  type="MaterialCommunityIcons"
-                  size={20}
-                  color={Colors.black}
-                />
+                <View style={{ marginRight: 10 }}>
+                  <VectorIcon
+                    name="checkbox-marked-circle-outline"
+                    type="MaterialCommunityIcons"
+                    size={20}
+                    color={Colors.black}
+                  />
+                </View>
               </View>
-            </View>
+            </TouchableOpacity>
           ))
         }
       </View>

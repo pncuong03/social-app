@@ -22,7 +22,6 @@ import NewGroup from './src/screens/NewGroup';
 import GroupDetail from './src/screens/GroupDetail';
 import NewPostInGroup from './src/screens/NewPostInGroup';
 
-
 // import auth from '@react-native-firebase/auth';
 
 const Stack = createStackNavigator();

@@ -16,7 +16,7 @@ const NotificationScreen = () => {
   return (
     <ScrollView style={styles.container}>
       <View style={styles.subNav}>
-        <Text style={{ fontWeight: "bold", fontSize: 25 }}>Notifications</Text>
+        <Text style={{ fontWeight: "bold", fontSize: 30 }}>Notifications</Text>
         <TouchableOpacity>
           <VectorIcon
             name="search1"
@@ -72,11 +72,10 @@ const styles = StyleSheet.create({
     marginLeft: 15,
   },
   subNav: {
-    padding: 10,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    padding: 10,
+    padding: 8,
   },
   container: {
     flex: 1,
