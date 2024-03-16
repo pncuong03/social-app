@@ -21,6 +21,7 @@ import GroupLists from './src/screens/GroupListsSreen';
 import NewGroup from './src/screens/NewGroup';
 import GroupDetail from './src/screens/GroupDetail';
 import NewPostInGroup from './src/screens/NewPostInGroup';
+import GroupMemberListScreen from './src/screens/GroupMemberListScreen';
 
 // import auth from '@react-native-firebase/auth';
 
@@ -63,6 +64,7 @@ const App = () => {
           <Stack.Screen name="New Group" component={NewGroup} />
           <Stack.Screen name="GroupDetail" component={GroupDetail} />
           <Stack.Screen name="NewPostInGroup" component={NewPostInGroup} />
+          <Stack.Screen name="GroupMemberListScreen" component={GroupMemberListScreen} />
         </>
 
       </Stack.Navigator>
