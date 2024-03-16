@@ -14,12 +14,13 @@ import NewPost from './src/screens/NewPost';
 import SearchGroupMessageScreen from './src/screens/SearchGroupMeassageScreen';
 import SearchMessageScreen from './src/screens/SearchMessage';
 import SplashScreen from './src/screens/SplashScreen';
-
 import MenuScreen from './src/screens/MenuSreen';
 import GroupScreen from './src/screens/GroupScreen';
 import ChatPrivateScreen from './src/screens/ChatPrivateScreen';
 import GroupLists from './src/screens/GroupListsSreen';
 import NewGroup from './src/screens/NewGroup';
+import GroupDetail from './src/screens/GroupDetail';
+import NewPostInGroup from './src/screens/NewPostInGroup';
 
 // import auth from '@react-native-firebase/auth';
 
@@ -60,6 +61,8 @@ const App = () => {
           <Stack.Screen name="GroupScreen" component={GroupScreen} />
           <Stack.Screen name="Group for you" component={GroupLists} />
           <Stack.Screen name="New Group" component={NewGroup} />
+          <Stack.Screen name="GroupDetail" component={GroupDetail} />
+          <Stack.Screen name="NewPostInGroup" component={NewPostInGroup} />
         </>
 
       </Stack.Navigator>
