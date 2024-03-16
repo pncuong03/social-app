@@ -18,6 +18,9 @@ export default function GroupDetail({ route }) {
     const handlePress = (groupId) => {
         navigation.navigate('NewPostInGroup', { groupId });
     };
+    const checkMember = (groupId) => {
+        navigation.navigate('GroupMemberListScreen', { groupId });
+    };
     return (
         <SafeAreaView
             style={{
@@ -138,7 +141,7 @@ export default function GroupDetail({ route }) {
                             0
                         </Text>
                     </View>
-                    <TouchableOpacity
+                    <TouchableOpacity onPress={() => checkMember(group.id)}
                         style={{
                             flexDirection: "column",
                             alignItems: "center",
