@@ -51,36 +51,3 @@ export default function GroupMemberListScreen({ route }) {
     );
 }
 
-const styles = StyleSheet.create({
-    container: {
-        padding: 10,
-    },
-    adminContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginBottom: 10,
-    },
-    memberContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginBottom: 10,
-    },
-    image: {
-        width: 50,
-        height: 50,
-        borderRadius: 25,
-        marginRight: 10,
-    },
-    adminText: {
-        fontSize: 18,
-        fontWeight: 'bold',
-    },
-    membersText: {
-        fontSize: 16,
-        fontWeight: 'bold',
-        marginBottom: 10,
-    },
-    memberText: {
-        fontSize: 16,
-    },
-});
