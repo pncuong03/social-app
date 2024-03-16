@@ -16,8 +16,12 @@ const GroupData = [
                 name: "Friend 2",
                 image: member
             },
-            // Add more friends here
-        ]
+        ],
+        admin: {
+            id: 1,
+            name: "Admin 1",
+            image: member
+        },
     },
     {
         id: 2,
@@ -35,7 +39,12 @@ const GroupData = [
                 image: member
             },
 
-        ]
+        ],
+        admin: {
+            id: 1,
+            name: "Admin 2",
+            image: member
+        },
     },
 
 ];
