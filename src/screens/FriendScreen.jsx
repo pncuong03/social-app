@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -6,24 +6,62 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
+  TextInput
 } from "react-native";
 import { Colors } from "../utils/Colors";
 import { friendRequests } from "../data/FriendData";
 import VectorIcon from "../utils/VectorIcon";
 
 const FriendScreen = () => {
+  const [requests, setRequests] = useState([...friendRequests]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [isSearch, setIsSearch] = useState(false);
+  const [filteredRequests, setFilteredRequests] = useState(friendRequests);
+  
+  const handleConfirm = (id) => {
+    const updatedRequests = requests.filter((request) => request.id !== id);
+    setRequests(updatedRequests);
+    setFilteredRequests(updatedRequests);
+  };
+
+  const handleDelete = (id) => {
+    const updatedRequests = requests.filter((request) => request.id !== id);
+    setRequests(updatedRequests);
+    setFilteredRequests(updatedRequests);
+  };
+
+  const toggleSearch = () => {
+    setIsSearch(!isSearch);
+  };
+
+  const handleSearch = (text) => {
+    setSearchTerm(text);
+    const filtered = requests.filter((request) =>
+      request.name.toLowerCase().includes(text.toLowerCase())
+    );
+    setFilteredRequests(filtered);
+  };
+
   return (
     <ScrollView style={styles.container}>
       <View style={styles.subNav}>
-        <Text style={{ fontWeight: "bold", fontSize: 30 }}>
-          Friends
-        </Text>
-        <VectorIcon
-          name="search1"
-          type="AntDesign"
-          size={24}
-          color={Colors.black}
-        />
+        <Text style={{ fontWeight: "bold", fontSize: 30 }}>Friends</Text>
+        <TouchableOpacity onPress={toggleSearch}>
+          <VectorIcon
+            name="search1"
+            type="AntDesign"
+            size={24}
+            color={Colors.black}
+          />
+        </TouchableOpacity>
+        {isSearch && (
+          <TextInput
+            style={{fontSize:17}}
+            placeholder="Search..."
+            onChangeText={handleSearch}
+            value={searchTerm}
+          />
+        )}
       </View>
       <View style={styles.headerFriend}>
         <Text
@@ -36,10 +74,10 @@ const FriendScreen = () => {
           Friend request
         </Text>
         <Text style={{ fontSize: 20, fontWeight: "700", color: "red" }}>
-          440
+          {requests.length}
         </Text>
       </View>
-      {friendRequests.map((request) => (
+      {filteredRequests.map((request) => (
         <View key={request.id} style={styles.friendView}>
           <Image style={styles.avatar} source={request.image} />
           <View style={styles.headerBox}>
@@ -67,11 +105,15 @@ const FriendScreen = () => {
                 marginTop: 10,
               }}
             >
-              <TouchableOpacity style={styles.button}>
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() => handleConfirm(request.id)}
+              >
                 <Text style={styles.buttonText}>Confirm</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={[styles.button, { backgroundColor: "gray" }]}
+                onPress={() => handleDelete(request.id)}
               >
                 <Text style={styles.buttonText}>Delete</Text>
               </TouchableOpacity>
@@ -133,7 +175,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     padding: 10,
     borderBottomWidth: 0.5,
-    borderBottomColor: "gray"
+    borderBottomColor: "gray",
   },
 });
 

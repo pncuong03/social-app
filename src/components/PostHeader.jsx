@@ -1,10 +1,11 @@
-import {View, Image, StyleSheet, Text} from 'react-native';
-import React from 'react';
+import {View, Image, StyleSheet, Text, TouchableOpacity} from 'react-native';
+import React, {useState} from 'react';
 import UserProfile from '../assets/images/post1.jpeg';
 import {Colors} from '../utils/Colors';
 import VectorIcon from '../utils/VectorIcon';
 
 const PostHeader = ({data}) => {
+ 
   return (
     <View style={styles.postHeaderContainer}>
       <View style={styles.postTopSec}>
@@ -25,21 +26,14 @@ const PostHeader = ({data}) => {
             </View>
           </View>
         </View>
-        <View style={styles.row}>
-          <VectorIcon
-            name="dots-three-horizontal"
-            type="Entypo"
-            size={25}
-            color={Colors.headerIconGrey}
-            style={styles.headerIcons}
-          />
+        <TouchableOpacity style={styles.row}>
           <VectorIcon
             name="close"
             type="Ionicons"
             size={25}
             color={Colors.headerIconGrey}
           />
-        </View>
+        </TouchableOpacity>
       </View>
       <Text style={styles.caption}>{data.caption}</Text>
     </View>

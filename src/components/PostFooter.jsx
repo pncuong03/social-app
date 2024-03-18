@@ -9,18 +9,21 @@ import VectorIcon from '../utils/VectorIcon';
 const PostFooter = ({data}) => {
 
   const [isLiked, setIsLiked] = useState(false);
+  const [isCommented, setIsCommented] = useState(false);
+  const [isShared, setIsShared] = useState(false);
 
   const handleLikePress = () => {
     setIsLiked(!isLiked);
   };
 
   const handleCommentPress = () => {
-    // Xử lý khi nút comment được nhấn
+    setIsCommented(!isCommented);
   };
 
   const handleSharePress = () => {
-    // Xử lý khi nút share được nhấn
+    setIsShared(!isShared);
   };
+
 
   return (
     <View style={styles.postFooterContainer}>
@@ -54,10 +57,10 @@ const PostFooter = ({data}) => {
         <TouchableOpacity onPress={handleCommentPress}>
           <View style={styles.row}>
             <VectorIcon
-              name="chatbox-outline"
+              name={isCommented ? "chatbox-sharp" : "chatbox-outline"}
               type="Ionicons"
               size={25}
-              color={Colors.grey}
+              color={isCommented ? '#384CFF' : Colors.grey}
             />
             <Text style={styles.reactionCount}>Comment</Text>
           </View>
@@ -65,15 +68,16 @@ const PostFooter = ({data}) => {
         <TouchableOpacity onPress={handleSharePress}>
           <View style={styles.row}>
             <VectorIcon
-              name="arrow-redo-outline"
+              name={isShared ?  "arrow-redo-sharp" : "arrow-redo-outline"}
               type="Ionicons"
               size={25}
-              color={Colors.grey}
+              color={isShared ? '#384CFF' : Colors.grey}
             />
             <Text style={styles.reactionCount}>Share</Text>
           </View>
         </TouchableOpacity>
       </View>
+
     </View>
   );
 };

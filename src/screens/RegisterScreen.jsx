@@ -1,160 +1,140 @@
+import React from "react";
 import {
   View,
   Text,
   Image,
-  StyleSheet,
-  TextInput,
   TouchableOpacity,
-  Alert,
-} from 'react-native';
-import React, { useState } from 'react';
-import VectorIcon from '../utils/VectorIcon';
-import { Colors } from '../utils/Colors';
-import Logo from '../assets/images/logo.png';
-import MetaLogo from '../assets/images/meta-logo.png';
-// import auth from '@react-native-firebase/auth';
+  SafeAreaView,
+  StyleSheet,
+} from "react-native";
+import { MaterialIcons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
+import Post from "../components/Post";
 
-const RegisterScreen = ({ navigation }) => {
-  const [fullname, setFullname] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-
-  // const onCreateAccount = () => {
-  //   navigation.navigate('LoginScreen');
-  // };
-
-  // const onRegister = () => {
-  //   if (password !== confirmPassword) {
-  //     Alert.alert("Password don't match.");
-  //     return;
-  //   }
-  //   if (email && password) {
-  //     auth()
-  //       .createUserWithEmailAndPassword(email, password)
-  //       .then(() => {
-  //         console.log('User account created & signed in!');
-  //       })
-  //       .catch(error => {
-  //         if (error.code === 'auth/email-already-in-use') {
-  //           console.log('That email address is already in use!');
-  //         }
-  //         if (error.code === 'auth/invalid-email') {
-  //           console.log('That email address is invalid!');
-  //         }
-  //         console.error(error);
-  //       });
-  //   } else {
-  //     Alert.alert('Please fill in details!');
-  //   }
-  // };
-
+export default function ProfileScreen() {
+  const navigation = useNavigation();
+  
   return (
-    <View style={styles.container}>
-      <VectorIcon
-        name="arrow-back"
-        type="Ionicons"
-        color={Colors.black}
-        size={20}
-        onPress={() => navigation.navigate('LoginScreen')}
-      />
-      <View style={styles.subContainer}>
-        <Image source={Logo} style={styles.logoStyle} />
-        <TextInput
-          placeholder="Full Name"
-          value={fullname}
-          onChangeText={value => setFullname(value)}
-          style={styles.inputBox}
+    <SafeAreaView style={styles.container}>
+      <View>
+        <Image
+          source={{
+            uri: "https://plainbackground.com/download.php?imagename=39569c.png",
+          }}
+          style={styles.backgroundImage}
         />
-        <TextInput
-          placeholder="Mobile number or email"
-          value={email}
-          onChangeText={value => setEmail(value)}
-          style={styles.inputBox}
-        />
-        <TextInput
-          placeholder="Password"
-          value={confirmPassword}
-          onChangeText={value => setConfirmPassword(value)}
-          style={styles.inputBox}
-        />
-        <TextInput
-          placeholder="Confirm Password"
-          value={password}
-          onChangeText={value => setPassword(value)}
-          style={styles.inputBox}
-        />
-        <TouchableOpacity style={styles.loginButton} onPress={() => navigation.navigate('MainScreen')}>
-          <Text style={styles.login}>Create Account</Text>
+        <TouchableOpacity
+          onPress={() => navigation.push("MainScreen")}
+          style={styles.backButton}
+        >
+          <MaterialIcons name="keyboard-arrow-left" size={35} color={"black"} />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.newAccount} >
-          <Text style={styles.newAccountText}>Already have an account?</Text>
-        </TouchableOpacity>
-        <Image source={MetaLogo} style={styles.metaLogoStyle} />
+        <Text style={styles.profileText}>Profile</Text>
       </View>
-    </View>
+
+      <View style={{ flex: 1, alignItems: "center" }}>
+        <Image
+          source={require("../assets/images/img1.jpeg")}
+          resizeMode="contain"
+          style={styles.profileImage}
+        />
+        <Text style={styles.profileName}>Ronaldo</Text>
+        <TouchableOpacity
+          onPress={() => navigation.push("EditProfile")}
+          style={styles.editProfileButton}
+        >
+          <Text style={styles.editProfileButtonText}>EditProfile</Text>
+        </TouchableOpacity>
+        <View style={styles.profileStatsContainer}>
+          <View style={styles.profileStatsItem}>
+            <Text style={styles.profileStatsLabel}>Posts</Text>
+            <Text style={styles.profileStatsValue}>0</Text>
+          </View>
+          <View style={styles.profileStatsItem}>
+            <Text style={styles.profileStatsLabel}>Followers</Text>
+            <Text style={styles.profileStatsValue}>0</Text>
+          </View>
+        </View>
+        {/* <ScrollView style={{ width: "100%" }}>
+          <Post />
+        </ScrollView> */}
+      </View>
+    </SafeAreaView>
   );
-};
+}
 
 const styles = StyleSheet.create({
-  logoStyle: {
-    height: 68,
-    width: 50,
-    marginVertical: '20%',
-  },
   container: {
-    padding: 16,
+    flex: 1,
+    backgroundColor: "white",
   },
-  subContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
+  backgroundImage: {
+    height: 180,
+    width: "100%",
+    display: "flex",
   },
-  inputBox: {
-    borderWidth: 1,
-    borderColor: Colors.borderGrey,
-    padding: 10,
-    borderRadius: 12,
-    width: '95%',
-    marginTop: 12,
+  backButton: {
+    zIndex: 99,
+    position: "absolute",
+    left: 0,
+    top: 10,
+    display: "flex",
   },
-  loginButton: {
-    backgroundColor: Colors.primaryColor,
-    padding: 10,
+  profileText: {
+    fontSize: 30,
+    fontWeight: "500",
+    position: "absolute",
+    top: 10,
+    left: 0,
+    right: 0,
+    textAlign: "center",
+    display: "flex",
+  },
+  profileImage: {
+    height: 170,
+    width: 170,
     borderRadius: 20,
-    width: '95%',
-    alignItems: 'center',
-    marginTop: 12,
+    borderWidth: 2,
+    borderColor: "#242760",
+    overflow: "hidden",
+    marginTop: -90,
   },
-  login: {
-    color: Colors.white,
-    fontSize: 15,
-    fontWeight: '500',
+  profileName: {
+    fontSize: 18,
+    lineHeight: 22,
+    color: "black",
+    marginVertical: 8,
   },
-  forgotPass: {
-    color: Colors.grey,
-    fontSize: 14,
-    fontWeight: '500',
-    marginTop: 15,
+  editProfileButton: {
+    backgroundColor: "black",
+    height: 40,
+    borderRadius: 6,
+    alignItems: "center",
+    justifyContent: "center",
+    width: 250,
   },
-  newAccount: {
-    borderColor: Colors.primaryColor,
-    borderWidth: 1,
-    padding: 10,
-    borderRadius: 18,
-    width: '95%',
-    alignItems: 'center',
-    marginTop: '35%',
+  editProfileButtonText: {
+    color: "white",
+    fontSize: 16,
   },
-  newAccountText: {
-    color: Colors.primaryColor,
-    fontSize: 14,
-    fontWeight: '400',
+  profileStatsContainer: {
+    paddingVertical: 8,
+    flexDirection: "row",
+    display: "flex",
+    justifyContent: "space-around",
+    width: "100%",
   },
-  metaLogoStyle: {
-    height: 15,
-    width: 70,
-    marginTop: 15,
+  profileStatsItem: {
+    flexDirection: "column",
+    alignItems: "center",
+    marginHorizontal: 10,
+  },
+  profileStatsLabel: {
+    fontSize: 16,
+    color: "#242760",
+  },
+  profileStatsValue: {
+    fontSize: 20,
+    color: "#242760",
   },
 });
-
-export default RegisterScreen;
