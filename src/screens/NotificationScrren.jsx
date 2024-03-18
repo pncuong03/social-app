@@ -11,40 +11,42 @@ import { Colors } from "../utils/Colors";
 import VectorIcon from "../utils/VectorIcon";
 import img1 from "../assets/images/img1.jpeg";
 import { notifyResponses } from "../data/NotifycationData";
+import { useNavigation } from "@react-navigation/native";
+
 
 const NotificationScreen = () => {
+  const navigation = useNavigation();
+
+  const handleNotificationPress = (postId) => {
+    navigation.navigate("PostDetail", { postId: postId });
+  };
+
   return (
     <ScrollView style={styles.container}>
       <View style={styles.subNav}>
         <Text style={{ fontWeight: "bold", fontSize: 30 }}>Notifications</Text>
-        <TouchableOpacity>
-          <VectorIcon
-            name="search1"
-            type="AntDesign"
-            size={24}
-            color={Colors.black}
-          />
-        </TouchableOpacity>
       </View>
-      <View
-        style={{ flexDirection: "column", backgroundColor: Colors.borderGrey }}
-      >
-        <Text style={styles.new}>New</Text>
+      <View style={{ flexDirection: "column" }}>
         {notifyResponses.map((notify) => (
-          <View key={notify.id} style={styles.inforNotify}>
-            <Image style={styles.imgNotify} source={notify.image} />
-            <View style={{ flexDirection: "row", marginBottom: 26 }}>
-              <Text style={{ marginRight: 4, fontWeight: "500" }}>
-                {notify.name}
-              </Text>
-              <Text>{notify.notify}</Text>
+          <TouchableOpacity
+            key={notify.id}
+            onPress={() => handleNotificationPress(notify.postId)}
+          >
+            <View style={[styles.inforNotify]}>
+              <Image style={styles.imgNotify} source={notify.image} />
+              <View style={{ flexDirection: "row", marginBottom: 26 }}>
+                <Text style={{ marginRight: 4, fontWeight: "500" }}>
+                  {notify.name}
+                </Text>
+                <Text>{notify.notify}</Text>
+              </View>
+              <View
+                style={{ position: "absolute", marginLeft: 60, paddingTop: 20 }}
+              >
+                <Text>{notify.time}</Text>
+              </View>
             </View>
-            <View
-              style={{ position: "absolute", marginLeft: 60, paddingTop: 20 }}
-            >
-              <Text>{notify.time}</Text>
-            </View>
-          </View>
+          </TouchableOpacity>
         ))}
       </View>
     </ScrollView>
@@ -59,7 +61,6 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   inforNotify: {
-    backgroundColor: Colors.borderGrey,
     flexDirection: "row",
     alignItems: "center",
     marginTop: 2,
