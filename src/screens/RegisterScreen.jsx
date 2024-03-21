@@ -12,42 +12,45 @@ import VectorIcon from '../utils/VectorIcon';
 import { Colors } from '../utils/Colors';
 import Logo from '../assets/images/logo.png';
 import MetaLogo from '../assets/images/meta-logo.png';
-// import auth from '@react-native-firebase/auth';
+import axios from 'axios';
 
 const RegisterScreen = ({ navigation }) => {
   const [fullname, setFullname] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const onRegister = () => {
+    if (fullname && email && password && confirmPassword) {
+      if (password !== confirmPassword) {
+        Alert.alert('Passwords do not match!');
+        return;
+      }
+  
+      axios.post('https://reqres.in/api/register', {
+        email: email,
+        password: password,
+      })
+        .then((response) => {
+          const data = response.data;
+          if (data.id && data.token) {
+            Alert.alert('Registration sucess!');
+            console.log('User account created & signed in!');
+            console.log('User ID:', data.id);
+            console.log('Token:', data.token);
+            navigation.replace("LoginScreen");
+          } else {
+            console.log('Registration failed:', data);
+          }
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+        });
+    } else {
+      Alert.alert('Please fill in details!');
+    }
+  };
 
-  // const onCreateAccount = () => {
-  //   navigation.navigate('LoginScreen');
-  // };
-
-  // const onRegister = () => {
-  //   if (password !== confirmPassword) {
-  //     Alert.alert("Password don't match.");
-  //     return;
-  //   }
-  //   if (email && password) {
-  //     auth()
-  //       .createUserWithEmailAndPassword(email, password)
-  //       .then(() => {
-  //         console.log('User account created & signed in!');
-  //       })
-  //       .catch(error => {
-  //         if (error.code === 'auth/email-already-in-use') {
-  //           console.log('That email address is already in use!');
-  //         }
-  //         if (error.code === 'auth/invalid-email') {
-  //           console.log('That email address is invalid!');
-  //         }
-  //         console.error(error);
-  //       });
-  //   } else {
-  //     Alert.alert('Please fill in details!');
-  //   }
-  // };
+  
 
   return (
     <View style={styles.container}>
@@ -84,10 +87,10 @@ const RegisterScreen = ({ navigation }) => {
           onChangeText={value => setPassword(value)}
           style={styles.inputBox}
         />
-        <TouchableOpacity style={styles.loginButton} onPress={() => navigation.navigate('MainScreen')}>
+        <TouchableOpacity style={styles.loginButton} onPress={onRegister}>
           <Text style={styles.login}>Create Account</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.newAccount} >
+        <TouchableOpacity style={styles.newAccount} onPress={() => navigation.navigate('LoginScreen')} >
           <Text style={styles.newAccountText}>Already have an account?</Text>
         </TouchableOpacity>
         <Image source={MetaLogo} style={styles.metaLogoStyle} />

@@ -5,38 +5,48 @@ import {
   StyleSheet,
   TextInput,
   TouchableOpacity,
+  Alert
 } from "react-native";
 import React, { useState } from "react";
 import VectorIcon from "../utils/VectorIcon";
 import { Colors } from "../utils/Colors";
 import Logo from "../assets/images/logo.png";
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const onLogin = () => {
+    if (email && password) {
+      axios.post('https://dummyjson.com/auth/login', {
+        username: email,
+        password: password,
+      })
+        .then((response) => {
+          const data = response.data;
+          if (data.token && data.id) {
+            console.log('User logged in!');
+            console.log('Token:', data.token);
+            console.log('User ID:', data.id); 
+            console.log('User email:', data.email); 
+            navigation.navigate("MainScreen");
+          } else {
+            throw new Error('Network response was not ok');
+          }
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+          Alert.alert('Login failed. Please check your email and password.');
+        });
+    } else {
+      Alert.alert('Please fill in details!');
+    }
+  };
 
-  // const onCreateAccount = () => {
-  //   navigation.navigate('RegisterScreen');
-  // };
 
-  // const onLogin = () => {
-  //   if (email && password) {
-  //     auth()
-  //       .signInWithEmailAndPassword(email, password)
-  //       .then(response => {
-  //         console.log('response :', response);
-  //       })
-  //       .catch(error => {
-  //         if (error.code === 'auth/wrong-password') {
-  //           Alert.alert('Your password is wrong!');
-  //         } else {
-  //           Alert.alert(`${error}`);
-  //         }
-  //         console.log('error :', error);
-  //       });
-  //   }
-  // };
+  
 
   return (
     <View style={styles.container}>
@@ -53,18 +63,19 @@ const LoginScreen = ({ navigation }) => {
         <TextInput
           placeholder="Mobile number or email"
           value={email}
-          onChangeText={(value) => setEmail(value)}
+          onChangeText={(text) => setEmail(text)}
           style={styles.inputBox}
         />
         <TextInput
+          secureTextEntry={true}
           placeholder="Password"
           value={password}
-          onChangeText={(value) => setPassword(value)}
+          onChangeText={(text) => setPassword(text)}
           style={styles.inputBox}
         />
         <TouchableOpacity
           style={styles.loginButton}
-          onPress={() => navigation.navigate("MainScreen")}
+           onPress={onLogin}
         >
           <Text style={styles.login}>Log in</Text>
         </TouchableOpacity>
