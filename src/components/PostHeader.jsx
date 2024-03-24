@@ -3,13 +3,22 @@ import React, {useState} from 'react';
 import UserProfile from '../assets/images/post1.jpeg';
 import {Colors} from '../utils/Colors';
 import VectorIcon from '../utils/VectorIcon';
+import { useNavigation } from '@react-navigation/native';
 
-const PostHeader = ({data}) => {
- 
+const PostHeader = ({data, onClose }) => {
+  const navigation = useNavigation(); 
+
+  const handleClose = () => {
+    onClose();
+  };
+
+  const handleProfile = () => {
+    navigation.navigate('UserProfile', { userId: data.userId });
+  };
   return (
     <View style={styles.postHeaderContainer}>
       <View style={styles.postTopSec}>
-        <View style={styles.row}>
+        <TouchableOpacity style={styles.row} onPress={handleProfile}>
           <Image source={data.profileImg} style={styles.userProfile} />
           <View style={styles.userSection}>
             <Text style={styles.username}>{data.name}</Text>
@@ -25,8 +34,8 @@ const PostHeader = ({data}) => {
               />
             </View>
           </View>
-        </View>
-        <TouchableOpacity style={styles.row}>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.row} onPress={handleClose}>
           <VectorIcon
             name="close"
             type="Ionicons"
@@ -60,6 +69,8 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: Colors.textColor,
     marginBottom: 2,
+    fontWeight: "600",
+
   },
   userSection: {
     marginLeft: 12,
