@@ -8,8 +8,6 @@ import {
 } from "react-native";
 import React from "react";
 import { Colors } from "../utils/Colors";
-import VectorIcon from "../utils/VectorIcon";
-import img1 from "../assets/images/img1.jpeg";
 import { notifyResponses } from "../data/NotifycationData";
 import { useNavigation } from "@react-navigation/native";
 
