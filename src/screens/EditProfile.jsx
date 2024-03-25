@@ -5,22 +5,44 @@ import {
   Image,
   ScrollView,
   TextInput,
+  Alert,
+  Button
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import * as ImagePicker from "expo-image-picker";
-
+import * as FileSystem from 'expo-file-system';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import DateTimePicker from '@react-native-community/datetimepicker';
 export default function EditProfile() {
   const navigation = useNavigation();
-  const [selectedImage, setSelectedImage] = useState(
-    require("../assets/images/img1.jpeg")
-  );
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [password, setPassword] = useState("");
+
+  const [selectedImage, setSelectedImage] = useState("http://res.cloudinary.com/ds9ipqi3z/image/upload/v1710954680/bpnracdpkspbzt0njy8n.png");
+
+  const [fullName, setFullName] = useState("");
+  const [birthday, setBirthDay] = useState("");
+  const [date, setDate] = useState(new Date());
+  const [mode, setMode] = useState('date');
+  const [show, setShow] = useState(false);
+  const onChange = (event, selectedDate) => {
+    const currentDate = selectedDate || date;
+    setShow(Platform.OS === 'android');
+    setDate(currentDate);
+    setBirthDay(currentDate.toISOString().split('T')[0]);
+  };
+
+  const showMode = (currentMode) => {
+    setShow(true);
+    setMode(currentMode);
+  };
+
+  const showDatepicker = () => {
+    showMode('date');
+  };
+
   const handleImageSelection = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -29,37 +51,69 @@ export default function EditProfile() {
       quality: 1,
     });
 
-    console.log(result);
+
 
     if (!result.canceled) {
       setSelectedImage(result.assets[0].uri);
     }
+    console.log(selectedImage)
   };
-  // const handleUpdate = async () => {
-  //     // Save the selected image URI to AsyncStorage
-  //     try {
-  //         await AsyncStorage.setItem('@profile_image', selectedImage);
-  //     } catch (e) {
-  //         // saving error
-  //         console.error(e);
-  //     }
-  // };
-  // useEffect(() => {
-  //     // Load the saved profile image URI from AsyncStorage when the component mounts
-  //     const loadProfileImage = async () => {
-  //         try {
-  //             const value = await AsyncStorage.getItem('@profile_image');
-  //             if (value !== null) {
-  //                 setSelectedImage(value);
-  //             }
-  //         } catch (e) {
-  //             // loading error
-  //             console.error(e);
-  //         }
-  //     };
+  const handleUpdate = async () => {
+    let changeInfoUserRequest = {
+      fullName: fullName,
+      birthdayString: date,
+      gender: "Male"
+    };
 
-  //     loadProfileImage();
-  // }, []);
+    // Convert image to base64
+    let image = await FileSystem.readAsStringAsync(selectedImage, {
+      encoding: FileSystem.EncodingType.Base64,
+    });
+
+    let formData = new FormData();
+    formData.append('new_user_info', JSON.stringify(changeInfoUserRequest));
+
+    // Create a new blob object
+    let blob = await new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.onload = function () {
+        resolve(xhr.response);
+      };
+      xhr.onerror = function () {
+        reject(new TypeError('Network request failed'));
+      };
+      xhr.responseType = 'blob';
+      xhr.open('GET', selectedImage, true);
+      xhr.send(null);
+    });
+
+    // Append the blob object as a file to the form data
+    let file = { uri: selectedImage, type: `image/${selectedImage.split('.').pop()}`, name: `image.${selectedImage.split('.').pop()}` };
+    formData.append('image', file);
+
+
+
+    try {
+      const token = await AsyncStorage.getItem('user');
+      const response = await axios({
+        method: 'POST',
+        url: 'http://192.168.1.204:8080/api/v1/user/change-user-information',
+        data: formData,
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (response.status === 200) {
+        Alert.alert('Success', 'Profile updated successfully');
+      } else {
+        Alert.alert('Error', 'Failed to update profile');
+      }
+    } catch (error) {
+      Alert.alert('Error', error.message);
+    }
+  };
 
   return (
     <SafeAreaView
@@ -84,7 +138,7 @@ export default function EditProfile() {
         />
 
         <TouchableOpacity
-          onPress={() => navigation.push("MainScreen")}
+          onPress={() => navigation.push("ProfileScreen")}
           style={{
             zIndex: 99,
             position: "absolute",
@@ -166,7 +220,7 @@ export default function EditProfile() {
               marginBottom: 6,
             }}
           >
-            <Text style={{ fontSize: 16 }}>UserName</Text>
+            <Text style={{ fontSize: 16 }}>FullName</Text>
             <View
               style={{
                 height: 44,
@@ -180,13 +234,34 @@ export default function EditProfile() {
               }}
             >
               <TextInput
-                value={name}
-                onChangeText={(value) => setName(value)}
+                value={fullName}
+                onChangeText={(value) => setFullName(value)}
                 editable={true}
               />
             </View>
           </View>
         </View>
+        {/* <View
+          style={{
+            flexDirection: "column",
+            marginBottom: 6,
+          }}
+        >
+          <Text style={{ fontSize: 16 }}>Birthday</Text>
+          <View>
+            <Button onPress={showDatepicker} title="Show date picker!" />
+          </View>
+          {show && (
+            <DateTimePicker
+              testID="dateTimePicker"
+              value={date}
+              mode={mode}
+              is24Hour={true}
+              display="default"
+              onChange={onChange}
+            />
+          )}
+        </View> */}
         <View
           style={{
             marginTop: 10,
@@ -286,7 +361,7 @@ export default function EditProfile() {
       </View>
       <View style={{ paddingHorizontal: 22 }}>
         <TouchableOpacity
-          // onPress={handleUpdate}
+          onPress={handleUpdate}
           style={{
             backgroundColor: "black",
             height: 44,

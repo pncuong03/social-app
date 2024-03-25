@@ -16,29 +16,37 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 const LoginScreen = ({ navigation }) => {
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const onLogin = () => {
-    if (email && password) {
-      axios.post('https://dummyjson.com/auth/login', {
-        username: email,
-        password: password,
+    if (username &&  password) {
+      
+      axios({
+        method: 'post',
+        url: 'http://192.168.1.204:8080/api/v1/user/log-in',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        data: {
+          username: username,
+          password: password,
+        },
+        responseType: 'text',
       })
         .then((response) => {
-          const data = response.data;
-          if (data.token && data.id) {
-            console.log('User logged in!');
-            console.log('Token:', data.token);
-            console.log('User ID:', data.id); 
-            console.log('User email:', data.email); 
-            navigation.navigate("MainScreen");
+          // console.log(response)
+          const data = JSON.parse(response.data);
+          if (data) {
+            Alert.alert('Login success!');
+            console.log('Token:', data.accessToken);
+            AsyncStorage.setItem('user', data.accessToken);
+            navigation.replace("MainScreen");
           } else {
-            throw new Error('Network response was not ok');
+            console.log('Login failed:', data);
           }
         })
         .catch((error) => {
           console.error('Error:', error);
-          Alert.alert('Login failed. Please check your email and password.');
         });
     } else {
       Alert.alert('Please fill in details!');
@@ -62,8 +70,8 @@ const LoginScreen = ({ navigation }) => {
         <Text style={styles.textLogo}>PaceBook</Text>
         <TextInput
           placeholder="Mobile number or email"
-          value={email}
-          onChangeText={(text) => setEmail(text)}
+          value={username}
+          onChangeText={(text) => setUsername(text)}
           style={styles.inputBox}
         />
         <TextInput

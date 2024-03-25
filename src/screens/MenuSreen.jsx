@@ -4,13 +4,14 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Colors } from "../utils/Colors";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { useNavigation } from "@react-navigation/native";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 export default function MenuScreen() {
     const navigation = useNavigation();
     const logout = () => {
         clearAuthToken();
     }
     const clearAuthToken = async () => {
-        // await AsyncStorage.removeItem("authToken");
+        await AsyncStorage.removeItem("user");
         // console.log("Cleared auth token");
         navigation.replace("LoginScreen")
     }

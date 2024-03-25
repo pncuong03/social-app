@@ -15,28 +15,31 @@ import MetaLogo from '../assets/images/meta-logo.png';
 import axios from 'axios';
 
 const RegisterScreen = ({ navigation }) => {
-  const [fullname, setFullname] = useState('');
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
+  // const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  // const [confirmPassword, setConfirmPassword] = useState('');
   const onRegister = () => {
-    if (fullname && email && password && confirmPassword) {
-      if (password !== confirmPassword) {
-        Alert.alert('Passwords do not match!');
-        return;
-      }
-  
-      axios.post('https://reqres.in/api/register', {
-        email: email,
-        password: password,
+    if (username &&  password) {
+      
+      axios({
+        method: 'post',
+        url: 'http://192.168.1.204:8080/api/v1/user/sign-up',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        data: {
+          username: username,
+          password: password,
+        },
+        responseType: 'text',
       })
         .then((response) => {
-          const data = response.data;
-          if (data.id && data.token) {
-            Alert.alert('Registration sucess!');
+          const data =  JSON.parse(response.data);
+          if (data) {
+            Alert.alert('Registration success!');
             console.log('User account created & signed in!');
-            console.log('User ID:', data.id);
-            console.log('Token:', data.token);
+            console.log('Token:', data);
             navigation.replace("LoginScreen");
           } else {
             console.log('Registration failed:', data);
@@ -50,7 +53,7 @@ const RegisterScreen = ({ navigation }) => {
     }
   };
 
-  
+
 
   return (
     <View style={styles.container}>
@@ -64,29 +67,19 @@ const RegisterScreen = ({ navigation }) => {
       <View style={styles.subContainer}>
         <Image source={Logo} style={styles.logoStyle} />
         <TextInput
-          placeholder="Full Name"
-          value={fullname}
-          onChangeText={value => setFullname(value)}
+          placeholder="Username"
+          value={username}
+          onChangeText={value => setUsername(value)}
           style={styles.inputBox}
         />
-        <TextInput
-          placeholder="Mobile number or email"
-          value={email}
-          onChangeText={value => setEmail(value)}
-          style={styles.inputBox}
-        />
+        
         <TextInput
           placeholder="Password"
-          value={confirmPassword}
-          onChangeText={value => setConfirmPassword(value)}
-          style={styles.inputBox}
-        />
-        <TextInput
-          placeholder="Confirm Password"
           value={password}
           onChangeText={value => setPassword(value)}
           style={styles.inputBox}
         />
+       
         <TouchableOpacity style={styles.loginButton} onPress={onRegister}>
           <Text style={styles.login}>Create Account</Text>
         </TouchableOpacity>
