@@ -23,6 +23,9 @@ export default function EditProfile() {
   const [selectedImage, setSelectedImage] = useState("http://res.cloudinary.com/ds9ipqi3z/image/upload/v1710954680/bpnracdpkspbzt0njy8n.png");
 
   const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [password, setPassword] = useState("");
   const [birthday, setBirthDay] = useState("");
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState('date');
