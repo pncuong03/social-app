@@ -49,7 +49,6 @@ const GroupMessageScreen = () => {
           />
         </View>
       </View>
-      {/* Add Static View */}
       <View style={style.peopleView}>
         <View style={{ flexDirection: "row", alignItems: "center" }}>
           <Image

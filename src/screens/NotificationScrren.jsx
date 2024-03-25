@@ -11,7 +11,6 @@ import { Colors } from "../utils/Colors";
 import { notifyResponses } from "../data/NotifycationData";
 import { useNavigation } from "@react-navigation/native";
 
-
 const NotificationScreen = () => {
   const navigation = useNavigation();
 
