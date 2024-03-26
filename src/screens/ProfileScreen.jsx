@@ -41,7 +41,7 @@ const ProfileScreen = () => {
         const token = await AsyncStorage.getItem('user');
         const response = await axios({
           method: 'get',
-          url: 'http://192.168.1.204:8080/api/v1/user',
+          url: 'http://192.168.230.1:8080/api/v1/user',
           headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`,

@@ -100,7 +100,7 @@ export default function EditProfile() {
       const token = await AsyncStorage.getItem('user');
       const response = await axios({
         method: 'POST',
-        url: 'http://192.168.1.204:8080/api/v1/user/change-user-information',
+        url: 'http://192.168.230.1:8080/api/v1/user/change-user-information',
         data: formData,
         headers: {
           'Content-Type': 'multipart/form-data',

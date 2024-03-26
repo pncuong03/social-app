@@ -19,11 +19,11 @@ const LoginScreen = ({ navigation }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const onLogin = () => {
-    if (username &&  password) {
-      
+    if (username && password) {
+
       axios({
         method: 'post',
-        url: 'http://192.168.1.204:8080/api/v1/user/log-in',
+        url: 'http://192.168.230.1:8080/api/v1/user/log-in',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -54,7 +54,7 @@ const LoginScreen = ({ navigation }) => {
   };
 
 
-  
+
 
   return (
     <View style={styles.container}>
@@ -83,7 +83,7 @@ const LoginScreen = ({ navigation }) => {
         />
         <TouchableOpacity
           style={styles.loginButton}
-           onPress={onLogin}
+          onPress={onLogin}
         >
           <Text style={styles.login}>Log in</Text>
         </TouchableOpacity>

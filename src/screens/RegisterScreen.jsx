@@ -20,11 +20,11 @@ const RegisterScreen = ({ navigation }) => {
   const [password, setPassword] = useState('');
   // const [confirmPassword, setConfirmPassword] = useState('');
   const onRegister = () => {
-    if (username &&  password) {
-      
+    if (username && password) {
+
       axios({
         method: 'post',
-        url: 'http://192.168.1.204:8080/api/v1/user/sign-up',
+        url: 'http://192.168.230.1:8080/api/v1/user/sign-up',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -35,7 +35,7 @@ const RegisterScreen = ({ navigation }) => {
         responseType: 'text',
       })
         .then((response) => {
-          const data =  JSON.parse(response.data);
+          const data = JSON.parse(response.data);
           if (data) {
             Alert.alert('Registration success!');
             console.log('User account created & signed in!');
@@ -72,14 +72,14 @@ const RegisterScreen = ({ navigation }) => {
           onChangeText={value => setUsername(value)}
           style={styles.inputBox}
         />
-        
+
         <TextInput
           placeholder="Password"
           value={password}
           onChangeText={value => setPassword(value)}
           style={styles.inputBox}
         />
-       
+
         <TouchableOpacity style={styles.loginButton} onPress={onRegister}>
           <Text style={styles.login}>Create Account</Text>
         </TouchableOpacity>
