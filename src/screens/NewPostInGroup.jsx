@@ -100,7 +100,7 @@ export default function NewPost({ route }) {
                     }}
                 >
                     <Image
-                        source={avatar}
+                        source={group.admin.image}
                         style={{
                             width: 60,
                             height: 60,
@@ -134,7 +134,7 @@ export default function NewPost({ route }) {
             <View>
                 {image && (
                     <Image
-                        source={group.admin.image}
+                        source={{uri: image}}
                         style={{ width: "100%", height: 240, marginVertical: 20 }}
                     />
                 )}
