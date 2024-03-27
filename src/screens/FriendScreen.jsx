@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -6,18 +6,19 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
-  TextInput
+  TextInput,
 } from "react-native";
 import { Colors } from "../utils/Colors";
 import { friendRequests } from "../data/FriendData";
 import VectorIcon from "../utils/VectorIcon";
+import friendApi from "../api/friendApi";
 
 const FriendScreen = () => {
   const [requests, setRequests] = useState([...friendRequests]);
   const [searchTerm, setSearchTerm] = useState("");
   const [isSearch, setIsSearch] = useState(false);
-  const [filteredRequests, setFilteredRequests] = useState(friendRequests);
-  
+  const [filteredRequests, setFilteredRequests] = useState([]);
+
   const handleConfirm = (id) => {
     const updatedRequests = requests.filter((request) => request.id !== id);
     setRequests(updatedRequests);
@@ -42,6 +43,20 @@ const FriendScreen = () => {
     setFilteredRequests(filtered);
   };
 
+  useEffect(() => {
+    const fetchFriendRequestList = async () => {
+      try {
+        const params = { _page: 1, _limit: 20 };
+        const response = await friendApi.getAll(params);
+        console.log("Fetch products successfully: ", response);
+        console.log(response);
+        setFilteredRequests(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchFriendRequestList();
+  }, []);
   return (
     <ScrollView style={styles.container}>
       <View style={styles.subNav}>
@@ -56,7 +71,7 @@ const FriendScreen = () => {
         </TouchableOpacity>
         {isSearch && (
           <TextInput
-            style={{fontSize:17}}
+            style={{ fontSize: 17 }}
             placeholder="Search..."
             onChangeText={handleSearch}
             value={searchTerm}
