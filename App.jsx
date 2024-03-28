@@ -8,8 +8,6 @@ import RegisterScreen from "./src/screens/RegisterScreen";
 import MainScreen from "./src/screens/MainScreen";
 import SplashScreen from "./src/screens/SplashScreen";
 import { Colors } from "react-native/Libraries/NewAppScreen";
-import HomeScreen from "./src/screens/HomeScreen";
-import MenuScreen from "./src/screens/MenuSreen";
 
 const Stack = createStackNavigator();
 
@@ -23,6 +21,7 @@ const App = () => {
 
 const AppContent = () => {
   const { userInfo, splashLoading } = useContext(AuthContext);
+  const isAuthenticated = userInfo && userInfo.accessToken;
 
   return (
     <NavigationContainer>
@@ -30,13 +29,14 @@ const AppContent = () => {
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         {splashLoading ? (
           <Stack.Screen name="SplashScreen" component={SplashScreen} />
-        ) : userInfo ? (
-          <Stack.Screen name="MainScreen" component={MainScreen} />
+        ) : isAuthenticated ? (
+          <>
+            <Stack.Screen name="MainScreen" component={MainScreen} />
+          </>
         ) : (
           <>
             <Stack.Screen name="LoginScreen" component={LoginScreen} />
             <Stack.Screen name="RegisterScreen" component={RegisterScreen} />
-            <Stack.Screen name="MenuScreen" component={MenuScreen} />
           </>
         )}
       </Stack.Navigator>
