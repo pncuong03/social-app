@@ -11,7 +11,6 @@ import {
 import { Colors } from "../utils/Colors";
 import { friendRequests } from "../data/FriendData";
 import VectorIcon from "../utils/VectorIcon";
-import friendApi from "../api/friendApi";
 
 const FriendScreen = () => {
   const [requests, setRequests] = useState([...friendRequests]);
@@ -43,20 +42,6 @@ const FriendScreen = () => {
     setFilteredRequests(filtered);
   };
 
-  useEffect(() => {
-    const fetchFriendRequestList = async () => {
-      try {
-        const params = { _page: 1, _limit: 20 };
-        const response = await friendApi.getAll(params);
-        console.log("Fetch products successfully: ", response);
-        console.log(response);
-        setFilteredRequests(response.data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchFriendRequestList();
-  }, []);
   return (
     <ScrollView style={styles.container}>
       <View style={styles.subNav}>
