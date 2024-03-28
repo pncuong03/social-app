@@ -6,88 +6,69 @@ import {
   TextInput,
   TouchableOpacity,
   Alert,
-} from 'react-native';
-import React, { useState } from 'react';
-import VectorIcon from '../utils/VectorIcon';
-import { Colors } from '../utils/Colors';
-import Logo from '../assets/images/logo.png';
-import MetaLogo from '../assets/images/meta-logo.png';
-// import auth from '@react-native-firebase/auth';
+} from "react-native";
+import React, { useContext, useState } from "react";
+import VectorIcon from "../utils/VectorIcon";
+import { Colors } from "../utils/Colors";
+import Logo from "../assets/images/logo.png";
+import MetaLogo from "../assets/images/meta-logo.png";
+import Spinner from "react-native-loading-spinner-overlay";
+import { AuthContext } from "../context/AuthContext";
 
 const RegisterScreen = ({ navigation }) => {
-  const [fullname, setFullname] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [username, setUsername] = useState(null);
+  const [password, setPassword] = useState(null);
 
-  // const onCreateAccount = () => {
-  //   navigation.navigate('LoginScreen');
-  // };
-
-  // const onRegister = () => {
-  //   if (password !== confirmPassword) {
-  //     Alert.alert("Password don't match.");
-  //     return;
-  //   }
-  //   if (email && password) {
-  //     auth()
-  //       .createUserWithEmailAndPassword(email, password)
-  //       .then(() => {
-  //         console.log('User account created & signed in!');
-  //       })
-  //       .catch(error => {
-  //         if (error.code === 'auth/email-already-in-use') {
-  //           console.log('That email address is already in use!');
-  //         }
-  //         if (error.code === 'auth/invalid-email') {
-  //           console.log('That email address is invalid!');
-  //         }
-  //         console.error(error);
-  //       });
-  //   } else {
-  //     Alert.alert('Please fill in details!');
-  //   }
-  // };
+  const { isLoading, register } = useContext(AuthContext);
 
   return (
     <View style={styles.container}>
-      <VectorIcon
+      {/* <Spinner visible={isLoading} /> */}
+      {/* <VectorIcon
         name="arrow-back"
         type="Ionicons"
         color={Colors.black}
         size={20}
-        onPress={() => navigation.navigate('LoginScreen')}
-      />
+        onPress={() => navigation.navigate("LoginScreen")}
+      /> */}
       <View style={styles.subContainer}>
         <Image source={Logo} style={styles.logoStyle} />
-        <TextInput
+        {/* <TextInput
           placeholder="Full Name"
           value={fullname}
-          onChangeText={value => setFullname(value)}
+          onChangeText={(value) => setFullname(value)}
           style={styles.inputBox}
-        />
+        /> */}
         <TextInput
-          placeholder="Mobile number or email"
-          value={email}
-          onChangeText={value => setEmail(value)}
+          placeholder="Username"
+          value={username}
+          onChangeText={(value) => setUsername(value)}
           style={styles.inputBox}
         />
         <TextInput
           placeholder="Password"
-          value={confirmPassword}
-          onChangeText={value => setConfirmPassword(value)}
+          value={password}
+          onChangeText={(value) => setPassword(value)}
           style={styles.inputBox}
         />
-        <TextInput
+        {/* <TextInput
           placeholder="Confirm Password"
           value={password}
           onChangeText={value => setPassword(value)}
           style={styles.inputBox}
-        />
-        <TouchableOpacity style={styles.loginButton} onPress={() => navigation.navigate('MainScreen')}>
+        /> */}
+        <TouchableOpacity
+          style={styles.loginButton}
+          onPress={() => {
+            register(username, password);
+          }}
+        >
           <Text style={styles.login}>Create Account</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.newAccount} >
+        <TouchableOpacity
+          style={styles.newAccount}
+          onPress={() => navigation.navigate("LoginScreen")}
+        >
           <Text style={styles.newAccountText}>Already have an account?</Text>
         </TouchableOpacity>
         <Image source={MetaLogo} style={styles.metaLogoStyle} />
@@ -100,40 +81,40 @@ const styles = StyleSheet.create({
   logoStyle: {
     height: 68,
     width: 50,
-    marginVertical: '20%',
+    marginVertical: "20%",
   },
   container: {
     padding: 16,
   },
   subContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   inputBox: {
     borderWidth: 1,
     borderColor: Colors.borderGrey,
     padding: 10,
     borderRadius: 12,
-    width: '95%',
+    width: "95%",
     marginTop: 12,
   },
   loginButton: {
     backgroundColor: Colors.primaryColor,
     padding: 10,
     borderRadius: 20,
-    width: '95%',
-    alignItems: 'center',
+    width: "95%",
+    alignItems: "center",
     marginTop: 12,
   },
   login: {
     color: Colors.white,
     fontSize: 15,
-    fontWeight: '500',
+    fontWeight: "500",
   },
   forgotPass: {
     color: Colors.grey,
     fontSize: 14,
-    fontWeight: '500',
+    fontWeight: "500",
     marginTop: 15,
   },
   newAccount: {
@@ -141,14 +122,14 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 10,
     borderRadius: 18,
-    width: '95%',
-    alignItems: 'center',
-    marginTop: '35%',
+    width: "95%",
+    alignItems: "center",
+    marginTop: "35%",
   },
   newAccountText: {
     color: Colors.primaryColor,
     fontSize: 14,
-    fontWeight: '400',
+    fontWeight: "400",
   },
   metaLogoStyle: {
     height: 15,
