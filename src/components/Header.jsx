@@ -1,18 +1,29 @@
-import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
-import React from 'react';
-import FacebookLogo from '../assets/images/fblogo.png';
-import VectorIcon from '../utils/VectorIcon';
-import { Colors } from '../utils/Colors';
-import { useNavigation } from '@react-navigation/native';
+import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
+import React from "react";
+import FacebookLogo from "../assets/images/fblogo.png";
+import VectorIcon from "../utils/VectorIcon";
+import { Colors } from "../utils/Colors";
+import { useNavigation } from "@react-navigation/native";
 
 const Header = () => {
-  const navigation = useNavigation()
+  const navigation = useNavigation();
+
+  const handleLogo = () => {
+    navigation.navigate("Home");
+  };
+
+  // const handleLogoPress = useCallback(() => {
+  //   navigation.navigate("Home");
+  //   reloadData();
+  // }, [navigation, reloadData]);
   return (
     <View style={styles.container}>
-      <Image source={FacebookLogo} style={styles.fbLogoStyle} />
+      <TouchableOpacity onPress={handleLogo} >
+        <Image source={FacebookLogo} style={styles.fbLogoStyle} />
+      </TouchableOpacity>
       <View style={styles.headerIcons}>
         <View style={styles.searchBg}>
-          <TouchableOpacity onPress={() => navigation.push('MessageScreen')}>
+          <TouchableOpacity onPress={() => navigation.push("MessageScreen")}>
             <VectorIcon
               name="messenger"
               type="Fontisto"
@@ -36,12 +47,12 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: Colors.white,
     padding: 16,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
     alignItems: "center",
   },
   headerIcons: {
-    flexDirection: 'row',
+    flexDirection: "row",
     marginTop: 20,
   },
 });
