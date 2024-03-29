@@ -35,6 +35,31 @@ export default function EditProfile() {
       setSelectedImage(result.assets[0].uri);
     }
   };
+  // const handleUpdate = async () => {
+  //     // Save the selected image URI to AsyncStorage
+  //     try {
+  //         await AsyncStorage.setItem('@profile_image', selectedImage);
+  //     } catch (e) {
+  //         // saving error
+  //         console.error(e);
+  //     }
+  // };
+  // useEffect(() => {
+  //     // Load the saved profile image URI from AsyncStorage when the component mounts
+  //     const loadProfileImage = async () => {
+  //         try {
+  //             const value = await AsyncStorage.getItem('@profile_image');
+  //             if (value !== null) {
+  //                 setSelectedImage(value);
+  //             }
+  //         } catch (e) {
+  //             // loading error
+  //             console.error(e);
+  //         }
+  //     };
+
+  //     loadProfileImage();
+  // }, []);
 
   return (
     <SafeAreaView

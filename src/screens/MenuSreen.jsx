@@ -12,7 +12,7 @@ export default function MenuScreen() {
 
   const handleLogout = () => {
     logout();
-    // navigation.navigate("LoginScreen");
+    navigation.navigate("SplashScreen");
   };
 
   return (

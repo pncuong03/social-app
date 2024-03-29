@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -9,63 +9,35 @@ import {
   TextInput,
 } from "react-native";
 import { Colors } from "../utils/Colors";
+import { friendRequests } from "../data/FriendData";
 import VectorIcon from "../utils/VectorIcon";
-import { AuthContext } from "../context/AuthContext";
-import {
-  fetchAcceptFriend,
-  fetchFriendRequests,
-  fetchRejectFriend,
-} from "../context/FriendContext";
 
 const FriendScreen = () => {
-  const { userInfo } = useContext(AuthContext);
-  const [requests, setRequests] = useState([]);
+  const [requests, setRequests] = useState([...friendRequests]);
   const [searchTerm, setSearchTerm] = useState("");
   const [isSearch, setIsSearch] = useState(false);
   const [filteredRequests, setFilteredRequests] = useState([]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = await fetchFriendRequests(userInfo.accessToken);
-        setRequests(data.content);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-    fetchData();
-  }, []);
-
-  const onConfirm = async (id) => {
-    try {
-      await fetchAcceptFriend(id, userInfo.accessToken);
-      const updatedRequests = requests.filter((request) => request.id !== id);
-      setRequests(updatedRequests);
-      setFilteredRequests(updatedRequests);
-    } catch (error) {
-      // console.error("Error confirming friend:", error);
-    }
+  const handleConfirm = (id) => {
+    const updatedRequests = requests.filter((request) => request.id !== id);
+    setRequests(updatedRequests);
+    setFilteredRequests(updatedRequests);
   };
 
-  const onDelete = async (id) => {
-    try {
-      await fetchRejectFriend(id, userInfo.accessToken);
-      const updatedRequests = requests.filter((request) => request.id !== id);
-      setRequests(updatedRequests);
-      setFilteredRequests(updatedRequests);
-    } catch (error) {
-      console.error("Error confirming friend:", error);
-    }
+  const handleDelete = (id) => {
+    const updatedRequests = requests.filter((request) => request.id !== id);
+    setRequests(updatedRequests);
+    setFilteredRequests(updatedRequests);
   };
 
   const toggleSearch = () => {
     setIsSearch(!isSearch);
   };
 
-  const onSearch = (text) => {
+  const handleSearch = (text) => {
     setSearchTerm(text);
     const filtered = requests.filter((request) =>
-      request.fullName.toLowerCase().includes(text.toLowerCase())
+      request.name.toLowerCase().includes(text.toLowerCase())
     );
     setFilteredRequests(filtered);
   };
@@ -86,7 +58,7 @@ const FriendScreen = () => {
           <TextInput
             style={{ fontSize: 17 }}
             placeholder="Search..."
-            onChangeText={onSearch}
+            onChangeText={handleSearch}
             value={searchTerm}
           />
         )}
@@ -105,7 +77,7 @@ const FriendScreen = () => {
           {requests.length}
         </Text>
       </View>
-      {requests.map((request) => (
+      {filteredRequests.map((request) => (
         <View key={request.id} style={styles.friendView}>
           <Image style={styles.avatar} source={request.image} />
           <View style={styles.headerBox}>
@@ -114,7 +86,7 @@ const FriendScreen = () => {
             >
               <View>
                 <Text style={{ fontWeight: "bold", fontSize: 18 }}>
-                  {request.fullName}
+                  {request.name}
                 </Text>
                 <Text style={{ fontWeight: 400, fontSize: 16, color: "gray" }}>
                   {request.amount} mutual friend
@@ -135,13 +107,13 @@ const FriendScreen = () => {
             >
               <TouchableOpacity
                 style={styles.button}
-                onPress={() => onConfirm(request.id)}
+                onPress={() => handleConfirm(request.id)}
               >
                 <Text style={styles.buttonText}>Confirm</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={[styles.button, { backgroundColor: "gray" }]}
-                onPress={() => onDelete(request.id)}
+                onPress={() => handleDelete(request.id)}
               >
                 <Text style={styles.buttonText}>Delete</Text>
               </TouchableOpacity>
@@ -152,6 +124,7 @@ const FriendScreen = () => {
     </ScrollView>
   );
 };
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
