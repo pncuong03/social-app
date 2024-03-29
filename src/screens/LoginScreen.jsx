@@ -18,6 +18,16 @@ const LoginScreen = ({ navigation }) => {
   const [username, setUsername] = useState(null);
   const [password, setPassword] = useState(null);
   const { isLoading, login } = useContext(AuthContext);
+
+  const handleLogin = () => {
+    // Kiểm tra xem tài khoản và mật khẩu có được nhập không
+    if (!username || !password) {
+      Alert.alert("Thông báo", "Vui lòng nhập đầy đủ tài khoản và mật khẩu");
+    } else {
+      // Nếu có giá trị, gọi hàm login
+      login(username, password);
+    }
+  };
   return (
     <View style={styles.container}>
       <Spinner visible={isLoading} />
@@ -44,12 +54,7 @@ const LoginScreen = ({ navigation }) => {
           style={styles.inputBox}
           secureTextEntry={true}
         />
-        <TouchableOpacity
-          style={styles.loginButton}
-          onPress={() => {
-            login(username, password);
-          }}
-        >
+        <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
           <Text style={styles.login}>Log in</Text>
         </TouchableOpacity>
         <Text style={styles.forgotPass}>OR</Text>
