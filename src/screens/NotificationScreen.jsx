@@ -12,6 +12,7 @@ import { notifyResponses } from "../data/NotifycationData";
 import { useNavigation } from "@react-navigation/native";
 import { AuthContext } from "../context/AuthContext";
 import { fetchNotifications } from "../context/NotificationContext";
+import moment from "moment";
 
 const NotificationScreen = () => {
   const { userInfo } = useContext(AuthContext);
@@ -21,14 +22,16 @@ const NotificationScreen = () => {
     const fetchData = async () => {
       try {
         const data = await fetchNotifications(userInfo.accessToken);
-        setNoti(data);
+        setNoti(data.content);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
     fetchData();
   }, []);
-  console.log(noti);
+  const formatDateTime = (dateTime) => {
+    return moment(dateTime).format("MMMM Do YYYY, h:mm:ss a");
+  };
 
   return (
     <ScrollView style={styles.container}>
@@ -36,23 +39,38 @@ const NotificationScreen = () => {
         <Text style={{ fontWeight: "bold", fontSize: 30 }}>Notifications</Text>
       </View>
       <View style={{ flexDirection: "column" }}>
-        {notifyResponses.map((notify) => (
+        {noti.map((notify) => (
           <TouchableOpacity
             key={notify.id}
             // onPress={() => handleNotificationPress(notify.postId)}
           >
             <View style={[styles.inforNotify]}>
-              <Image style={styles.imgNotify} source={notify.image} />
-              <View style={{ flexDirection: "row", marginBottom: 26 }}>
-                <Text style={{ marginRight: 4, fontWeight: "500" }}>
-                  {notify.name}
+              <Image
+                style={styles.imgNotify}
+                source={{ uri: notify.interact.imageUrl }}
+              />
+              <View
+                style={{
+                  flexDirection: "row",
+                  marginBottom: 26,
+                  alignItems: "center",
+                }}
+              >
+                <Text
+                  style={{ marginRight: 8, fontWeight: "bold", fontSize: 20 }}
+                >
+                  {notify.interact.fullName}
                 </Text>
-                <Text>{notify.notify}</Text>
+                <Text style={{ fontSize: 16, maxWidth: "auto" }}>
+                  {notify.interactType}
+                </Text>
               </View>
               <View
                 style={{ position: "absolute", marginLeft: 60, paddingTop: 20 }}
               >
-                <Text>{notify.time}</Text>
+                <Text style={{ fontSize: 15, color: "gray" }}>
+                  {formatDateTime(notify.createdAt)}
+                </Text>
               </View>
             </View>
           </TouchableOpacity>

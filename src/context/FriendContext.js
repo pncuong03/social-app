@@ -30,3 +30,35 @@ export const fetchListFriend = async (accessToken) => {
     throw error;
   }
 };
+
+export const fetchAcceptFriend = async (id, accessToken) => {
+  try {
+    const response = await axios.post(`${BASE_URL}/friend/accept?id=${id}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error("Error confirming friend11111:", error);
+    throw error;
+  }
+};
+
+export const fetchRejectFriend = async (id, accessToken) => {
+  try {
+    const response = await axios.delete(
+      `${BASE_URL}/friend/reject?senderId=${id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error confirming friend:", error);
+    throw error;
+  }
+};
