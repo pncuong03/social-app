@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -9,15 +9,29 @@ import {
   TextInput,
 } from "react-native";
 import { Colors } from "../utils/Colors";
-import { friendRequests } from "../data/FriendData";
 import VectorIcon from "../utils/VectorIcon";
+import { AuthContext } from "../context/AuthContext";
+import { fetchFriendRequests } from "../context/FriendContext";
 
 const FriendScreen = () => {
-  const [requests, setRequests] = useState([...friendRequests]);
+  const { userInfo } = useContext(AuthContext);
+  const [requests, setRequests] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [isSearch, setIsSearch] = useState(false);
   const [filteredRequests, setFilteredRequests] = useState([]);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await fetchFriendRequests(userInfo.accessToken);
+        setRequests(data);
+        console.log(data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    fetchData();
+  }, []);
   const handleConfirm = (id) => {
     const updatedRequests = requests.filter((request) => request.id !== id);
     setRequests(updatedRequests);
@@ -124,7 +138,6 @@ const FriendScreen = () => {
     </ScrollView>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,

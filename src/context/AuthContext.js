@@ -55,7 +55,7 @@ export const AuthProvider = ({ children }) => {
   const logout = () => {
     setIsLoading(true);
 
-    AsyncStorage.clear()
+    AsyncStorage.removeItem("userInfo")
       .then(() => {
         setUserInfo({});
         setIsLoading(false);

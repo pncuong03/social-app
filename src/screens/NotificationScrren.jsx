@@ -6,17 +6,29 @@ import {
   ScrollView,
   TouchableOpacity,
 } from "react-native";
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Colors } from "../utils/Colors";
 import { notifyResponses } from "../data/NotifycationData";
 import { useNavigation } from "@react-navigation/native";
+import { AuthContext } from "../context/AuthContext";
+import { fetchNotifications } from "../context/NotificationContext";
 
 const NotificationScreen = () => {
-  const navigation = useNavigation();
+  const { userInfo } = useContext(AuthContext);
+  const [noti, setNoti] = useState([]);
 
-  const handleNotificationPress = (postId) => {
-    navigation.navigate("PostDetail", { postId: postId });
-  };
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await fetchNotifications(userInfo.accessToken);
+        setNoti(data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    fetchData();
+  }, []);
+  console.log(noti);
 
   return (
     <ScrollView style={styles.container}>
@@ -27,7 +39,7 @@ const NotificationScreen = () => {
         {notifyResponses.map((notify) => (
           <TouchableOpacity
             key={notify.id}
-            onPress={() => handleNotificationPress(notify.postId)}
+            // onPress={() => handleNotificationPress(notify.postId)}
           >
             <View style={[styles.inforNotify]}>
               <Image style={styles.imgNotify} source={notify.image} />
