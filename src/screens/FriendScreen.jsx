@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -6,7 +6,7 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
-  TextInput
+  TextInput,
 } from "react-native";
 import { Colors } from "../utils/Colors";
 import { friendRequests } from "../data/FriendData";
@@ -16,8 +16,8 @@ const FriendScreen = () => {
   const [requests, setRequests] = useState([...friendRequests]);
   const [searchTerm, setSearchTerm] = useState("");
   const [isSearch, setIsSearch] = useState(false);
-  const [filteredRequests, setFilteredRequests] = useState(friendRequests);
-  
+  const [filteredRequests, setFilteredRequests] = useState([]);
+
   const handleConfirm = (id) => {
     const updatedRequests = requests.filter((request) => request.id !== id);
     setRequests(updatedRequests);
@@ -56,7 +56,7 @@ const FriendScreen = () => {
         </TouchableOpacity>
         {isSearch && (
           <TextInput
-            style={{fontSize:17}}
+            style={{ fontSize: 17 }}
             placeholder="Search..."
             onChangeText={handleSearch}
             value={searchTerm}

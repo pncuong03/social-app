@@ -18,7 +18,7 @@ const Header = () => {
   // }, [navigation, reloadData]);
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={handleLogo} >
+      <TouchableOpacity onPress={handleLogo}>
         <Image source={FacebookLogo} style={styles.fbLogoStyle} />
       </TouchableOpacity>
       <View style={styles.headerIcons}>

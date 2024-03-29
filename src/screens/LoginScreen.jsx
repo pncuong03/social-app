@@ -1,3 +1,4 @@
+import React, { useContext, useState } from "react";
 import {
   View,
   Text,
@@ -5,73 +6,56 @@ import {
   StyleSheet,
   TextInput,
   TouchableOpacity,
-  Alert
+  Alert,
 } from "react-native";
-import React, { useState } from "react";
 import VectorIcon from "../utils/VectorIcon";
 import { Colors } from "../utils/Colors";
 import Logo from "../assets/images/logo.png";
-import axios from 'axios';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 const LoginScreen = ({ navigation }) => {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const onLogin = () => {
-    if (username &&  password) {
-      
-      axios({
-        method: 'post',
-        url: 'http://192.168.1.204:8080/api/v1/user/log-in',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        data: {
-          username: username,
-          password: password,
-        },
-        responseType: 'text',
-      })
-        .then((response) => {
-          // console.log(response)
-          const data = JSON.parse(response.data);
-          if (data) {
-            Alert.alert('Login success!');
-            console.log('Token:', data.accessToken);
-            AsyncStorage.setItem('user', data.accessToken);
-            navigation.replace("MainScreen");
-          } else {
-            console.log('Login failed:', data);
-          }
-        })
-        .catch((error) => {
-          console.error('Error:', error);
-        });
-    } else {
-      Alert.alert('Please fill in details!');
-    }
-  };
 
+  // const onCreateAccount = () => {
+  //   navigation.navigate('RegisterScreen');
+  // };
 
-  
+  // const onLogin = () => {
+  //   if (email && password) {
+  //     auth()
+  //       .signInWithEmailAndPassword(email, password)
+  //       .then(response => {
+  //         console.log('response :', response);
+  //       })
+  //       .catch(error => {
+  //         if (error.code === 'auth/wrong-password') {
+  //           Alert.alert('Your password is wrong!');
+  //         } else {
+  //           Alert.alert(`${error}`);
+  //         }
+  //         console.log('error :', error);
+  //       });
+  //   }
+  // };
 
   return (
     <View style={styles.container}>
-      <VectorIcon
+      <Spinner visible={isLoading} />
+      {/* <VectorIcon
         name="arrow-back"
         type="Ionicons"
         color={Colors.black}
         size={20}
         onPress={() => navigation.navigate("SplashScreen")}
-      />
+      /> */}
       <View style={styles.subContainer}>
         <Image source={Logo} style={styles.logoStyle} />
         <Text style={styles.textLogo}>PaceBook</Text>
         <TextInput
           placeholder="Mobile number or email"
-          value={username}
-          onChangeText={(text) => setUsername(text)}
+          value={email}
+          onChangeText={(value) => setEmail(value)}
           style={styles.inputBox}
         />
         <TextInput
@@ -80,10 +64,11 @@ const LoginScreen = ({ navigation }) => {
           value={password}
           onChangeText={(text) => setPassword(text)}
           style={styles.inputBox}
+          secureTextEntry={true}
         />
         <TouchableOpacity
           style={styles.loginButton}
-           onPress={onLogin}
+          onPress={() => navigation.navigate("MainScreen")}
         >
           <Text style={styles.login}>Log in</Text>
         </TouchableOpacity>
@@ -94,7 +79,6 @@ const LoginScreen = ({ navigation }) => {
         >
           <Text style={styles.newAccountText}>Create new account</Text>
         </TouchableOpacity>
-        {/* <Image source={MetaLogo} style={styles.metaLogoStyle} /> */}
       </View>
     </View>
   );
