@@ -6,6 +6,7 @@ import {
   Pressable,
   Image,
   TextInput,
+  Alert
 } from "react-native";
 import VectorIcon from "../utils/VectorIcon";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -18,17 +19,19 @@ import {
   MenuProvider,
 } from "react-native-popup-menu";
 import * as ImagePicker from "expo-image-picker";
+import * as FileSystem from 'expo-file-system';
 import { Colors } from "../utils/Colors";
 import avatar from "../assets/images/img1.jpeg";
-
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 export default function NewPost() {
   const navigation = useNavigation();
   const [privacyOption, setPrivacyOption] = useState("public");
   const [postContent, setPostContent] = useState("");
-  const [image, setImage] = useState("");
+  const [selectedImage, setSelectedImage] = useState("");
   const handlePrivacyOption = (value) => {
     console.log("Privacy option selected:", value);
-    setPrivacyOption(value === "public" ? "public" : "friends");
+    setPrivacyOption(value === "public" ? "public" : "private");
   };
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -38,11 +41,44 @@ export default function NewPost() {
       quality: 1,
     });
 
-    console.log(result);
     if (!result.canceled) {
-      setImage(result.assets[0].uri);
+      setSelectedImage(result.assets[0].uri);
     }
   };
+  
+  const createPost = async () => {
+    let formData = new FormData();
+    formData.append('createPostInput', JSON.stringify({
+      content: postContent,
+      state: privacyOption,
+    }));
+    let image = await FileSystem.readAsStringAsync(selectedImage, {
+      encoding: FileSystem.EncodingType.Base64,
+    });
+    formData.append('image', image);
+    // console.log(formData);
+    try {
+      const token = await AsyncStorage.getItem('user');
+      console.log(token);
+      let response = await axios({
+        url: 'http://192.168.1.204:8080/api/v1/post/post',
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data',
+        },
+        data: formData,
+      });
+      if (response.status === 200) {
+        Alert.alert('Success', 'Create Post successfully');
+      } else {
+        Alert.alert('Error', 'Failed to update profile');
+      }
+    } catch (error) {
+      Alert.alert('Error', error.message);
+    }
+  };
+  
   return (
     <MenuProvider>
       <View
@@ -71,6 +107,7 @@ export default function NewPost() {
           </TouchableOpacity>
           <Text style={{ fontSize: 20 }}>Create a post</Text>
           <Pressable
+          onPress={createPost}
             style={({ pressed }) => ({
               display: "flex",
               alignItems: "center",
@@ -152,8 +189,8 @@ export default function NewPost() {
                 <MenuOption value={"public"}>
                   <Text>public</Text>
                 </MenuOption>
-                <MenuOption value={"friends"}>
-                  <Text>friends</Text>
+                <MenuOption value={"private"}>
+                  <Text>private</Text>
                 </MenuOption>
               </MenuOptions>
             </Menu>
@@ -166,9 +203,9 @@ export default function NewPost() {
           placeholder="What's on your mind?"
         />
         <View>
-          {image && (
+          {selectedImage && (
             <Image
-              source={{ uri: image }}
+              source={{ uri: selectedImage }}
               style={{ width: "100%", height: 240, marginVertical: 20 }}
             />
           )}

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   View,
   Text,
@@ -13,9 +13,20 @@ import member from "../assets/images/img1.jpeg";
 import { PostData } from "../data/PostData";
 import PostFooter from "../components/PostFooter";
 import PostHeader from "../components/PostHeader";
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
+import { AuthContext } from "../context/AuthContext";
+import { fetchUserInfo } from '../context/ProfileContext';
 const ProfileScreen = () => {
+  const { userInfo } = useContext(AuthContext);
   const navigation = useNavigation();
+  const [user, setUser] = useState({
+    birthday: null,
+    fullName: "",
+    gender: null,
+    id: null,
+    imageUrl: ""
+  });
   const [posts, setPosts] = useState([]);
   const [followers, setFollowers] = useState(0);
   const mockPosts = [
@@ -38,7 +49,27 @@ const ProfileScreen = () => {
     fetchPosts();
     fetchFollowers();
   }, []);
-
+  useEffect(() => {
+    const getUserInfo = async () => {
+      try {
+        const data = await fetchUserInfo(userInfo.accessToken);        
+        console.log(data);
+        setUser({
+          birthday: data.birthday,
+          fullName: data.fullName,
+          gender: data.gender,
+          id: data.id,
+          imageUrl: data.imageUrl
+        });
+        setPosts(data.posts);
+        setFollowers(data.followers);
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    };
+  
+    getUserInfo();
+  }, []);
   return (
     <ScrollView style={styles.container}>
       <View>
@@ -53,8 +84,8 @@ const ProfileScreen = () => {
       </View>
 
       <View style={styles.profileInfoContainer}>
-        <Image source={member} style={styles.profileImage} />
-        <Text style={styles.profileName}>Ronaldo</Text>
+        <Image source={{ uri: user.imageUrl }} style={styles.profileImage} />
+        <Text style={styles.profileName}>{user.fullName}</Text>
         <TouchableOpacity
           onPress={() => navigation.push("EditProfile")}
           style={styles.editProfileButton}
@@ -64,24 +95,24 @@ const ProfileScreen = () => {
         <View style={styles.profileStatsContainer}>
           <View style={styles.profileStatsItem}>
             <Text style={styles.profileStatsLabel}>Posts</Text>
-            <Text style={styles.profileStatsValue}>{posts.length}</Text>
+            <Text style={styles.profileStatsValue}>3</Text>
           </View>
           <View style={styles.profileStatsItem}>
             <Text style={styles.profileStatsLabel}>Followers</Text>
-            <Text style={styles.profileStatsValue}>{followers}</Text>
+            <Text style={styles.profileStatsValue}>4</Text>
           </View>
         </View>
       </View>
 
       <View style={styles.postContainer}>
-      {PostData.map(item => (
-        <View key={item.id}>
-          <PostHeader data={item} />
-          <Image source={item.postImg} style={styles.postImg} />
-          <PostFooter data={item} />
-        </View>
-      ))}
-    </View>
+        {PostData.map(item => (
+          <View key={item.id}>
+            <PostHeader data={item} />
+            <Image source={item.postImg} style={styles.postImg} />
+            <PostFooter data={item} />
+          </View>
+        ))}
+      </View>
     </ScrollView>
   );
 };
@@ -109,6 +140,12 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     textAlign: "center",
+  },
+  profileBirthday: {
+    fontSize: 16,
+    lineHeight: 20,
+    color: "black",
+    marginVertical: 4,
   },
   profileInfoContainer: {
     flex: 1,

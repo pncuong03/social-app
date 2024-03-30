@@ -5,19 +5,26 @@ import {
   Image,
   ScrollView,
   TextInput,
+  Alert,
+  Button
 } from "react-native";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useContext } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import * as ImagePicker from "expo-image-picker";
-
+import * as FileSystem from 'expo-file-system';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { AuthContext } from "../context/AuthContext";
+import { upDateUserInfo } from "../context/ProfileContext";
 export default function EditProfile() {
+  const { userInfo } = useContext(AuthContext);
   const navigation = useNavigation();
-  const [selectedImage, setSelectedImage] = useState(
-    require("../assets/images/img1.jpeg")
-  );
-  const [name, setName] = useState("");
+
+  const [selectedImage, setSelectedImage] = useState("http://res.cloudinary.com/ds9ipqi3z/image/upload/v1710954680/bpnracdpkspbzt0njy8n.png");
+
+  const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [password, setPassword] = useState("");
@@ -29,10 +36,58 @@ export default function EditProfile() {
       quality: 1,
     });
 
-    console.log(result);
+
 
     if (!result.canceled) {
       setSelectedImage(result.assets[0].uri);
+    }
+    console.log(selectedImage)
+  };
+  const handleUpdate = async () => {
+    let changeInfoUserRequest = {
+      fullName: fullName,
+      birthdayString: "2011-08-12T20:17:46.384Z",
+      gender: "Male"
+    };
+
+    // Convert image to base64
+    let image = await FileSystem.readAsStringAsync(selectedImage, {
+      encoding: FileSystem.EncodingType.Base64,
+    });
+
+    let formData = new FormData();
+    formData.append('new_user_info', JSON.stringify(changeInfoUserRequest));
+
+    // Create a new blob object
+    let blob = await new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.onload = function () {
+        resolve(xhr.response);
+      };
+      xhr.onerror = function () {
+        reject(new TypeError('Network request failed'));
+      };
+      xhr.responseType = 'blob';
+      xhr.open('GET', selectedImage, true);
+      xhr.send(null);
+    });
+
+    // Append the blob object as a file to the form data
+    let file = { uri: selectedImage, type: `image/${selectedImage.split('.').pop()}`, name: `image.${selectedImage.split('.').pop()}` };
+    formData.append('image', file);
+
+
+
+    try {
+      const response = await upDateUserInfo(userInfo.accessToken, formData);
+      console.log(response.status);
+      if (response.status === 200) {
+        Alert.alert('Success', 'Profile updated successfully');
+      } else {
+        Alert.alert('Error', 'Failed to update profile');
+      }
+    } catch (error) {
+      Alert.alert('Error', error.message);
     }
   };
 
@@ -59,7 +114,7 @@ export default function EditProfile() {
         />
 
         <TouchableOpacity
-          onPress={() => navigation.push("MainScreen")}
+          onPress={() => navigation.push("ProfileScreen")}
           style={{
             zIndex: 99,
             position: "absolute",
@@ -141,7 +196,7 @@ export default function EditProfile() {
               marginBottom: 6,
             }}
           >
-            <Text style={{ fontSize: 16 }}>UserName</Text>
+            <Text style={{ fontSize: 16 }}>FullName</Text>
             <View
               style={{
                 height: 44,
@@ -155,8 +210,8 @@ export default function EditProfile() {
               }}
             >
               <TextInput
-                value={name}
-                onChangeText={(value) => setName(value)}
+                value={fullName}
+                onChangeText={(value) => setFullName(value)}
                 editable={true}
               />
             </View>
@@ -261,7 +316,7 @@ export default function EditProfile() {
       </View>
       <View style={{ paddingHorizontal: 22 }}>
         <TouchableOpacity
-          // onPress={handleUpdate}
+          onPress={handleUpdate}
           style={{
             backgroundColor: "black",
             height: 44,
