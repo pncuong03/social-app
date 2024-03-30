@@ -15,8 +15,10 @@ import PostFooter from "../components/PostFooter";
 import PostHeader from "../components/PostHeader";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import { AuthContext } from "../context/AuthContext";
+import { fetchUserInfo } from '../context/ProfileContext';
 const ProfileScreen = () => {
-
+  const { userInfo } = useContext(AuthContext);
   const navigation = useNavigation();
   const [user, setUser] = useState({
     birthday: null,
@@ -25,8 +27,6 @@ const ProfileScreen = () => {
     id: null,
     imageUrl: ""
   });
-  const [username, setUsername] = useState("");
-  const [imageUrl, setImageUrl] = useState({});
   const [posts, setPosts] = useState([]);
   const [followers, setFollowers] = useState(0);
   const mockPosts = [
@@ -34,24 +34,26 @@ const ProfileScreen = () => {
     { id: 2, content: "Post 2" },
     { id: 3, content: "Post 3" },
   ];
-  useEffect(() => {
-    const fetchUserInfo = async () => {
-      try {
-        const token = await AsyncStorage.getItem('userInfo');
-        const tokenObject = JSON.parse(token);
-        const accessToken = tokenObject.accessToken;
-        console.log(accessToken);
-        const response = await axios({
-          method: 'get',
-          url: 'http://192.168.1.204:8080/api/v1/user',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${accessToken}`,
-          },
-        });
 
-        console.log(response.data);
-        const data = response.data;
+  const fetchPosts = () => {
+
+    setPosts(mockPosts);
+  };
+
+  const fetchFollowers = () => {
+    const mockFollowers = 100;
+    setFollowers(mockFollowers);
+  };
+
+  useEffect(() => {
+    fetchPosts();
+    fetchFollowers();
+  }, []);
+  useEffect(() => {
+    const getUserInfo = async () => {
+      try {
+        const data = await fetchUserInfo(userInfo.accessToken);        
+        console.log(data);
         setUser({
           birthday: data.birthday,
           fullName: data.fullName,
@@ -59,19 +61,15 @@ const ProfileScreen = () => {
           id: data.id,
           imageUrl: data.imageUrl
         });
-        // setPosts(data.posts);
-        // setFollowers(data.followers);
+        setPosts(data.posts);
+        setFollowers(data.followers);
       } catch (error) {
         console.error('Error:', error);
       }
     };
-
-    fetchUserInfo();
+  
+    getUserInfo();
   }, []);
-
-
-
-
   return (
     <ScrollView style={styles.container}>
       <View>
@@ -88,9 +86,6 @@ const ProfileScreen = () => {
       <View style={styles.profileInfoContainer}>
         <Image source={{ uri: user.imageUrl }} style={styles.profileImage} />
         <Text style={styles.profileName}>{user.fullName}</Text>
-        {user.birthday && <Text style={styles.profileBirthday}>
-          {new Date(user.birthday).toLocaleDateString()}
-        </Text>}
         <TouchableOpacity
           onPress={() => navigation.push("EditProfile")}
           style={styles.editProfileButton}
@@ -100,11 +95,11 @@ const ProfileScreen = () => {
         <View style={styles.profileStatsContainer}>
           <View style={styles.profileStatsItem}>
             <Text style={styles.profileStatsLabel}>Posts</Text>
-            <Text style={styles.profileStatsValue}>{posts.length}</Text>
+            <Text style={styles.profileStatsValue}>3</Text>
           </View>
           <View style={styles.profileStatsItem}>
             <Text style={styles.profileStatsLabel}>Followers</Text>
-            <Text style={styles.profileStatsValue}>{followers}</Text>
+            <Text style={styles.profileStatsValue}>4</Text>
           </View>
         </View>
       </View>

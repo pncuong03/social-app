@@ -9,7 +9,8 @@ import MainScreen from "./src/screens/MainScreen";
 import SplashScreen from "./src/screens/SplashScreen";
 import { Colors } from "react-native/Libraries/NewAppScreen";
 import MessageScreen from "./src/screens/MessageScreen";
-
+import ProfileScreen from "./src/screens/ProfileScreen";
+import EditProfile from "./src/screens/EditProfile";
 const Stack = createStackNavigator();
 
 const App = () => {
@@ -32,6 +33,8 @@ const AppContent = () => {
           <>
             <Stack.Screen name="MainScreen" component={MainScreen} />
             <Stack.Screen name="MessageScreen" component={MessageScreen} />
+            <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
+            <Stack.Screen name="EditProfile" component={EditProfile} />
           </>
         ) : (
           <>

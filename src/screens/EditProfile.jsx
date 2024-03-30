@@ -8,7 +8,7 @@ import {
   Alert,
   Button
 } from "react-native";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useContext } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -16,8 +16,10 @@ import * as ImagePicker from "expo-image-picker";
 import * as FileSystem from 'expo-file-system';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import DateTimePicker from '@react-native-community/datetimepicker';
+import { AuthContext } from "../context/AuthContext";
+import { upDateUserInfo } from "../context/ProfileContext";
 export default function EditProfile() {
+  const { userInfo } = useContext(AuthContext);
   const navigation = useNavigation();
 
   const [selectedImage, setSelectedImage] = useState("http://res.cloudinary.com/ds9ipqi3z/image/upload/v1710954680/bpnracdpkspbzt0njy8n.png");
@@ -26,26 +28,6 @@ export default function EditProfile() {
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [password, setPassword] = useState("");
-  const [birthday, setBirthDay] = useState("");
-  const [date, setDate] = useState(new Date());
-  const [mode, setMode] = useState('date');
-  const [show, setShow] = useState(false);
-  const onChange = (event, selectedDate) => {
-    const currentDate = selectedDate || date;
-    setShow(Platform.OS === 'android');
-    setDate(currentDate);
-    setBirthDay(currentDate.toISOString().split('T')[0]);
-  };
-
-  const showMode = (currentMode) => {
-    setShow(true);
-    setMode(currentMode);
-  };
-
-  const showDatepicker = () => {
-    showMode('date');
-  };
-
   const handleImageSelection = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -64,7 +46,7 @@ export default function EditProfile() {
   const handleUpdate = async () => {
     let changeInfoUserRequest = {
       fullName: fullName,
-      birthdayString: date,
+      birthdayString: "2011-08-12T20:17:46.384Z",
       gender: "Male"
     };
 
@@ -97,17 +79,8 @@ export default function EditProfile() {
 
 
     try {
-      const token = await AsyncStorage.getItem('user');
-      const response = await axios({
-        method: 'POST',
-        url: 'http://192.168.1.204:8080/api/v1/user/change-user-information',
-        data: formData,
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          'Authorization': `Bearer ${token}`,
-        },
-      });
-
+      const response = await upDateUserInfo(userInfo.accessToken, formData);
+      console.log(response.status);
       if (response.status === 200) {
         Alert.alert('Success', 'Profile updated successfully');
       } else {
@@ -244,27 +217,6 @@ export default function EditProfile() {
             </View>
           </View>
         </View>
-        {/* <View
-          style={{
-            flexDirection: "column",
-            marginBottom: 6,
-          }}
-        >
-          <Text style={{ fontSize: 16 }}>Birthday</Text>
-          <View>
-            <Button onPress={showDatepicker} title="Show date picker!" />
-          </View>
-          {show && (
-            <DateTimePicker
-              testID="dateTimePicker"
-              value={date}
-              mode={mode}
-              is24Hour={true}
-              display="default"
-              onChange={onChange}
-            />
-          )}
-        </View> */}
         <View
           style={{
             marginTop: 10,
