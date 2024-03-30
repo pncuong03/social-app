@@ -61,62 +61,6 @@ export default function EditProfile() {
     }
     console.log(selectedImage)
   };
-  const handleUpdate = async () => {
-    let changeInfoUserRequest = {
-      fullName: fullName,
-      birthdayString: date,
-      gender: "Male"
-    };
-
-    // Convert image to base64
-    let image = await FileSystem.readAsStringAsync(selectedImage, {
-      encoding: FileSystem.EncodingType.Base64,
-    });
-
-    let formData = new FormData();
-    formData.append('new_user_info', JSON.stringify(changeInfoUserRequest));
-
-    // Create a new blob object
-    let blob = await new Promise((resolve, reject) => {
-      const xhr = new XMLHttpRequest();
-      xhr.onload = function () {
-        resolve(xhr.response);
-      };
-      xhr.onerror = function () {
-        reject(new TypeError('Network request failed'));
-      };
-      xhr.responseType = 'blob';
-      xhr.open('GET', selectedImage, true);
-      xhr.send(null);
-    });
-
-    // Append the blob object as a file to the form data
-    let file = { uri: selectedImage, type: `image/${selectedImage.split('.').pop()}`, name: `image.${selectedImage.split('.').pop()}` };
-    formData.append('image', file);
-
-
-
-    try {
-      const token = await AsyncStorage.getItem('user');
-      const response = await axios({
-        method: 'POST',
-        url: 'http://192.168.230.1:8080/api/v1/user/change-user-information',
-        data: formData,
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          'Authorization': `Bearer ${token}`,
-        },
-      });
-
-      if (response.status === 200) {
-        Alert.alert('Success', 'Profile updated successfully');
-      } else {
-        Alert.alert('Error', 'Failed to update profile');
-      }
-    } catch (error) {
-      Alert.alert('Error', error.message);
-    }
-  };
 
   return (
     <SafeAreaView
