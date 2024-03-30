@@ -11,34 +11,13 @@ import {
 import VectorIcon from "../utils/VectorIcon";
 import { Colors } from "../utils/Colors";
 import Logo from "../assets/images/logo.png";
-
+import { AuthContext } from "../context/AuthContext";
+import Spinner from "react-native-loading-spinner-overlay";
 
 const LoginScreen = ({ navigation }) => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
-  // const onCreateAccount = () => {
-  //   navigation.navigate('RegisterScreen');
-  // };
-
-  // const onLogin = () => {
-  //   if (email && password) {
-  //     auth()
-  //       .signInWithEmailAndPassword(email, password)
-  //       .then(response => {
-  //         console.log('response :', response);
-  //       })
-  //       .catch(error => {
-  //         if (error.code === 'auth/wrong-password') {
-  //           Alert.alert('Your password is wrong!');
-  //         } else {
-  //           Alert.alert(`${error}`);
-  //         }
-  //         console.log('error :', error);
-  //       });
-  //   }
-  // };
-
+  const [username, setUsername] = useState(null);
+  const [password, setPassword] = useState(null);
+  const { isLoading, login } = useContext(AuthContext);
   return (
     <View style={styles.container}>
       <Spinner visible={isLoading} />
@@ -53,22 +32,23 @@ const LoginScreen = ({ navigation }) => {
         <Image source={Logo} style={styles.logoStyle} />
         <Text style={styles.textLogo}>PaceBook</Text>
         <TextInput
-          placeholder="Mobile number or email"
-          value={email}
-          onChangeText={(value) => setEmail(value)}
+          placeholder="Username"
+          value={username}
+          onChangeText={(value) => setUsername(value)}
           style={styles.inputBox}
         />
         <TextInput
-          secureTextEntry={true}
           placeholder="Password"
           value={password}
-          onChangeText={(text) => setPassword(text)}
+          onChangeText={(value) => setPassword(value)}
           style={styles.inputBox}
           secureTextEntry={true}
         />
         <TouchableOpacity
           style={styles.loginButton}
-          onPress={() => navigation.navigate("MainScreen")}
+          onPress={() => {
+            login(username, password);
+          }}
         >
           <Text style={styles.login}>Log in</Text>
         </TouchableOpacity>

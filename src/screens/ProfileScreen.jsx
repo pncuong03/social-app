@@ -15,7 +15,6 @@ import PostFooter from "../components/PostFooter";
 import PostHeader from "../components/PostHeader";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
-import UserType from '../../UserContext';
 const ProfileScreen = () => {
 
   const navigation = useNavigation();
@@ -38,13 +37,16 @@ const ProfileScreen = () => {
   useEffect(() => {
     const fetchUserInfo = async () => {
       try {
-        const token = await AsyncStorage.getItem('user');
+        const token = await AsyncStorage.getItem('userInfo');
+        const tokenObject = JSON.parse(token);
+        const accessToken = tokenObject.accessToken;
+        console.log(accessToken);
         const response = await axios({
           method: 'get',
           url: 'http://192.168.1.204:8080/api/v1/user',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`,
+            'Authorization': `Bearer ${accessToken}`,
           },
         });
 

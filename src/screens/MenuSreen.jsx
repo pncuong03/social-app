@@ -4,6 +4,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Colors } from "../utils/Colors";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { useNavigation } from "@react-navigation/native";
+import { AuthContext } from "../context/AuthContext";
 export default function MenuScreen() {
   const { userInfo, isLoading, logout } = useContext(AuthContext);
   const navigation = useNavigation();
