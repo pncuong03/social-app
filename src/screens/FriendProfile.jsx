@@ -18,53 +18,30 @@ import axios from 'axios';
 import { AuthContext } from "../context/AuthContext";
 import { fetchUserInfo } from '../context/ProfileContext';
 import { fetchListFriend } from '../context/FriendContext'
-const ProfileScreen = () => {
+export default function FriendProfile({route}) {
   const { userInfo } = useContext(AuthContext);
+  const {friendId} = route.params;
   const navigation = useNavigation();
-  const [user, setUser] = useState({
-    birthday: null,
-    fullName: "",
-    gender: null,
-    id: null,
-    imageUrl: ""
-  });
-  const [posts, setPosts] = useState([]);
   const [friends, setFriends] = useState([]);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     const fetchFriends = async () => {
       try {
         const friendsData = await fetchListFriend(userInfo.accessToken);
         console.log(friendsData.content);
         setFriends(friendsData.content);
+        setLoading(false);
       } catch (error) {
         console.error('Error:', error);
       }
     };
-
     fetchFriends();
   }, []);
-
-  useEffect(() => {
-    const getUserInfo = async () => {
-      try {
-        const data = await fetchUserInfo(userInfo.accessToken);
-        console.log(data);
-        setUser({
-          birthday: data.birthday,
-          fullName: data.fullName,
-          gender: data.gender,
-          id: data.id,
-          imageUrl: data.imageUrl
-        });
-        setPosts(data.posts);
-        setFollowers(data.followers);
-      } catch (error) {
-        console.error('Error:', error);
-      }
-    };
-
-    getUserInfo();
-  }, []);
+  const friend = friends.find((f) => f.id === friendId);
+  console.log(friend);
+  if (loading) {
+    return <Text>Loading...</Text>;
+  }
   return (
     <ScrollView style={styles.container}>
       <View>
@@ -79,24 +56,16 @@ const ProfileScreen = () => {
       </View>
 
       <View style={styles.profileInfoContainer}>
-        <Image source={{ uri: user.imageUrl }} style={styles.profileImage} />
-        <Text style={styles.profileName}>{user.fullName}</Text>
-        <TouchableOpacity
-          onPress={() => navigation.push("EditProfile")}
-          style={styles.editProfileButton}
-        >
-          <Text style={styles.editProfileButtonText}>Edit Profile</Text>
-        </TouchableOpacity>
+        <Image source={{ uri: friend.imageUrl }} style={styles.profileImage} />
+        <Text style={styles.profileName}>{friend.fullName}</Text>
         <View style={styles.profileStatsContainer}>
           <View style={styles.profileStatsItem}>
             <Text style={styles.profileStatsLabel}>Posts</Text>
             <Text style={styles.profileStatsValue}>3</Text>
           </View>
-          <View >
-            <TouchableOpacity onPress={() => navigation.navigate('FriendList')} style={styles.profileStatsItem}>
+          <View  style={styles.profileStatsItem}>
               <Text style={styles.profileStatsLabel}>Friends</Text>
               <Text style={styles.profileStatsValue}>{friends.length}</Text>
-            </TouchableOpacity>
           </View>
         </View>
       </View>
@@ -213,4 +182,3 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ProfileScreen;
