@@ -12,3 +12,6 @@ export const formatNoti = (notify) => {
 export const formatTime = (dateTime) => {
   return moment(dateTime).format("MMMM Do YYYY, h:mm:ss a");
 };
+export const formatTimes = (dateTime) => {
+  return moment(dateTime).format("MMMM Do YYYY, h:mm:ss a");
+};

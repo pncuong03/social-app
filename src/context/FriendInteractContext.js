@@ -22,7 +22,7 @@ export const fetchLike = async (postId, accessToken) => {
   try {
     const response = await axios.post(
       `${BASE_URL}/user/post/interaction/like?postId=${postId}`,
-      {},
+      // {},
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -30,15 +30,16 @@ export const fetchLike = async (postId, accessToken) => {
       }
     );
 
-    return response.data;
+    return response.dat1a;
   } catch (error) {
     console.error(error);
     throw error;
   }
 };
+
 export const fetchListLike = async (id, accessToken) => {
   try {
-    const response = await axios.post(
+    const response = await axios.get(
       `${BASE_URL}/user/post/interaction/like/list?postId=${id}`,
       {},
       {
@@ -67,6 +68,23 @@ export const fetchUnLike = async (id, accessToken) => {
       }
     );
 
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+export const fetchComment = async (postId, comment, accessToken) => {
+  try {
+    const response = await axios.post(
+      `${BASE_URL}/user/post/interaction/comment?postId=${postId}&comment=${comment}`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
     return response.data;
   } catch (error) {
     console.error(error);

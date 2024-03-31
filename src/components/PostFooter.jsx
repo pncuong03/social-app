@@ -1,3 +1,4 @@
+import React, { useContext, useState } from "react";
 import {
   View,
   Text,
@@ -6,14 +7,12 @@ import {
   TouchableOpacity,
   TextInput,
 } from "react-native";
-import React, { useContext, useState } from "react";
 import Like from "../assets/images/like.jpeg";
-
-import { Colors } from "../utils/Colors";
-import VectorIcon from "../utils/VectorIcon";
 import Post1 from "../assets/images/post1.jpeg";
 import { AuthContext } from "../context/AuthContext";
-import { fetchLike, fetchUnLike } from "../context/FriendInteractContext";
+import { fetchLike, fetchComment } from "../context/FriendInteractContext";
+import { Colors } from "../utils/Colors";
+import VectorIcon from "../utils/VectorIcon";
 
 const PostFooter = ({ data }) => {
   const { userInfo } = useContext(AuthContext);
@@ -21,7 +20,7 @@ const PostFooter = ({ data }) => {
   const [isCommented, setIsCommented] = useState(false);
   const [isShared, setIsShared] = useState(false);
   const [commentText, setCommentText] = useState("");
-  const [comments, setComments] = useState(data.commentCount);
+  const [comments, setComments] = useState(data.comments);
   const [like, setLike] = useState(data.likeCount);
   const [share, setShare] = useState(data.shareCount);
 
@@ -35,22 +34,24 @@ const PostFooter = ({ data }) => {
     }
   };
 
-  // const onShare = () => {
-  //   setIsShared(!isShared);
-  //   setShare(isShared ? share - 1 : share + 1);
-  // };
   const onShare = () => {
     setIsShared(!isShared);
     setShare(isShared ? share - 1 : share + 1);
   };
 
-  const onCommentSubmit = () => {
+  const onCommentSubmit = async () => {
     if (commentText.trim() !== "") {
-      const newComment = { text: commentText };
-      setComments([...comments, newComment]);
-      setCommentText("");
+      try {
+        await fetchComment(data.id, commentText, userInfo.accessToken);
+        const newComment = { text: commentText };
+        setComments([...comments, newComment]);
+        setCommentText("");
+      } catch (error) {
+        console.error("Error commenting:", error);
+      }
     }
   };
+
   return (
     <View style={styles.postFooterContainer}>
       <View style={styles.footerReactionSec}>
@@ -118,7 +119,7 @@ const PostFooter = ({ data }) => {
 
       {isCommented && (
         <View>
-          {comment.map((comment, index) => (
+          {comments.map((comment, index) => (
             <View
               key={index}
               style={{
