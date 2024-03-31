@@ -20,6 +20,7 @@ import { fetchUserInfo } from '../context/ProfileContext';
 import { fetchListFriend } from '../context/FriendContext'
 const ProfileScreen = () => {
   const { userInfo } = useContext(AuthContext);
+  const { userInfo } = useContext(AuthContext);
   const navigation = useNavigation();
   const [user, setUser] = useState({
     birthday: null,
@@ -58,6 +59,8 @@ const ProfileScreen = () => {
         });
         setPosts(data.posts);
         setFollowers(data.followers);
+        setPosts(data.posts);
+        setFollowers(data.followers);
       } catch (error) {
         console.error('Error:', error);
       }
@@ -90,6 +93,7 @@ const ProfileScreen = () => {
         <View style={styles.profileStatsContainer}>
           <View style={styles.profileStatsItem}>
             <Text style={styles.profileStatsLabel}>Posts</Text>
+            <Text style={styles.profileStatsValue}>3</Text>
             <Text style={styles.profileStatsValue}>3</Text>
           </View>
           <View >
