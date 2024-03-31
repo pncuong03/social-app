@@ -12,7 +12,6 @@ import {
 import VectorIcon from "../utils/VectorIcon";
 import { useNavigation } from "@react-navigation/native";
 import { Colors } from "../utils/Colors";
-import { friendRequests } from "../data/FriendData";
 
 const AddMemberGroup = () => {
   const navigation = useNavigation();
@@ -33,7 +32,7 @@ const AddMemberGroup = () => {
     }
   };
 
-  const handleSearch = (text) => {
+  const onSearch = (text) => {
     setSearchValue(text);
     const filteredMembers = friendRequests.filter((member) =>
       member.name.toLowerCase().includes(text.toLowerCase())
@@ -70,7 +69,7 @@ const AddMemberGroup = () => {
           style={{ marginLeft: 5 }}
           placeholder="Search"
           value={searchValue}
-          onChangeText={handleSearch}
+          onChangeText={onSearch}
         />
       </View>
       <Text

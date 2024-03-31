@@ -6,40 +6,51 @@ import {
   TouchableOpacity,
   TextInput,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import Like from "../assets/images/like.jpeg";
 
 import { Colors } from "../utils/Colors";
 import VectorIcon from "../utils/VectorIcon";
 import Post1 from "../assets/images/post1.jpeg";
+import { AuthContext } from "../context/AuthContext";
+import { fetchLike, fetchUnLike } from "../context/FriendInteractContext";
 
 const PostFooter = ({ data }) => {
+  const { userInfo } = useContext(AuthContext);
   const [isLiked, setIsLiked] = useState(false);
   const [isCommented, setIsCommented] = useState(false);
   const [isShared, setIsShared] = useState(false);
   const [commentText, setCommentText] = useState("");
-  const [comments, setComments] = useState(data.comments || []);
-  const [like, setLike] = useState(data.like);
-  const [share, setShare] = useState(data.share);
+  const [comments, setComments] = useState(data.commentCount);
+  const [like, setLike] = useState(data.likeCount);
+  const [share, setShare] = useState(data.shareCount);
 
-  const handleLike = () => {
-    setIsLiked(!isLiked);
-    setLike(isLiked ? like - 1 : like + 1);
+  const onLike = async (postId) => {
+    try {
+      await fetchLike(postId, userInfo.accessToken);
+      // setIsLiked(!isLiked);
+      // setLike(like - 1);
+    } catch (error) {
+      console.error("Error like post:", error);
+    }
   };
 
-  const handleShare = () => {
+  // const onShare = () => {
+  //   setIsShared(!isShared);
+  //   setShare(isShared ? share - 1 : share + 1);
+  // };
+  const onShare = () => {
     setIsShared(!isShared);
     setShare(isShared ? share - 1 : share + 1);
   };
 
-  const handleCommentSubmit = () => {
+  const onCommentSubmit = () => {
     if (commentText.trim() !== "") {
       const newComment = { text: commentText };
       setComments([...comments, newComment]);
       setCommentText("");
     }
   };
-
   return (
     <View style={styles.postFooterContainer}>
       <View style={styles.footerReactionSec}>
@@ -47,15 +58,16 @@ const PostFooter = ({ data }) => {
           <TouchableOpacity>
             <Image source={Like} style={styles.reactionIcon} />
           </TouchableOpacity>
-          <Text style={styles.reactionCount}>{like}</Text>
+          <Text style={styles.reactionCount}>{data.likeCount} like</Text>
         </View>
         <View style={{ flexDirection: "row", gap: 10 }}>
-          <Text style={styles.reactionCount}>{comments.length} comment</Text>
-          <Text style={styles.reactionCount}>{share} share</Text>
+          <Text style={styles.reactionCount}>{data.commentCount} comment</Text>
+          <Text style={styles.reactionCount}>{data.shareCount} share</Text>
         </View>
       </View>
+
       <View style={styles.userActionSec}>
-        <TouchableOpacity onPress={handleLike}>
+        <TouchableOpacity onPress={() => onLike(data.id)}>
           <View style={styles.row}>
             <VectorIcon
               name={isLiked ? "like1" : "like2"}
@@ -77,7 +89,7 @@ const PostFooter = ({ data }) => {
             <Text style={styles.reactionCount}>Comment</Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity onPress={handleShare}>
+        <TouchableOpacity onPress={onShare}>
           <View style={styles.row}>
             <VectorIcon
               name={isShared ? "arrow-redo-sharp" : "arrow-redo-outline"}
@@ -98,7 +110,7 @@ const PostFooter = ({ data }) => {
             value={commentText}
             onChangeText={(text) => setCommentText(text)}
           />
-          <TouchableOpacity onPress={handleCommentSubmit}>
+          <TouchableOpacity onPress={onCommentSubmit}>
             <Text style={styles.commentSubmit}>Submit</Text>
           </TouchableOpacity>
         </View>
@@ -106,7 +118,7 @@ const PostFooter = ({ data }) => {
 
       {isCommented && (
         <View>
-          {comments.map((comment, index) => (
+          {comment.map((comment, index) => (
             <View
               key={index}
               style={{
@@ -198,9 +210,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: Colors.lightgrey,
     borderRadius: 10,
-    width:"auto",
-    padding:7,
-    height:50
+    width: "auto",
+    padding: 7,
+    height: 50,
   },
 });
 

@@ -11,7 +11,6 @@ import {
 import VectorIcon from "../utils/VectorIcon";
 import { useNavigation } from "@react-navigation/native";
 import { Colors } from "../utils/Colors";
-import { friendRequests } from "../data/FriendData";
 
 const ManageMember = () => {
   const navigation = useNavigation();

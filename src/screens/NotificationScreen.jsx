@@ -8,11 +8,10 @@ import {
 } from "react-native";
 import React, { useContext, useEffect, useState } from "react";
 import { Colors } from "../utils/Colors";
-import { notifyResponses } from "../data/NotifycationData";
-import { useNavigation } from "@react-navigation/native";
 import { AuthContext } from "../context/AuthContext";
 import { fetchNotifications } from "../context/NotificationContext";
-import moment from "moment";
+import { formatNoti } from "../utils/Fomart";
+import TimeComparison from "../utils/Time";
 
 const NotificationScreen = () => {
   const { userInfo } = useContext(AuthContext);
@@ -29,9 +28,6 @@ const NotificationScreen = () => {
     };
     fetchData();
   }, []);
-  const formatDateTime = (dateTime) => {
-    return moment(dateTime).format("MMMM Do YYYY, h:mm:ss a");
-  };
 
   return (
     <ScrollView style={styles.container}>
@@ -42,7 +38,7 @@ const NotificationScreen = () => {
         {noti.map((notify) => (
           <TouchableOpacity
             key={notify.id}
-            // onPress={() => handleNotificationPress(notify.postId)}
+            // onPress={() => onNotificationPress(notify.postId)}
           >
             <View style={[styles.inforNotify]}>
               <Image
@@ -62,14 +58,14 @@ const NotificationScreen = () => {
                   {notify.interact.fullName}
                 </Text>
                 <Text style={{ fontSize: 16, maxWidth: "auto" }}>
-                  {notify.interactType}
+                  {formatNoti(notify.interactType)}
                 </Text>
               </View>
               <View
                 style={{ position: "absolute", marginLeft: 60, paddingTop: 20 }}
               >
                 <Text style={{ fontSize: 15, color: "gray" }}>
-                  {formatDateTime(notify.createdAt)}
+                  <TimeComparison time={notify.createdAt} />
                 </Text>
               </View>
             </View>
