@@ -20,7 +20,6 @@ import { fetchUserInfo } from '../context/ProfileContext';
 import { fetchListFriend } from '../context/FriendContext'
 const ProfileScreen = () => {
   const { userInfo } = useContext(AuthContext);
-  const { userInfo } = useContext(AuthContext);
   const navigation = useNavigation();
   const [user, setUser] = useState({
     birthday: null,
