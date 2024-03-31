@@ -93,7 +93,6 @@ const ProfileScreen = () => {
           <View style={styles.profileStatsItem}>
             <Text style={styles.profileStatsLabel}>Posts</Text>
             <Text style={styles.profileStatsValue}>3</Text>
-            <Text style={styles.profileStatsValue}>3</Text>
           </View>
           <View >
             <TouchableOpacity onPress={() => navigation.navigate('FriendList')} style={styles.profileStatsItem}>
