@@ -1,8 +1,10 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useContext, useState } from "react";
 import {
   View,
   Text,
   Image,
+  StyleSheet,
+  TextInput,
   TouchableOpacity,
   Alert,
 } from "react-native";
@@ -55,141 +57,82 @@ const LoginScreen = ({ navigation }) => {
         <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
           <Text style={styles.login}>Log in</Text>
         </TouchableOpacity>
-        <Text style={styles.profileText}>Profile</Text>
-      </View>
-
-      <View style={styles.profileInfoContainer}>
-        <Image source={{ uri: user.imageUrl }} style={styles.profileImage} />
-        <Text style={styles.profileName}>{user.fullName}</Text>
-        {user.birthday && <Text style={styles.profileBirthday}>
-          {new Date(user.birthday).toLocaleDateString()}
-        </Text>}
+        <Text style={styles.forgotPass}>OR</Text>
         <TouchableOpacity
-          onPress={() => navigation.push("EditProfile")}
-          style={styles.editProfileButton}
+          style={styles.newAccount}
+          onPress={() => navigation.navigate("RegisterScreen")}
         >
-          <Text style={styles.editProfileButtonText}>Edit Profile</Text>
+          <Text style={styles.newAccountText}>Create new account</Text>
         </TouchableOpacity>
-        <View style={styles.profileStatsContainer}>
-          <View style={styles.profileStatsItem}>
-            <Text style={styles.profileStatsLabel}>Posts</Text>
-            <Text style={styles.profileStatsValue}>{posts.length}</Text>
-          </View>
-          <View style={styles.profileStatsItem}>
-            <Text style={styles.profileStatsLabel}>Followers</Text>
-            <Text style={styles.profileStatsValue}>{followers}</Text>
-          </View>
-        </View>
       </View>
-
-      <View style={styles.postContainer}>
-        {PostData.map(item => (
-          <View key={item.id}>
-            <PostHeader data={item} />
-            <Image source={item.postImg} style={styles.postImg} />
-            <PostFooter data={item} />
-          </View>
-        ))}
-      </View>
-    </ScrollView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "white",
-  },
-  backgroundImage: {
-    height: 180,
-    width: "100%",
-  },
-  backButton: {
-    zIndex: 99,
-    position: "absolute",
-    left: 0,
-    top: 10,
-  },
-  profileText: {
-    fontSize: 30,
-    fontWeight: "500",
-    position: "absolute",
-    top: 10,
-    left: 0,
-    right: 0,
-    textAlign: "center",
-  },
-  profileBirthday: {
-    fontSize: 16,
-    lineHeight: 20,
-    color: "black",
-    marginVertical: 4,
-  },
-  profileInfoContainer: {
-    flex: 1,
-    alignItems: "center",
-  },
-  profileImage: {
-    height: 170,
-    width: 170,
-    borderRadius: 20,
-    borderWidth: 2,
-    borderColor: "#242760",
-    overflow: "hidden",
-    marginTop: -90,
-  },
-  profileName: {
-    fontSize: 18,
-    lineHeight: 22,
-    color: "black",
-    marginVertical: 8,
-  },
-  editProfileButton: {
-    backgroundColor: "black",
-    height: 40,
-    borderRadius: 6,
-    alignItems: "center",
-    justifyContent: "center",
-    width: 250,
-  },
-  editProfileButtonText: {
-    color: "white",
-    fontSize: 16,
-  },
-  profileStatsContainer: {
-    paddingVertical: 8,
-    flexDirection: "row",
-    justifyContent: "space-around",
-    width: "100%",
-  },
-  profileStatsItem: {
-    flexDirection: "column",
-    alignItems: "center",
-    marginHorizontal: 10,
-  },
-  profileStatsLabel: {
-    fontSize: 16,
-    color: "#242760",
-  },
-  profileStatsValue: {
+  textLogo: {
+    color: Colors.primaryColor,
     fontSize: 20,
-    color: "#242760",
+    fontWeight: "bold",
+    // marginTop: -50
   },
-  postsContainer: {
-    flex: 1,
-    marginTop: 20,
+  logoStyle: {
+    height: 125,
+    width: 95,
+    marginVertical: "15%",
   },
-  postItem: {
-    padding: 10,
-    marginVertical: 5,
-    marginHorizontal: 20,
+  container: {
+    padding: 16,
+  },
+  subContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  inputBox: {
     borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 10,
+    borderColor: Colors.borderGrey,
+    padding: 10,
+    borderRadius: 12,
+    width: "95%",
+    marginTop: 12,
   },
-  postImg: {
-    width: '100%',
-    height: 250,
+  loginButton: {
+    backgroundColor: Colors.primaryColor,
+    padding: 10,
+    borderRadius: 20,
+    width: "95%",
+    alignItems: "center",
+    marginTop: 12,
+  },
+  login: {
+    color: Colors.white,
+    fontSize: 15,
+    fontWeight: "500",
+  },
+  forgotPass: {
+    color: Colors.grey,
+    fontSize: 14,
+    fontWeight: "500",
+    marginTop: 25,
+  },
+  newAccount: {
+    borderColor: Colors.primaryColor,
+    borderWidth: 1,
+    padding: 10,
+    borderRadius: 18,
+    width: "95%",
+    alignItems: "center",
+    marginTop: "10%",
+  },
+  newAccountText: {
+    color: Colors.primaryColor,
+    fontSize: 14,
+    fontWeight: "400",
+  },
+  metaLogoStyle: {
+    height: 15,
+    width: 70,
+    marginTop: 15,
   },
 });
 
