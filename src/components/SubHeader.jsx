@@ -1,12 +1,19 @@
-import { View, TextInput, Image, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import {
+  View,
+  TextInput,
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+} from "react-native";
 import React, { useState, useEffect, useContext } from "react";
-import Profile from '../assets/images/img1.jpeg';
-import { Colors } from '../utils/Colors';
+import Profile from "../assets/images/img1.jpeg";
+import { Colors } from "../utils/Colors";
 import { useNavigation } from "@react-navigation/native";
-import VectorIcon from '../utils/VectorIcon';
+import VectorIcon from "../utils/VectorIcon";
 import { MaterialIcons } from "@expo/vector-icons";
 import { AuthContext } from "../context/AuthContext";
-import { fetchUserInfo } from '../context/ProfileContext';
+import { fetchUserInfo } from "../context/ProfileContext";
 
 const SubHeader = () => {
   const navigation = useNavigation();
@@ -16,10 +23,10 @@ const SubHeader = () => {
     const getUserInfo = async () => {
       try {
         const data = await fetchUserInfo(userInfo.accessToken);
-        console.log(data);
+        // console.log(data);
         setImage(data.imageUrl);
       } catch (error) {
-        console.error('Error:', error);
+        console.error("Error:", error);
       }
     };
 
@@ -27,16 +34,22 @@ const SubHeader = () => {
   }, []);
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={() => navigation.push('ProfileScreen')} >
-        <Image source={{uri:image}} style={styles.profileStyle} />
-      </TouchableOpacity >
-      <TouchableOpacity style={styles.inputBox} onPress={() => navigation.push('NewPost')} >
-        <View >
+      <TouchableOpacity onPress={() => navigation.push("ProfileScreen")}>
+        <Image source={{ uri: image }} style={styles.profileStyle} />
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.inputBox}
+        onPress={() => navigation.push("NewPost")}
+      >
+        <View>
           <Text style={styles.inputStyle}>Write something here...</Text>
           <Text style={styles.inputStyle}>Seven...</Text>
         </View>
-      </TouchableOpacity >
-      <TouchableOpacity style={{ marginLeft: 10 }} onPress={() => navigation.push('NewPost')} >
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={{ marginLeft: 10 }}
+        onPress={() => navigation.push("NewPost")}
+      >
         <MaterialIcons name="perm-media" size={24} color="black" />
       </TouchableOpacity>
       {/* <View style={styles.searchBg}>
@@ -53,19 +66,19 @@ const SubHeader = () => {
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
     padding: 15,
     backgroundColor: Colors.white,
-    alignItems: 'center',
+    alignItems: "center",
   },
   searchBg: {
     backgroundColor: Colors.lightgrey,
     height: 35,
     width: 35,
     borderRadius: 50,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     marginLeft: 10,
   },
   profileStyle: {
@@ -78,7 +91,7 @@ const styles = StyleSheet.create({
     borderColor: Colors.borderGrey,
     borderRadius: 30,
     paddingHorizontal: 20,
-    width: '70%',
+    width: "70%",
     paddingVertical: 3,
   },
   inputStyle: {

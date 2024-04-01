@@ -21,7 +21,7 @@ const RegisterScreen = ({ navigation }) => {
 
   const { isLoading, register } = useContext(AuthContext);
 
-  const handleRegister = () => {
+  const onRegister = () => {
     if (!username || !password) {
       Alert.alert("Thông báo", "Vui lòng nhập đầy đủ tài khoản và mật khẩu");
     } else {
@@ -30,7 +30,7 @@ const RegisterScreen = ({ navigation }) => {
   };
   return (
     <View style={styles.container}>
-      {/* <Spinner visible={isLoading} /> */}
+      <Spinner visible={isLoading} />
       {/* <VectorIcon
         name="arrow-back"
         type="Ionicons"
@@ -64,7 +64,7 @@ const RegisterScreen = ({ navigation }) => {
           onChangeText={value => setPassword(value)}
           style={styles.inputBox}
         /> */}
-        <TouchableOpacity style={styles.loginButton} onPress={handleRegister}>
+        <TouchableOpacity style={styles.loginButton} onPress={onRegister}>
           <Text style={styles.login}>Create Account</Text>
         </TouchableOpacity>
         <TouchableOpacity

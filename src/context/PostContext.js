@@ -14,4 +14,3 @@ export const fetchPostPublic = async (accessToken) => {
     throw error;
   }
 };
-///api/v1/post/list/friends
