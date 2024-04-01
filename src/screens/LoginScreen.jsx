@@ -8,7 +8,6 @@ import {
   TouchableOpacity,
   Alert,
 } from "react-native";
-import VectorIcon from "../utils/VectorIcon";
 import { Colors } from "../utils/Colors";
 import Logo from "../assets/images/logo.png";
 import { AuthContext } from "../context/AuthContext";

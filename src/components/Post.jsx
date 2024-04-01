@@ -6,10 +6,12 @@ import PostFooter from "./PostFooter";
 import { fetchPostPublic } from "../context/PostContext";
 import { AuthContext } from "../context/AuthContext";
 import Carousel from "react-native-snap-carousel";
+import Spinner from "react-native-loading-spinner-overlay";
 
 const Post = () => {
   const { userInfo } = useContext(AuthContext);
   const [posts, setPosts] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const windowWidth = Dimensions.get("window").width;
 
   const onClosePost = (postId) => {
@@ -18,11 +20,14 @@ const Post = () => {
   };
   useEffect(() => {
     const getAllPost = async () => {
+      setIsLoading(true);
       try {
         const data = await fetchPostPublic(userInfo.accessToken);
         setPosts(data.content);
       } catch (error) {
         console.error("Error getAllPost:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
     getAllPost();
@@ -39,6 +44,7 @@ const Post = () => {
 
   return (
     <View style={styles.postContainer}>
+      <Spinner visible={isLoading} />
       {posts.map((item) => (
         <View key={item.id}>
           <PostHeader data={item} onClose={() => onClosePost(item.id)} />
@@ -62,7 +68,7 @@ const styles = StyleSheet.create({
     marginTop: 8,
   },
   postImg: {
-    height: 250, // Chiều cao có thể điều chỉnh theo nhu cầu
+    height: 250,
   },
   slide: {
     flex: 1,

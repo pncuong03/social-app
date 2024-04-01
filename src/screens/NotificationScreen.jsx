@@ -28,7 +28,6 @@ const NotificationScreen = () => {
     };
     fetchData();
   }, []);
-
   return (
     <ScrollView style={styles.container}>
       <View style={styles.subNav}>

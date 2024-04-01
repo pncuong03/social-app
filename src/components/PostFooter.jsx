@@ -10,48 +10,88 @@ import {
 import Like from "../assets/images/like.jpeg";
 import Post1 from "../assets/images/post1.jpeg";
 import { AuthContext } from "../context/AuthContext";
-import { fetchLike, fetchComment } from "../context/FriendInteractContext";
+import {
+  fetchLike,
+  fetchComment,
+  fetchUnLike,
+  fetchPostDetail,
+  fetchShare,
+} from "../context/FriendInteractContext";
 import { Colors } from "../utils/Colors";
 import VectorIcon from "../utils/VectorIcon";
 
 const PostFooter = ({ data }) => {
   const { userInfo } = useContext(AuthContext);
+
   const [isLiked, setIsLiked] = useState(false);
   const [isCommented, setIsCommented] = useState(false);
   const [isShared, setIsShared] = useState(false);
+
+  const [commentCount, setCommentCount] = useState(data.commentCount);
+  const [likeCount, setLikeCount] = useState(data.likeCount);
+  const [shareCount, setShareCount] = useState(data.shareCount);
+
   const [commentText, setCommentText] = useState("");
-  const [comments, setComments] = useState(data.comments);
-  const [like, setLike] = useState(data.likeCount);
-  const [share, setShare] = useState(data.shareCount);
+  const [listComment, setListComment] = useState([data.comments]);
+
+  useEffect(() => {
+    const postDetail = async (postId) => {
+      try {
+        const postData = await fetchPostDetail(postId, userInfo.accessToken);
+        setListComment(postData);
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    };
+
+    postDetail();
+  }, []);
+  // console.log(listComment);
+
+  const post = postDetail(data.id);
 
   const onLike = async (postId) => {
     try {
       await fetchLike(postId, userInfo.accessToken);
-      // setIsLiked(!isLiked);
-      // setLike(like - 1);
+      setIsLiked(true);
+      setLikeCount((prevCount) => prevCount + 1);
+    } catch (error) {
+      console.error("Error like post:", error);
+    }
+  };
+  const onUnLike = async (postId) => {
+    try {
+      await fetchUnLike(postId, userInfo.accessToken);
+      setIsLiked(false);
+      setLikeCount((prevCount) => prevCount - 1);
     } catch (error) {
       console.error("Error like post:", error);
     }
   };
 
-  const onShare = () => {
-    setIsShared(!isShared);
-    setShare(isShared ? share - 1 : share + 1);
+  const onShare = async (postId) => {
+    try {
+      await fetchShare(postId, userInfo.accessToken);
+      setIsShared(false);
+      setShareCount((prevCount) => prevCount - 1);
+    } catch (error) {
+      console.error("Error like post:", error);
+    }
   };
 
-  const onCommentSubmit = async () => {
+  const onComment = async (postId, comment) => {
     if (commentText.trim() !== "") {
       try {
-        await fetchComment(data.id, commentText, userInfo.accessToken);
+        await fetchComment(postId, comment, userInfo.accessToken);
         const newComment = { text: commentText };
-        setComments([...comments, newComment]);
-        setCommentText("");
+        setListComment([...listComment, newComment]);
+        setCommentCount((prevCount) => prevCount + 1); // Tăng commentCount lên 1
+        setCommentText(""); // Xóa nội dung trong ô nhập comment sau khi gửi thành công
       } catch (error) {
         console.error("Error commenting:", error);
       }
     }
   };
-
   return (
     <View style={styles.postFooterContainer}>
       <View style={styles.footerReactionSec}>
@@ -59,16 +99,18 @@ const PostFooter = ({ data }) => {
           <TouchableOpacity>
             <Image source={Like} style={styles.reactionIcon} />
           </TouchableOpacity>
-          <Text style={styles.reactionCount}>{data.likeCount} like</Text>
+          <Text style={styles.reactionCount}>{likeCount} like</Text>
         </View>
         <View style={{ flexDirection: "row", gap: 10 }}>
-          <Text style={styles.reactionCount}>{data.commentCount} comment</Text>
-          <Text style={styles.reactionCount}>{data.shareCount} share</Text>
+          <Text style={styles.reactionCount}>{commentCount} comment</Text>
+          <Text style={styles.reactionCount}>{shareCount} share</Text>
         </View>
       </View>
 
       <View style={styles.userActionSec}>
-        <TouchableOpacity onPress={() => onLike(data.id)}>
+        <TouchableOpacity
+          onPress={() => (isLiked ? onUnLike(data.id) : onLike(data.id))}
+        >
           <View style={styles.row}>
             <VectorIcon
               name={isLiked ? "like1" : "like2"}
@@ -90,7 +132,7 @@ const PostFooter = ({ data }) => {
             <Text style={styles.reactionCount}>Comment</Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity onPress={onShare}>
+        <TouchableOpacity onPress={() => onShare(data.id)}>
           <View style={styles.row}>
             <VectorIcon
               name={isShared ? "arrow-redo-sharp" : "arrow-redo-outline"}
@@ -111,15 +153,15 @@ const PostFooter = ({ data }) => {
             value={commentText}
             onChangeText={(text) => setCommentText(text)}
           />
-          <TouchableOpacity onPress={onCommentSubmit}>
+          <TouchableOpacity onPress={() => onComment(data.id, commentText)}>
             <Text style={styles.commentSubmit}>Submit</Text>
           </TouchableOpacity>
         </View>
       )}
-
+      {/* 
       {isCommented && (
         <View>
-          {comments.map((comment, index) => (
+          {listComment.map((commentt, index) => (
             <View
               key={index}
               style={{
@@ -132,12 +174,12 @@ const PostFooter = ({ data }) => {
               <Image source={Post1} style={styles.userProfile} />
               <View style={styles.commentContent}>
                 <Text style={styles.username}>{data.name}</Text>
-                <Text style={styles.commentText}>{comment.text}</Text>
+                <Text style={styles.commentText}>{commentt.}</Text>
               </View>
             </View>
           ))}
         </View>
-      )}
+      )} */}
     </View>
   );
 };
