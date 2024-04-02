@@ -1,22 +1,22 @@
 import axios from "axios";
 import { BASE_URL } from "../config";
 
-export const fetchDetailPost = async (accessToken) => {
-  try {
-    const response = await axios.get(
-      `${BASE_URL}/user/post/interaction?postId=${id}`,
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      }
-    );
-    return response.data;
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
-};
+// export const fetchDetailPost = async (accessToken) => {
+//   try {
+//     const response = await axios.get(
+//       `${BASE_URL}/user/post/interaction?postId=${id}`,
+//       {
+//         headers: {
+//           Authorization: `Bearer ${accessToken}`,
+//         },
+//       }
+//     );
+//     return response.data;
+//   } catch (error) {
+//     console.error(error);
+//     throw error;
+//   }
+// };
 
 export const fetchLike = async (postId, accessToken) => {
   try {
@@ -30,7 +30,7 @@ export const fetchLike = async (postId, accessToken) => {
       }
     );
 
-    return response.dat1a;
+    return response.data;
   } catch (error) {
     console.error(error);
     throw error;
@@ -79,24 +79,6 @@ export const fetchComment = async (postId, comment, accessToken) => {
   try {
     const response = await axios.post(
       `${BASE_URL}/user/post/interaction/comment?postId=${postId}&comment=${comment}`,
-      {},
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      }
-    );
-    return response.data;
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
-};
-
-export const fetchPostDetail = async (postId, accessToken) => {
-  try {
-    const response = await axios.post(
-      `${BASE_URL}/user/post/interaction?postId=${postId}`,
       {},
       {
         headers: {

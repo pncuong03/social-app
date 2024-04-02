@@ -15,13 +15,13 @@ import TimeComparison from "../utils/Time";
 
 const NotificationScreen = () => {
   const { userInfo } = useContext(AuthContext);
-  const [noti, setNoti] = useState([]);
+  const [notification, setNotification] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const data = await fetchNotifications(userInfo.accessToken);
-        setNoti(data.content);
+        setNotification(data.content);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -34,7 +34,7 @@ const NotificationScreen = () => {
         <Text style={{ fontWeight: "bold", fontSize: 30 }}>Notifications</Text>
       </View>
       <View style={{ flexDirection: "column" }}>
-        {noti.map((notify) => (
+        {notification.map((notify) => (
           <TouchableOpacity
             key={notify.id}
             // onPress={() => onNotificationPress(notify.postId)}

@@ -13,11 +13,18 @@ import member from "../assets/images/img1.jpeg";
 import { PostData } from "../data/PostData";
 import PostFooter from "../components/PostFooter";
 import PostHeader from "../components/PostHeader";
+<<<<<<< HEAD
+import { AuthContext } from "../context/AuthContext";
+import { fetchUserInfo } from "../context/ProfileContext";
+import { fetchListFriend } from "../context/FriendContext";
+=======
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { AuthContext } from "../context/AuthContext";
 import { fetchUserInfo } from "../context/ProfileContext";
 import { fetchListFriend } from "../context/FriendContext";
+import UserPost from "../components/UserPost";
+>>>>>>> 5fc4f30b5f13b1dfa2a02a9a9c82d24b54b7fffc
 const ProfileScreen = () => {
   const { userInfo } = useContext(AuthContext);
   const navigation = useNavigation();
@@ -106,6 +113,7 @@ const ProfileScreen = () => {
         </View>
       </View>
 
+<<<<<<< HEAD
       <View style={styles.postContainer}>
         {PostData.map((item) => (
           <View key={item.id}>
@@ -115,6 +123,9 @@ const ProfileScreen = () => {
           </View>
         ))}
       </View>
+=======
+      <UserPost />
+>>>>>>> 5fc4f30b5f13b1dfa2a02a9a9c82d24b54b7fffc
     </ScrollView>
   );
 };

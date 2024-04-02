@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -8,7 +8,6 @@ import {
   TextInput,
 } from "react-native";
 import Like from "../assets/images/like.jpeg";
-import Post1 from "../assets/images/post1.jpeg";
 import { AuthContext } from "../context/AuthContext";
 import {
   fetchLike,
@@ -34,21 +33,19 @@ const PostFooter = ({ data }) => {
   const [commentText, setCommentText] = useState("");
   const [listComment, setListComment] = useState([data.comments]);
 
-  useEffect(() => {
-    const postDetail = async (postId) => {
-      try {
-        const postData = await fetchPostDetail(postId, userInfo.accessToken);
-        setListComment(postData);
-      } catch (error) {
-        console.error("Error:", error);
-      }
-    };
+  // useEffect(() => {
+  //   const postDetail = async (postId) => {
+  //     try {
+  //       const postData = await fetchPostDetail(postId, userInfo.accessToken);
+  //       setListComment(postData);
+  //     } catch (error) {
+  //       console.error("Error:", error);
+  //     }
+  //   };
 
-    postDetail();
-  }, []);
+  //   postDetail();
+  // }, []);
   // console.log(listComment);
-
-  const post = postDetail(data.id);
 
   const onLike = async (postId) => {
     try {
@@ -85,8 +82,8 @@ const PostFooter = ({ data }) => {
         await fetchComment(postId, comment, userInfo.accessToken);
         const newComment = { text: commentText };
         setListComment([...listComment, newComment]);
-        setCommentCount((prevCount) => prevCount + 1); // Tăng commentCount lên 1
-        setCommentText(""); // Xóa nội dung trong ô nhập comment sau khi gửi thành công
+        setCommentCount((prevCount) => prevCount + 1);
+        setCommentText("");
       } catch (error) {
         console.error("Error commenting:", error);
       }

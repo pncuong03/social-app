@@ -2,6 +2,7 @@ import FriendScreen from "../screens/FriendScreen";
 import HomeScreen from "../screens/HomeScreen";
 import MenuScreen from "../screens/MenuSreen";
 import NotificationScreen from "../screens/NotificationScreen";
+import SearchScreen from "../screens/SearchScreen";
 
 export const TabData = [
   {
@@ -39,6 +40,17 @@ export const TabData = [
   },
   {
     id: 4,
+    route: SearchScreen,
+    name: "Search",
+    activeIconName: "search-sharp",
+    activeiconType: "Ionicons",
+    inactiveIconName: "search-outline",
+    inactiveIconType: "Ionicons",
+    size: 25,
+    unFocusSize: 25,
+  },
+  {
+    id: 5,
     route: MenuScreen,
     name: "Menu",
     activeIconName: "menu-sharp",
