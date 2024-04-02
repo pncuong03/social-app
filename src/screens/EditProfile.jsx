@@ -8,7 +8,7 @@ import {
   Alert,
   Button
 } from "react-native";
-import React, { useState, useEffect,useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -217,102 +217,7 @@ export default function EditProfile() {
             </View>
           </View>
         </View>
-        <View
-          style={{
-            marginTop: 10,
-          }}
-        >
-          <View
-            style={{
-              flexDirection: "column",
-              marginBottom: 6,
-            }}
-          >
-            <Text style={{ fontSize: 16 }}>Email</Text>
-            <View
-              style={{
-                height: 44,
-                width: "100%",
-                borderColor: "rgba(84, 76, 76, 0.14)",
-                borderWidth: 1,
-                borderRadius: 4,
-                marginVertical: 6,
-                justifyContent: "center",
-                paddingLeft: 8,
-              }}
-            >
-              <TextInput
-                value={email}
-                onChangeText={(value) => setEmail(value)}
-                editable={true}
-              />
-            </View>
-          </View>
-        </View>
-        <View
-          style={{
-            marginTop: 10,
-          }}
-        >
-          <View
-            style={{
-              flexDirection: "column",
-              marginBottom: 6,
-            }}
-          >
-            <Text style={{ fontSize: 16 }}>Phone Number</Text>
-            <View
-              style={{
-                height: 44,
-                width: "100%",
-                borderColor: "rgba(84, 76, 76, 0.14)",
-                borderWidth: 1,
-                borderRadius: 4,
-                marginVertical: 6,
-                justifyContent: "center",
-                paddingLeft: 8,
-              }}
-            >
-              <TextInput
-                value={phoneNumber}
-                onChangeText={(value) => setPhoneNumber(value)}
-                editable={true}
-              />
-            </View>
-          </View>
-        </View>
-        <View
-          style={{
-            marginTop: 30,
-          }}
-        >
-          <View
-            style={{
-              flexDirection: "column",
-              marginBottom: 6,
-            }}
-          >
-            <Text style={{ fontSize: 16 }}>Password</Text>
-            <View
-              style={{
-                height: 44,
-                width: "100%",
-                borderColor: "rgba(84, 76, 76, 0.14)",
-                borderWidth: 1,
-                borderRadius: 4,
-                marginVertical: 6,
-                justifyContent: "center",
-                paddingLeft: 8,
-              }}
-            >
-              <TextInput
-                value={password}
-                onChangeText={(value) => setPassword(value)}
-                editable={true}
-              />
-            </View>
-          </View>
-        </View>
+
       </View>
       <View style={{ paddingHorizontal: 22 }}>
         <TouchableOpacity
