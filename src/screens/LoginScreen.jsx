@@ -8,7 +8,6 @@ import {
   TouchableOpacity,
   Alert,
 } from "react-native";
-import VectorIcon from "../utils/VectorIcon";
 import { Colors } from "../utils/Colors";
 import Logo from "../assets/images/logo.png";
 import { AuthContext } from "../context/AuthContext";
@@ -20,11 +19,9 @@ const LoginScreen = ({ navigation }) => {
   const { isLoading, login } = useContext(AuthContext);
 
   const handleLogin = () => {
-    // Kiểm tra xem tài khoản và mật khẩu có được nhập không
     if (!username || !password) {
       Alert.alert("Thông báo", "Vui lòng nhập đầy đủ tài khoản và mật khẩu");
     } else {
-      // Nếu có giá trị, gọi hàm login
       login(username, password);
     }
   };

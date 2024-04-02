@@ -1,3 +1,4 @@
+import React, { useContext, useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -6,40 +7,88 @@ import {
   TouchableOpacity,
   TextInput,
 } from "react-native";
-import React, { useState } from "react";
 import Like from "../assets/images/like.jpeg";
-
+import { AuthContext } from "../context/AuthContext";
+import {
+  fetchLike,
+  fetchComment,
+  fetchUnLike,
+  fetchPostDetail,
+  fetchShare,
+} from "../context/FriendInteractContext";
 import { Colors } from "../utils/Colors";
 import VectorIcon from "../utils/VectorIcon";
-import Post1 from "../assets/images/post1.jpeg";
 
 const PostFooter = ({ data }) => {
+  const { userInfo } = useContext(AuthContext);
+
   const [isLiked, setIsLiked] = useState(false);
   const [isCommented, setIsCommented] = useState(false);
   const [isShared, setIsShared] = useState(false);
+
+  const [commentCount, setCommentCount] = useState(data.commentCount);
+  const [likeCount, setLikeCount] = useState(data.likeCount);
+  const [shareCount, setShareCount] = useState(data.shareCount);
+
   const [commentText, setCommentText] = useState("");
-  const [comments, setComments] = useState(data.comments || []);
-  const [like, setLike] = useState(data.like);
-  const [share, setShare] = useState(data.share);
+  const [listComment, setListComment] = useState([data.comments]);
 
-  const handleLike = () => {
-    setIsLiked(!isLiked);
-    setLike(isLiked ? like - 1 : like + 1);
+  // useEffect(() => {
+  //   const postDetail = async (postId) => {
+  //     try {
+  //       const postData = await fetchPostDetail(postId, userInfo.accessToken);
+  //       setListComment(postData);
+  //     } catch (error) {
+  //       console.error("Error:", error);
+  //     }
+  //   };
+
+  //   postDetail();
+  // }, []);
+  // console.log(listComment);
+
+  const onLike = async (postId) => {
+    try {
+      await fetchLike(postId, userInfo.accessToken);
+      setIsLiked(true);
+      setLikeCount((prevCount) => prevCount + 1);
+    } catch (error) {
+      console.error("Error like post:", error);
+    }
   };
-
-  const handleShare = () => {
-    setIsShared(!isShared);
-    setShare(isShared ? share - 1 : share + 1);
-  };
-
-  const handleCommentSubmit = () => {
-    if (commentText.trim() !== "") {
-      const newComment = { text: commentText };
-      setComments([...comments, newComment]);
-      setCommentText("");
+  const onUnLike = async (postId) => {
+    try {
+      await fetchUnLike(postId, userInfo.accessToken);
+      setIsLiked(false);
+      setLikeCount((prevCount) => prevCount - 1);
+    } catch (error) {
+      console.error("Error like post:", error);
     }
   };
 
+  const onShare = async (postId) => {
+    try {
+      await fetchShare(postId, userInfo.accessToken);
+      setIsShared(false);
+      setShareCount((prevCount) => prevCount - 1);
+    } catch (error) {
+      console.error("Error like post:", error);
+    }
+  };
+
+  const onComment = async (postId, comment) => {
+    if (commentText.trim() !== "") {
+      try {
+        await fetchComment(postId, comment, userInfo.accessToken);
+        const newComment = { text: commentText };
+        setListComment([...listComment, newComment]);
+        setCommentCount((prevCount) => prevCount + 1);
+        setCommentText("");
+      } catch (error) {
+        console.error("Error commenting:", error);
+      }
+    }
+  };
   return (
     <View style={styles.postFooterContainer}>
       <View style={styles.footerReactionSec}>
@@ -47,15 +96,18 @@ const PostFooter = ({ data }) => {
           <TouchableOpacity>
             <Image source={Like} style={styles.reactionIcon} />
           </TouchableOpacity>
-          <Text style={styles.reactionCount}>{like}</Text>
+          <Text style={styles.reactionCount}>{likeCount} like</Text>
         </View>
         <View style={{ flexDirection: "row", gap: 10 }}>
-          <Text style={styles.reactionCount}>{comments.length} comment</Text>
-          <Text style={styles.reactionCount}>{share} share</Text>
+          <Text style={styles.reactionCount}>{commentCount} comment</Text>
+          <Text style={styles.reactionCount}>{shareCount} share</Text>
         </View>
       </View>
+
       <View style={styles.userActionSec}>
-        <TouchableOpacity onPress={handleLike}>
+        <TouchableOpacity
+          onPress={() => (isLiked ? onUnLike(data.id) : onLike(data.id))}
+        >
           <View style={styles.row}>
             <VectorIcon
               name={isLiked ? "like1" : "like2"}
@@ -77,7 +129,7 @@ const PostFooter = ({ data }) => {
             <Text style={styles.reactionCount}>Comment</Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity onPress={handleShare}>
+        <TouchableOpacity onPress={() => onShare(data.id)}>
           <View style={styles.row}>
             <VectorIcon
               name={isShared ? "arrow-redo-sharp" : "arrow-redo-outline"}
@@ -98,15 +150,15 @@ const PostFooter = ({ data }) => {
             value={commentText}
             onChangeText={(text) => setCommentText(text)}
           />
-          <TouchableOpacity onPress={handleCommentSubmit}>
+          <TouchableOpacity onPress={() => onComment(data.id, commentText)}>
             <Text style={styles.commentSubmit}>Submit</Text>
           </TouchableOpacity>
         </View>
       )}
-
+      {/* 
       {isCommented && (
         <View>
-          {comments.map((comment, index) => (
+          {listComment.map((commentt, index) => (
             <View
               key={index}
               style={{
@@ -119,12 +171,12 @@ const PostFooter = ({ data }) => {
               <Image source={Post1} style={styles.userProfile} />
               <View style={styles.commentContent}>
                 <Text style={styles.username}>{data.name}</Text>
-                <Text style={styles.commentText}>{comment.text}</Text>
+                <Text style={styles.commentText}>{commentt.}</Text>
               </View>
             </View>
           ))}
         </View>
-      )}
+      )} */}
     </View>
   );
 };
@@ -198,9 +250,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: Colors.lightgrey,
     borderRadius: 10,
-    width:"auto",
-    padding:7,
-    height:50
+    width: "auto",
+    padding: 7,
+    height: 50,
   },
 });
 

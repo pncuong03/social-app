@@ -29,12 +29,29 @@ const FriendScreen = () => {
       try {
         const data = await fetchFriendRequests(userInfo.accessToken);
         setRequests(data.content);
+        setFilteredRequests(data.content);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
     fetchData();
   }, []);
+
+  const toggleSearch = () => {
+    setIsSearch(!isSearch);
+    if (!isSearch) {
+      setSearchTerm("");
+      setFilteredRequests(requests);
+    }
+  };
+
+  const onSearch = (text) => {
+    setSearchTerm(text);
+    const filtered = requests.filter((request) =>
+      request.fullName.toLowerCase().includes(text.toLowerCase())
+    );
+    setFilteredRequests(filtered);
+  };
 
   const onConfirm = async (id) => {
     try {
@@ -43,7 +60,7 @@ const FriendScreen = () => {
       setRequests(updatedRequests);
       setFilteredRequests(updatedRequests);
     } catch (error) {
-      // console.error("Error confirming friend:", error);
+      console.error("Error confirming friend:", error);
     }
   };
 
@@ -56,18 +73,6 @@ const FriendScreen = () => {
     } catch (error) {
       console.error("Error confirming friend:", error);
     }
-  };
-
-  const toggleSearch = () => {
-    setIsSearch(!isSearch);
-  };
-
-  const onSearch = (text) => {
-    setSearchTerm(text);
-    const filtered = requests.filter((request) =>
-      request.fullName.toLowerCase().includes(text.toLowerCase())
-    );
-    setFilteredRequests(filtered);
   };
 
   return (
@@ -102,10 +107,10 @@ const FriendScreen = () => {
           Friend request
         </Text>
         <Text style={{ fontSize: 20, fontWeight: "700", color: "red" }}>
-          {requests.length}
+          {filteredRequests.length}
         </Text>
       </View>
-      {requests.map((request) => (
+      {filteredRequests.map((request) => (
         <View key={request.id} style={styles.friendView}>
           <Image style={styles.avatar} source={request.image} />
           <View style={styles.headerBox}>
@@ -152,6 +157,7 @@ const FriendScreen = () => {
     </ScrollView>
   );
 };
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,

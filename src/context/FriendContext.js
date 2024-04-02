@@ -33,12 +33,15 @@ export const fetchListFriend = async (accessToken) => {
 
 export const fetchAcceptFriend = async (id, accessToken) => {
   try {
-    const response = await axios.post(`${BASE_URL}/friend/accept?id=${id}`, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
-
+    const response = await axios.post(
+      `${BASE_URL}/friend/accept?id=${id}`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
     return response.data;
   } catch (error) {
     console.error("Error confirming friend11111:", error);
@@ -59,6 +62,24 @@ export const fetchRejectFriend = async (id, accessToken) => {
     return response.data;
   } catch (error) {
     console.error("Error confirming friend:", error);
+    throw error;
+  }
+};
+
+export const fetchAddFriend = async (id, accessToken) => {
+  try {
+    const response = await axios.post(
+      `${BASE_URL}/friend/add?id=${id}`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error add friend:", error);
     throw error;
   }
 };
