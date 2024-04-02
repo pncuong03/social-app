@@ -13,14 +13,14 @@ import member from "../assets/images/img1.jpeg";
 import { PostData } from "../data/PostData";
 import PostFooter from "../components/PostFooter";
 import PostHeader from "../components/PostHeader";
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import axios from 'axios';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
 import { AuthContext } from "../context/AuthContext";
-import { fetchUserInfo } from '../context/ProfileContext';
-import { fetchListFriend } from '../context/FriendContext'
-export default function FriendProfile({route}) {
+import { fetchUserInfo } from "../context/ProfileContext";
+import { fetchListFriend } from "../context/FriendContext";
+export default function FriendProfile({ route }) {
   const { userInfo } = useContext(AuthContext);
-  const {friendId} = route.params;
+  const { friendId } = route.params;
   const navigation = useNavigation();
   const [friends, setFriends] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -32,13 +32,12 @@ export default function FriendProfile({route}) {
         setFriends(friendsData.content);
         setLoading(false);
       } catch (error) {
-        console.error('Error:', error);
+        console.error("Error:", error);
       }
     };
     fetchFriends();
   }, []);
   const friend = friends.find((f) => f.id === friendId);
-  console.log(friend);
   if (loading) {
     return <Text>Loading...</Text>;
   }
@@ -63,15 +62,15 @@ export default function FriendProfile({route}) {
             <Text style={styles.profileStatsLabel}>Posts</Text>
             <Text style={styles.profileStatsValue}>3</Text>
           </View>
-          <View  style={styles.profileStatsItem}>
-              <Text style={styles.profileStatsLabel}>Friends</Text>
-              <Text style={styles.profileStatsValue}>{friends.length}</Text>
+          <View style={styles.profileStatsItem}>
+            <Text style={styles.profileStatsLabel}>Friends</Text>
+            <Text style={styles.profileStatsValue}>{friends.length}</Text>
           </View>
         </View>
       </View>
 
       <View style={styles.postContainer}>
-        {PostData.map(item => (
+        {PostData.map((item) => (
           <View key={item.id}>
             <PostHeader data={item} />
             <Image source={item.postImg} style={styles.postImg} />
@@ -81,7 +80,7 @@ export default function FriendProfile({route}) {
       </View>
     </ScrollView>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -153,7 +152,7 @@ const styles = StyleSheet.create({
   profileStatsItem: {
     flexDirection: "column",
     alignItems: "center",
-    justifyContent:"center",
+    justifyContent: "center",
     marginHorizontal: 10,
   },
   profileStatsLabel: {
@@ -177,8 +176,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   postImg: {
-    width: '100%',
+    width: "100%",
     height: 250,
   },
 });
-

@@ -33,3 +33,6 @@ yarn-error.*
 .env
 # typescript
 *.tsbuildinfo
+
+%ProgramData%
+.vscode
