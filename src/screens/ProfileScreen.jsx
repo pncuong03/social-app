@@ -13,11 +13,12 @@ import member from "../assets/images/img1.jpeg";
 import { PostData } from "../data/PostData";
 import PostFooter from "../components/PostFooter";
 import PostHeader from "../components/PostHeader";
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import axios from 'axios';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
 import { AuthContext } from "../context/AuthContext";
-import { fetchUserInfo } from '../context/ProfileContext';
-import { fetchListFriend } from '../context/FriendContext'
+import { fetchUserInfo } from "../context/ProfileContext";
+import { fetchListFriend } from "../context/FriendContext";
+import UserPost from "../components/UserPost";
 const ProfileScreen = () => {
   const { userInfo } = useContext(AuthContext);
   const navigation = useNavigation();
@@ -26,7 +27,7 @@ const ProfileScreen = () => {
     fullName: "",
     gender: null,
     id: null,
-    imageUrl: ""
+    imageUrl: "",
   });
   const [posts, setPosts] = useState([]);
   const [friends, setFriends] = useState([]);
@@ -37,7 +38,7 @@ const ProfileScreen = () => {
         console.log(friendsData.content);
         setFriends(friendsData.content);
       } catch (error) {
-        console.error('Error:', error);
+        console.error("Error:", error);
       }
     };
 
@@ -54,14 +55,14 @@ const ProfileScreen = () => {
           fullName: data.fullName,
           gender: data.gender,
           id: data.id,
-          imageUrl: data.imageUrl
+          imageUrl: data.imageUrl,
         });
         setPosts(data.posts);
         setFollowers(data.followers);
         setPosts(data.posts);
         setFollowers(data.followers);
       } catch (error) {
-        console.error('Error:', error);
+        console.error("Error:", error);
       }
     };
 
@@ -94,8 +95,11 @@ const ProfileScreen = () => {
             <Text style={styles.profileStatsLabel}>Posts</Text>
             <Text style={styles.profileStatsValue}>3</Text>
           </View>
-          <View >
-            <TouchableOpacity onPress={() => navigation.navigate('FriendList')} style={styles.profileStatsItem}>
+          <View>
+            <TouchableOpacity
+              onPress={() => navigation.navigate("FriendList")}
+              style={styles.profileStatsItem}
+            >
               <Text style={styles.profileStatsLabel}>Friends</Text>
               <Text style={styles.profileStatsValue}>{friends.length}</Text>
             </TouchableOpacity>
@@ -103,15 +107,7 @@ const ProfileScreen = () => {
         </View>
       </View>
 
-      <View style={styles.postContainer}>
-        {PostData.map(item => (
-          <View key={item.id}>
-            <PostHeader data={item} />
-            <Image source={item.postImg} style={styles.postImg} />
-            <PostFooter data={item} />
-          </View>
-        ))}
-      </View>
+      <UserPost />
     </ScrollView>
   );
 };
@@ -186,7 +182,7 @@ const styles = StyleSheet.create({
   profileStatsItem: {
     flexDirection: "column",
     alignItems: "center",
-    justifyContent:"center",
+    justifyContent: "center",
     marginHorizontal: 10,
   },
   profileStatsLabel: {
@@ -210,7 +206,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   postImg: {
-    width: '100%',
+    width: "100%",
     height: 250,
   },
 });

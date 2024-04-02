@@ -43,7 +43,7 @@ const FriendScreen = () => {
       setRequests(updatedRequests);
       setFilteredRequests(updatedRequests);
     } catch (error) {
-      // console.error("Error confirming friend:", error);
+      console.error("Error confirming friend:", error);
     }
   };
 
@@ -57,7 +57,7 @@ const FriendScreen = () => {
       console.error("Error confirming friend:", error);
     }
   };
-
+  // console.log(11111111, onDelete(ids));
   const toggleSearch = () => {
     setIsSearch(!isSearch);
   };
@@ -70,6 +70,8 @@ const FriendScreen = () => {
     setFilteredRequests(filtered);
   };
 
+  // const ids = requests.map((request) => request.id);
+  // console.log(ids);
   return (
     <ScrollView style={styles.container}>
       <View style={styles.subNav}>
