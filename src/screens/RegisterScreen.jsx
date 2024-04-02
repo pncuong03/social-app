@@ -8,7 +8,6 @@ import {
   Alert,
 } from "react-native";
 import React, { useContext, useState } from "react";
-import VectorIcon from "../utils/VectorIcon";
 import { Colors } from "../utils/Colors";
 import Logo from "../assets/images/logo.png";
 import MetaLogo from "../assets/images/meta-logo.png";
