@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { Colors } from "../utils/Colors";
 import PostHeader from "./PostHeader";
 import PostFooter from "./PostFooter";
-import { fetchPostPublic } from "../context/PostContext";
+import { fetchPostMe, fetchPostPublic } from "../context/PostContext";
 import { AuthContext } from "../context/AuthContext";
 import Carousel from "react-native-snap-carousel";
 import Spinner from "react-native-loading-spinner-overlay";
@@ -31,6 +31,22 @@ const Post = () => {
       }
     };
     getAllPost();
+  }, []);
+
+  useEffect(() => {
+    const getPostMe = async () => {
+      setIsLoading(true);
+      try {
+        const data = await fetchPostMe(userInfo.accessToken);
+        setPosts(data.content);
+        // console.log(data.content);
+      } catch (error) {
+        console.error("Error getPostMe:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    getPostMe();
   }, []);
 
   const ImageSlider = ({ item }) => (
