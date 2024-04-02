@@ -34,21 +34,21 @@ const PostFooter = ({ data }) => {
   const [commentText, setCommentText] = useState("");
   const [listComment, setListComment] = useState([data.comments]);
 
-  useEffect(() => {
-    const postDetail = async (postId) => {
-      try {
-        const postData = await fetchPostDetail(postId, userInfo.accessToken);
-        setListComment(postData);
-      } catch (error) {
-        console.error("Error:", error);
-      }
-    };
+  // useEffect(() => {
+  //   const postDetail = async (postId) => {
+  //     try {
+  //       const postData = await fetchPostDetail(postId, userInfo.accessToken);
+  //       setListComment(postData);
+  //     } catch (error) {
+  //       console.error("Error:", error);
+  //     }
+  //   };
 
-    postDetail();
-  }, []);
+  //   postDetail();
+  // }, []);
   // console.log(listComment);
 
-  const post = postDetail(data.id);
+  // const post = postDetail(data.id);
 
   const onLike = async (postId) => {
     try {

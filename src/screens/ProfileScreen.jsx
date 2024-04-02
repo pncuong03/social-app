@@ -18,6 +18,7 @@ import axios from "axios";
 import { AuthContext } from "../context/AuthContext";
 import { fetchUserInfo } from "../context/ProfileContext";
 import { fetchListFriend } from "../context/FriendContext";
+import UserPost from "../components/UserPost";
 const ProfileScreen = () => {
   const { userInfo } = useContext(AuthContext);
   const navigation = useNavigation();
@@ -106,15 +107,7 @@ const ProfileScreen = () => {
         </View>
       </View>
 
-      <View style={styles.postContainer}>
-        {PostData.map((item) => (
-          <View key={item.id}>
-            <PostHeader data={item} />
-            <Image source={item.postImg} style={styles.postImg} />
-            <PostFooter data={item} />
-          </View>
-        ))}
-      </View>
+      <UserPost />
     </ScrollView>
   );
 };
