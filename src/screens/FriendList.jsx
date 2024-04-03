@@ -7,7 +7,7 @@ import {
     ScrollView,
     StyleSheet,
 } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation,useFocusEffect } from "@react-navigation/native";
 import { MaterialIcons } from "@expo/vector-icons";
 import member from "../assets/images/img1.jpeg";
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -24,20 +24,22 @@ export default function FriendList() {
         navigation.navigate('FriendProfile', { friendId });
     };
 
-    useEffect(() => {
-        const fetchFriends = async () => {
-            try {
-                const friendsData = await fetchListFriend(userInfo.accessToken);
-                console.log(userInfo.accessToken);
-                console.log(friendsData.content);
-                setFriends(friendsData.content);
-            } catch (error) {
-                console.error('Error:', error);
-            }
-        };
+    useFocusEffect(
+        React.useCallback(() => {
+            const fetchFriends = async () => {
+                try {
+                    const friendsData = await fetchListFriend(userInfo.accessToken);
+                    console.log(userInfo.accessToken);
+                    console.log(friendsData.content);
+                    setFriends(friendsData.content);
+                } catch (error) {
+                    console.error('Error:', error);
+                }
+            };
 
-        fetchFriends();
-    }, []);
+            fetchFriends();
+        }, [])
+    );
 
     return (
         <View style={styles.container}>
