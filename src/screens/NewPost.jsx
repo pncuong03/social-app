@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import {
   Text,
   View,
@@ -24,14 +24,34 @@ import { Colors } from "../utils/Colors";
 import avatar from "../assets/images/img1.jpeg";
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { fetchUserInfo } from "../context/ProfileContext";
+import { AuthContext } from "../context/AuthContext";
+import { userPost } from "../context/PostContext";
 export default function NewPost() {
+  const { userInfo } = useContext(AuthContext);
   const navigation = useNavigation();
-  const [privacyOption, setPrivacyOption] = useState("public");
+  const [privacyOption, setPrivacyOption] = useState("PUBLIC");
   const [postContent, setPostContent] = useState("");
   const [selectedImage, setSelectedImage] = useState("");
+  const [image, setImage] = useState(null);
+  const [name, setName] = useState(null);
+  useEffect(() => {
+    const getUserInfo = async () => {
+      try {
+        const data = await fetchUserInfo(userInfo.accessToken);
+        // console.log(data);
+        setImage(data.imageUrl);
+        setName(data.fullName)
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    };
+
+    getUserInfo();
+  }, []);
   const handlePrivacyOption = (value) => {
     console.log("Privacy option selected:", value);
-    setPrivacyOption(value === "public" ? "public" : "private");
+    setPrivacyOption(value === "PUBLIC" ? "PUBLIC" : "PRIVATE");
   };
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -45,40 +65,28 @@ export default function NewPost() {
       setSelectedImage(result.assets[0].uri);
     }
   };
-  
+
   const createPost = async () => {
     let formData = new FormData();
-    formData.append('createPostInput', JSON.stringify({
+    formData.append('createPostInputString', JSON.stringify({
       content: postContent,
       state: privacyOption,
     }));
-    let image = await FileSystem.readAsStringAsync(selectedImage, {
-      encoding: FileSystem.EncodingType.Base64,
-    });
-    formData.append('image', image);
-    // console.log(formData);
+    let file = { uri: selectedImage, type: `image/${selectedImage.split('.').pop()}`, name: `image.${selectedImage.split('.').pop()}` };
+    formData.append('images', file);
     try {
-      const token = await AsyncStorage.getItem('user');
-      console.log(token);
-      let response = await axios({
-        url: 'http://192.168.1.204:8080/api/v1/post/post',
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'multipart/form-data',
-        },
-        data: formData,
-      });
+      const response = await userPost(userInfo.accessToken, formData);
+      console.log(response.status);
       if (response.status === 200) {
-        Alert.alert('Success', 'Create Post successfully');
+        Alert.alert('Success', 'Post Success');
       } else {
-        Alert.alert('Error', 'Failed to update profile');
+        Alert.alert('Error', 'Failed to success');
       }
     } catch (error) {
       Alert.alert('Error', error.message);
     }
   };
-  
+
   return (
     <MenuProvider>
       <View
@@ -107,7 +115,7 @@ export default function NewPost() {
           </TouchableOpacity>
           <Text style={{ fontSize: 20 }}>Create a post</Text>
           <Pressable
-          onPress={createPost}
+            onPress={createPost}
             style={({ pressed }) => ({
               display: "flex",
               alignItems: "center",
@@ -146,7 +154,7 @@ export default function NewPost() {
             }}
           >
             <Image
-              source={avatar}
+              source={{ uri: image }}
               style={{
                 width: 60,
                 height: 60,
@@ -166,7 +174,7 @@ export default function NewPost() {
                 fontSize: 16,
               }}
             >
-              Nguyễn Thị C
+              {name}
             </Text>
             <Menu onSelect={handlePrivacyOption}>
               <MenuTrigger>
@@ -186,11 +194,11 @@ export default function NewPost() {
                 </View>
               </MenuTrigger>
               <MenuOptions>
-                <MenuOption value={"public"}>
-                  <Text>public</Text>
+                <MenuOption value={"PUBLIC"}>
+                  <Text>PUBLIC</Text>
                 </MenuOption>
-                <MenuOption value={"private"}>
-                  <Text>private</Text>
+                <MenuOption value={"PRIVATE"}>
+                  <Text>PRIVATE</Text>
                 </MenuOption>
               </MenuOptions>
             </Menu>

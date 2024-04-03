@@ -13,6 +13,7 @@ import ProfileScreen from "./src/screens/ProfileScreen";
 import FriendList from "./src/screens/FriendList";
 import EditProfile from "./src/screens/EditProfile";
 import FriendProfile from "./src/screens/FriendProfile";
+import NewPost from "./src/screens/NewPost";
 const Stack = createStackNavigator();
 
 const App = () => {
@@ -39,6 +40,7 @@ const AppContent = () => {
             <Stack.Screen name="FriendList" component={FriendList} />
             <Stack.Screen name="FriendProfile" component={FriendProfile} />
             <Stack.Screen name="EditProfile" component={EditProfile} />
+            <Stack.Screen name="NewPost" component={NewPost} />
           </>
         ) : (
           <>
