@@ -3,12 +3,12 @@ import React, { useContext, useEffect, useState } from "react";
 import { Colors } from "../utils/Colors";
 import PostHeader from "./PostHeader";
 import PostFooter from "./PostFooter";
-import { getPostofMe } from "../context/PostContext";
+import { getPostofMe, getPostsOfUser } from "../context/PostContext";
 import { AuthContext } from "../context/AuthContext";
 import Carousel from "react-native-snap-carousel";
 import Spinner from "react-native-loading-spinner-overlay";
 
-const UserPost = () => {
+const UserPost = ({ accessToken, userId }) => {
     const { userInfo } = useContext(AuthContext);
     const [posts, setPosts] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -20,20 +20,31 @@ const UserPost = () => {
     };
     useEffect(() => {
         const getAllPost = async () => {
-            setIsLoading(true);
-            try {
-                const data = await getPostofMe(userInfo.accessToken);
-                // Assuming data.content is an array of posts
-                const sortedPosts = data.content.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-                setPosts(sortedPosts);
-            } catch (error) {
-                console.error("Error getAllPost:", error);
-            } finally {
-                setIsLoading(false);
+          setIsLoading(true);
+          try {
+            if (!accessToken || !userId) {
+              console.error("Invalid accessToken or userId");
+              return;
             }
+            const data = await getPostsOfUser(accessToken, userId);
+            if (!data || !data.content) {
+              console.error("Invalid response from API");
+              return;
+            }
+            const sortedPosts = data.content.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+            console.log(sortedPosts);
+            setPosts(sortedPosts);
+          } catch (error) {
+            console.error("Error getAllPost:", error);
+          } finally {
+            setIsLoading(false);
+          }
         };
-        getAllPost();
-    }, []);
+        
+        if (userId) {
+          getAllPost();
+        }
+      }, [userId]);
 
     const ImageSlider = ({ item }) => (
         <View style={styles.slide}>
