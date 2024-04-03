@@ -28,8 +28,11 @@ const FriendScreen = () => {
     const fetchData = async () => {
       try {
         const data = await fetchFriendRequests(userInfo.accessToken);
+        const sorted = data.content.sort(
+          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+        );
         setRequests(data.content);
-        setFilteredRequests(data.content);
+        setFilteredRequests(sorted);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -74,25 +77,21 @@ const FriendScreen = () => {
       console.error("Error confirming friend:", error);
     }
   };
-<<<<<<< HEAD
-
-=======
   // console.log(11111111, onDelete(ids));
-  const toggleSearch = () => {
-    setIsSearch(!isSearch);
-  };
+  // const toggleSearch = () => {
+  //   setIsSearch(!isSearch);
+  // };
 
-  const onSearch = (text) => {
-    setSearchTerm(text);
-    const filtered = requests.filter((request) =>
-      request.fullName.toLowerCase().includes(text.toLowerCase())
-    );
-    setFilteredRequests(filtered);
-  };
+  // const onSearch = (text) => {
+  //   setSearchTerm(text);
+  //   const filtered = requests.filter((request) =>
+  //     request.fullName.toLowerCase().includes(text.toLowerCase())
+  //   );
+  //   setFilteredRequests(filtered);
+  // };
 
   // const ids = requests.map((request) => request.id);
   // console.log(ids);
->>>>>>> 5fc4f30b5f13b1dfa2a02a9a9c82d24b54b7fffc
   return (
     <ScrollView style={styles.container}>
       <View style={styles.subNav}>
