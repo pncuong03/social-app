@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
   },
   postImg: {
     width: '100%',
-    height: 250,
+    height: 500,
   },
 });
 
