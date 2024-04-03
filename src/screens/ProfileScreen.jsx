@@ -23,11 +23,10 @@ const ProfileScreen = () => {
   const { userInfo } = useContext(AuthContext);
   const navigation = useNavigation();
   const [user, setUser] = useState({
-    birthday: null,
-    fullName: "",
-    gender: null,
     id: null,
+    fullName: "",
     imageUrl: "",
+    description: ""
   });
   const [posts, setPosts] = useState([]);
   const [friends, setFriends] = useState([]);
@@ -56,6 +55,7 @@ const ProfileScreen = () => {
           gender: data.gender,
           id: data.id,
           imageUrl: data.imageUrl,
+          description: data.description
         });
       } catch (error) {
         console.error("Error:", error);
@@ -80,6 +80,13 @@ const ProfileScreen = () => {
       <View style={styles.profileInfoContainer}>
         <Image source={{ uri: user.imageUrl }} style={styles.profileImage} />
         <Text style={styles.profileName}>{user.fullName}</Text>
+        {user.description && user.description.split("\\n").map((item, key) => {
+          return (
+            <Text key={key} style={styles.profileDescription}>
+              {item}
+            </Text>
+          );
+        })}
         <TouchableOpacity
           onPress={() => navigation.push("EditProfile")}
           style={styles.editProfileButton}
@@ -156,6 +163,12 @@ const styles = StyleSheet.create({
     lineHeight: 22,
     color: "black",
     marginVertical: 8,
+  },
+  profileDescription: {
+    fontSize: 16,
+    lineHeight: 20,
+    color: "black",
+    marginVertical: 4,
   },
   editProfileButton: {
     backgroundColor: "black",
