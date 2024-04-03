@@ -7,7 +7,7 @@ import {
   ScrollView,
   StyleSheet,
 } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { MaterialIcons } from "@expo/vector-icons";
 import member from "../assets/images/img1.jpeg";
 import { PostData } from "../data/PostData";
@@ -18,27 +18,40 @@ import axios from 'axios';
 import { AuthContext } from "../context/AuthContext";
 import { fetchUserInfo } from '../context/ProfileContext';
 import { fetchListFriend } from '../context/FriendContext'
-export default function FriendProfile({route}) {
+import UserPost from "../components/UserPost";
+import { getPostsOfUser } from "../context/PostContext";
+export default function FriendProfile({ route }) {
   const { userInfo } = useContext(AuthContext);
-  const {friendId} = route.params;
+  const { friendId } = route.params;
   const navigation = useNavigation();
   const [friends, setFriends] = useState([]);
+  const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
-  useEffect(() => {
-    const fetchFriends = async () => {
-      try {
-        const friendsData = await fetchListFriend(userInfo.accessToken);
-        console.log(friendsData.content);
-        setFriends(friendsData.content);
-        setLoading(false);
-      } catch (error) {
-        console.error('Error:', error);
-      }
-    };
-    fetchFriends();
-  }, []);
+  useFocusEffect(
+    React.useCallback(() => {
+      const fetchFriends = async () => {
+        try {
+          const friendsData = await fetchListFriend(userInfo.accessToken);
+          // console.log(friendsData.content);
+          setFriends(friendsData.content);
+          setLoading(false);
+        } catch (error) {
+          console.error('Error:', error);
+        }
+      };
+      const fetchPosts = async () => {
+        try {
+          const postData = await getPostsOfUser(userInfo.accessToken, friendId);
+          setPosts(postData.content);
+        } catch (error) {
+          console.error("Error:", error);
+        }
+      };
+      fetchFriends();
+      fetchPosts();
+    }, [userInfo.accessToken, friendId])
+  );
   const friend = friends.find((f) => f.id === friendId);
-  console.log(friend);
   if (loading) {
     return <Text>Loading...</Text>;
   }
@@ -47,7 +60,7 @@ export default function FriendProfile({route}) {
       <View>
         <Image source={member} style={styles.backgroundImage} />
         <TouchableOpacity
-          onPress={() => navigation.push("MainScreen")}
+          onPress={() => navigation.push("FriendList")}
           style={styles.backButton}
         >
           <MaterialIcons name="keyboard-arrow-left" size={35} color={"black"} />
@@ -61,24 +74,16 @@ export default function FriendProfile({route}) {
         <View style={styles.profileStatsContainer}>
           <View style={styles.profileStatsItem}>
             <Text style={styles.profileStatsLabel}>Posts</Text>
-            <Text style={styles.profileStatsValue}>3</Text>
+            <Text style={styles.profileStatsValue}>{posts.length}</Text>
           </View>
-          <View  style={styles.profileStatsItem}>
-              <Text style={styles.profileStatsLabel}>Friends</Text>
-              <Text style={styles.profileStatsValue}>{friends.length}</Text>
+          <View style={styles.profileStatsItem}>
+            <Text style={styles.profileStatsLabel}>Friends</Text>
+            <Text style={styles.profileStatsValue}>{friends.length}</Text>
           </View>
         </View>
       </View>
 
-      <View style={styles.postContainer}>
-        {PostData.map(item => (
-          <View key={item.id}>
-            <PostHeader data={item} />
-            <Image source={item.postImg} style={styles.postImg} />
-            <PostFooter data={item} />
-          </View>
-        ))}
-      </View>
+      <UserPost accessToken={userInfo.accessToken} userId={friendId} />
     </ScrollView>
   );
 };
@@ -153,7 +158,7 @@ const styles = StyleSheet.create({
   profileStatsItem: {
     flexDirection: "column",
     alignItems: "center",
-    justifyContent:"center",
+    justifyContent: "center",
     marginHorizontal: 10,
   },
   profileStatsLabel: {
