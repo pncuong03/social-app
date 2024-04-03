@@ -13,39 +13,29 @@ import {
   fetchLike,
   fetchComment,
   fetchUnLike,
-  fetchPostDetail,
   fetchShare,
 } from "../context/FriendInteractContext";
 import { Colors } from "../utils/Colors";
 import VectorIcon from "../utils/VectorIcon";
+import { useNavigation } from "@react-navigation/native";
 
 const PostFooter = ({ data }) => {
+  const navigation = useNavigation();
+
   const { userInfo } = useContext(AuthContext);
 
   const [isLiked, setIsLiked] = useState(false);
-  const [isCommented, setIsCommented] = useState(false);
   const [isShared, setIsShared] = useState(false);
 
   const [commentCount, setCommentCount] = useState(data.commentCount);
   const [likeCount, setLikeCount] = useState(data.likeCount);
   const [shareCount, setShareCount] = useState(data.shareCount);
 
-  const [commentText, setCommentText] = useState("");
-  const [listComment, setListComment] = useState([data.comments]);
-
-  // useEffect(() => {
-  //   const postDetail = async (postId) => {
-  //     try {
-  //       const postData = await fetchPostDetail(postId, userInfo.accessToken);
-  //       setListComment(postData);
-  //     } catch (error) {
-  //       console.error("Error:", error);
-  //     }
-  //   };
-
-  //   postDetail();
-  // }, []);
-  // console.log(listComment);
+  useEffect(() => {
+    if (data.hasLike) {
+      setIsLiked(true);
+    }
+  }, []);
 
   const onLike = async (postId) => {
     try {
@@ -76,19 +66,6 @@ const PostFooter = ({ data }) => {
     }
   };
 
-  const onComment = async (postId, comment) => {
-    if (commentText.trim() !== "") {
-      try {
-        await fetchComment(postId, comment, userInfo.accessToken);
-        const newComment = { text: commentText };
-        setListComment([...listComment, newComment]);
-        setCommentCount((prevCount) => prevCount + 1);
-        setCommentText("");
-      } catch (error) {
-        console.error("Error commenting:", error);
-      }
-    }
-  };
   return (
     <View style={styles.postFooterContainer}>
       <View style={styles.footerReactionSec}>
@@ -118,13 +95,24 @@ const PostFooter = ({ data }) => {
             <Text style={styles.reactionCount}>Like</Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => setIsCommented(!isCommented)}>
+        <TouchableOpacity
+          // onPress={() => {
+          //   getPostDetail(data.id);
+          //   setIsCommented(!isCommented);
+          // }}
+          onPress={() => {
+            navigation.push("CommentDetail", {
+              postId: data.id,
+              data: data,
+            });
+          }}
+        >
           <View style={styles.row}>
             <VectorIcon
-              name={isCommented ? "chatbox-sharp" : "chatbox-outline"}
+              name="chatbox-outline"
               type="Ionicons"
               size={25}
-              color={isCommented ? "#384CFF" : Colors.grey}
+              color={Colors.grey}
             />
             <Text style={styles.reactionCount}>Comment</Text>
           </View>
@@ -141,46 +129,9 @@ const PostFooter = ({ data }) => {
           </View>
         </TouchableOpacity>
       </View>
-
-      {isCommented && (
-        <View style={styles.commentInputContainer}>
-          <TextInput
-            placeholder="Write a comment..."
-            style={styles.commentInput}
-            value={commentText}
-            onChangeText={(text) => setCommentText(text)}
-          />
-          <TouchableOpacity onPress={() => onComment(data.id, commentText)}>
-            <Text style={styles.commentSubmit}>Submit</Text>
-          </TouchableOpacity>
-        </View>
-      )}
-      {/* 
-      {isCommented && (
-        <View>
-          {listComment.map((commentt, index) => (
-            <View
-              key={index}
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-                gap: 8,
-                margin: 8,
-              }}
-            >
-              <Image source={Post1} style={styles.userProfile} />
-              <View style={styles.commentContent}>
-                <Text style={styles.username}>{data.name}</Text>
-                <Text style={styles.commentText}>{commentt.}</Text>
-              </View>
-            </View>
-          ))}
-        </View>
-      )} */}
     </View>
   );
 };
-
 const styles = StyleSheet.create({
   reactionIcon: {
     height: 20,
@@ -210,49 +161,6 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     flexDirection: "row",
     justifyContent: "space-around",
-  },
-  commentInputContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    margin: 10,
-    padding: 5,
-    borderWidth: 1,
-    borderColor: "lightgrey",
-    borderRadius: 20,
-  },
-  commentInput: {
-    flex: 1,
-    height: 30,
-    paddingHorizontal: 10,
-  },
-  commentSubmit: {
-    color: "#384CFF",
-    fontWeight: "bold",
-    paddingHorizontal: 10,
-  },
-  commentText: {
-    marginTop: 5,
-    fontSize: 10,
-    color: "black",
-  },
-  userProfile: {
-    height: 40,
-    width: 40,
-    borderRadius: 50,
-  },
-  username: {
-    fontSize: 12,
-    color: Colors.textColor,
-    fontWeight: "500",
-  },
-  commentContent: {
-    backgroundColor: Colors.lightgrey,
-    borderWidth: 1,
-    borderColor: Colors.lightgrey,
-    borderRadius: 10,
-    width: "auto",
-    padding: 7,
-    height: 50,
   },
 });
 

@@ -28,3 +28,20 @@ export const fetchPostMe = async (accessToken) => {
     throw error;
   }
 };
+
+export const userPost = async (accessToken, formData) => {
+  try {
+    const response = await axios({
+      method: "post",
+      url: `${BASE_URL}/post/post`,
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: `Bearer ${accessToken}`,
+      },
+      data: formData,
+    });
+    return response;
+  } catch (error) {
+    console.error("Error:", error);
+  }
+};

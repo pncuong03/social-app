@@ -6,7 +6,7 @@ import {
   Pressable,
   Image,
   TextInput,
-  Alert
+  Alert,
 } from "react-native";
 import VectorIcon from "../utils/VectorIcon";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -19,11 +19,11 @@ import {
   MenuProvider,
 } from "react-native-popup-menu";
 import * as ImagePicker from "expo-image-picker";
-import * as FileSystem from 'expo-file-system';
+import * as FileSystem from "expo-file-system";
 import { Colors } from "../utils/Colors";
 import avatar from "../assets/images/img1.jpeg";
-import axios from 'axios';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { fetchUserInfo } from "../context/ProfileContext";
 import { AuthContext } from "../context/AuthContext";
 import { userPost } from "../context/PostContext";
@@ -41,7 +41,7 @@ export default function NewPost() {
         const data = await fetchUserInfo(userInfo.accessToken);
         // console.log(data);
         setImage(data.imageUrl);
-        setName(data.fullName)
+        setName(data.fullName);
       } catch (error) {
         console.error("Error:", error);
       }
@@ -68,22 +68,29 @@ export default function NewPost() {
 
   const createPost = async () => {
     let formData = new FormData();
-    formData.append('createPostInputString', JSON.stringify({
-      content: postContent,
-      state: privacyOption,
-    }));
-    let file = { uri: selectedImage, type: `image/${selectedImage.split('.').pop()}`, name: `image.${selectedImage.split('.').pop()}` };
-    formData.append('images', file);
+    formData.append(
+      "createPostInputString",
+      JSON.stringify({
+        content: postContent,
+        state: privacyOption,
+      })
+    );
+    let file = {
+      uri: selectedImage,
+      type: `image/${selectedImage.split(".").pop()}`,
+      name: `image.${selectedImage.split(".").pop()}`,
+    };
+    formData.append("images", file);
     try {
       const response = await userPost(userInfo.accessToken, formData);
       console.log(response.status);
       if (response.status === 200) {
-        Alert.alert('Success', 'Post Success');
+        Alert.alert("Success", "Post Success");
       } else {
-        Alert.alert('Error', 'Failed to success');
+        Alert.alert("Error", "Failed to success");
       }
     } catch (error) {
-      Alert.alert('Error', error.message);
+      Alert.alert("Error", error.message);
     }
   };
 

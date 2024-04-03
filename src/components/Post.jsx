@@ -5,8 +5,8 @@ import PostHeader from "./PostHeader";
 import PostFooter from "./PostFooter";
 import { fetchPostMe, fetchPostPublic } from "../context/PostContext";
 import { AuthContext } from "../context/AuthContext";
-import Carousel from "react-native-snap-carousel";
 import Spinner from "react-native-loading-spinner-overlay";
+import ImageCarousel from "./ImageCarousel";
 
 const Post = () => {
   const { userInfo } = useContext(AuthContext);
@@ -18,45 +18,25 @@ const Post = () => {
     const updatedPosts = posts.filter((post) => post.id !== postId);
     setPosts(updatedPosts);
   };
+
   useEffect(() => {
-    const getAllPost = async () => {
+    const fetchNewPosts = async () => {
       setIsLoading(true);
       try {
         const data = await fetchPostPublic(userInfo.accessToken);
-        setPosts(data.content);
+        const sorted = data.content.sort(
+          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+        );
+        setPosts(sorted);
       } catch (error) {
-        console.error("Error getAllPost:", error);
+        console.error("Error fetching new posts:", error);
       } finally {
         setIsLoading(false);
       }
     };
-    getAllPost();
-  }, []);
 
-  useEffect(() => {
-    const getPostMe = async () => {
-      setIsLoading(true);
-      try {
-        const data = await fetchPostMe(userInfo.accessToken);
-        setPosts(data.content);
-        // console.log(data.content);
-      } catch (error) {
-        console.error("Error getPostMe:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    getPostMe();
+    fetchNewPosts();
   }, []);
-
-  const ImageSlider = ({ item }) => (
-    <View style={styles.slide}>
-      <Image
-        source={{ uri: item }}
-        style={[styles.postImg, { width: windowWidth }]}
-      />
-    </View>
-  );
 
   return (
     <View style={styles.postContainer}>
@@ -64,13 +44,7 @@ const Post = () => {
       {posts.map((item) => (
         <View key={item.id}>
           <PostHeader data={item} onClose={() => onClosePost(item.id)} />
-          <Carousel
-            data={item.imageUrls}
-            renderItem={ImageSlider}
-            sliderWidth={windowWidth}
-            itemWidth={windowWidth}
-          />
-
+          <ImageCarousel data={item.imageUrls} windowWidth={windowWidth} />
           <PostFooter data={item} />
         </View>
       ))}
@@ -82,14 +56,6 @@ const styles = StyleSheet.create({
   postContainer: {
     backgroundColor: Colors.white,
     marginTop: 8,
-  },
-  postImg: {
-    height: 250,
-  },
-  slide: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
   },
 });
 
