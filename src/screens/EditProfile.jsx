@@ -7,7 +7,8 @@ import {
   TextInput,
   Alert,
   Button,
-  Platform
+  Platform,
+  KeyboardAvoidingView
 } from "react-native";
 import React, { useState, useEffect, useContext } from "react";
 import { useNavigation } from "@react-navigation/native";
@@ -47,7 +48,7 @@ export default function EditProfile() {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
-      aspect: [4, 4],
+      aspect: [16, 20],
       quality: 1,
     });
 
@@ -61,7 +62,8 @@ export default function EditProfile() {
     let changeInfoUserRequest = {
       fullName: fullName,
       birthdayString: "2011-08-12T20:17:46.384Z",
-      gender: "Male"
+      gender: "Male",
+      description: description,
     };
 
 
@@ -90,6 +92,7 @@ export default function EditProfile() {
   };
 
   return (
+    
     <SafeAreaView
       style={{
         flex: 1,
