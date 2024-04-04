@@ -74,25 +74,6 @@ const FriendScreen = () => {
       console.error("Error confirming friend:", error);
     }
   };
-<<<<<<< HEAD
-
-=======
-  // console.log(11111111, onDelete(ids));
-  const toggleSearch = () => {
-    setIsSearch(!isSearch);
-  };
-
-  const onSearch = (text) => {
-    setSearchTerm(text);
-    const filtered = requests.filter((request) =>
-      request.fullName.toLowerCase().includes(text.toLowerCase())
-    );
-    setFilteredRequests(filtered);
-  };
-
-  // const ids = requests.map((request) => request.id);
-  // console.log(ids);
->>>>>>> 5fc4f30b5f13b1dfa2a02a9a9c82d24b54b7fffc
   return (
     <ScrollView style={styles.container}>
       <View style={styles.subNav}>

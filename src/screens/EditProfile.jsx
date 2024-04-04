@@ -58,29 +58,16 @@ export default function EditProfile() {
     let formData = new FormData();
     formData.append('new_user_info', JSON.stringify(changeInfoUserRequest));
 
-    // Create a new blob object
-    let blob = await new Promise((resolve, reject) => {
-      const xhr = new XMLHttpRequest();
-      xhr.onload = function () {
-        resolve(xhr.response);
-      };
-      xhr.onerror = function () {
-        reject(new TypeError('Network request failed'));
-      };
-      xhr.responseType = 'blob';
-      xhr.open('GET', selectedImage, true);
-      xhr.send(null);
-    });
-
     // Append the blob object as a file to the form data
     let file = { uri: selectedImage, type: `image/${selectedImage.split('.').pop()}`, name: `image.${selectedImage.split('.').pop()}` };
     formData.append('image', file);
+    console.log(formData);
 
 
 
     try {
       const response = await upDateUserInfo(userInfo.accessToken, formData);
-      console.log(response.status);
+      console.log(response);
       if (response.status === 200) {
         Alert.alert('Success', 'Profile updated successfully');
       } else {

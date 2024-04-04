@@ -26,8 +26,10 @@ export const upDateUserInfo = async (accessToken, formData) => {
       },
       data: formData,
     });
+    console.log(response.data); // Log the response data
     return response;
   } catch (error) {
     console.error("Error:", error);
+    throw error; // Re-throw the error so it can be caught and handled by the calling function
   }
 };
