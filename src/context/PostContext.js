@@ -63,3 +63,6 @@ export const getPostsOfUser = async (accessToken, userId) => {
     console.error("Error:", error);
   }
 }
+
+
+
