@@ -6,7 +6,9 @@ import {
   ScrollView,
   TextInput,
   Alert,
-  Button
+  Button,
+  Platform,
+  KeyboardAvoidingView
 } from "react-native";
 import React, { useState, useEffect, useContext } from "react";
 import { useNavigation } from "@react-navigation/native";
@@ -17,22 +19,36 @@ import * as FileSystem from 'expo-file-system';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AuthContext } from "../context/AuthContext";
+import { fetchUserInfo } from "../context/ProfileContext";
 import { upDateUserInfo } from "../context/ProfileContext";
 export default function EditProfile() {
   const { userInfo } = useContext(AuthContext);
   const navigation = useNavigation();
-
-  const [selectedImage, setSelectedImage] = useState("http://res.cloudinary.com/ds9ipqi3z/image/upload/v1710954680/bpnracdpkspbzt0njy8n.png");
-
+  const [selectedImage, setSelectedImage] = useState(null);
   const [fullName, setFullName] = useState("");
+  const [description, setDescription] = useState("");
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [password, setPassword] = useState("");
+  useEffect(() => {
+    const getUserInfo = async () => {
+      try {
+        const data = await fetchUserInfo(userInfo.accessToken);
+        // console.log(data);
+        setSelectedImage(data.imageUrl);
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    };
+
+    getUserInfo();
+  }, []);
+
   const handleImageSelection = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
-      aspect: [4, 4],
+      aspect: [16, 20],
       quality: 1,
     });
 
@@ -41,46 +57,30 @@ export default function EditProfile() {
     if (!result.canceled) {
       setSelectedImage(result.assets[0].uri);
     }
-    console.log(selectedImage)
   };
   const handleUpdate = async () => {
     let changeInfoUserRequest = {
       fullName: fullName,
       birthdayString: "2011-08-12T20:17:46.384Z",
-      gender: "Male"
+      gender: "Male",
+      description: description,
     };
 
-    // Convert image to base64
-    let image = await FileSystem.readAsStringAsync(selectedImage, {
-      encoding: FileSystem.EncodingType.Base64,
-    });
+
+
 
     let formData = new FormData();
     formData.append('new_user_info', JSON.stringify(changeInfoUserRequest));
 
-    // Create a new blob object
-    let blob = await new Promise((resolve, reject) => {
-      const xhr = new XMLHttpRequest();
-      xhr.onload = function () {
-        resolve(xhr.response);
-      };
-      xhr.onerror = function () {
-        reject(new TypeError('Network request failed'));
-      };
-      xhr.responseType = 'blob';
-      xhr.open('GET', selectedImage, true);
-      xhr.send(null);
-    });
 
     // Append the blob object as a file to the form data
     let file = { uri: selectedImage, type: `image/${selectedImage.split('.').pop()}`, name: `image.${selectedImage.split('.').pop()}` };
-    formData.append('image', file);
-
+    console.log(file);
+    formData.append('image', file)
 
 
     try {
       const response = await upDateUserInfo(userInfo.accessToken, formData);
-      console.log(response.status);
       if (response.status === 200) {
         Alert.alert('Success', 'Profile updated successfully');
       } else {
@@ -92,6 +92,7 @@ export default function EditProfile() {
   };
 
   return (
+
     <SafeAreaView
       style={{
         flex: 1,
@@ -217,7 +218,40 @@ export default function EditProfile() {
             </View>
           </View>
         </View>
-
+        <View
+          style={{
+            marginTop: 10,
+          }}
+        >
+          <View
+            style={{
+              flexDirection: "column",
+              marginBottom: 6,
+            }}
+          >
+            <Text style={{ fontSize: 16 }}>Decription</Text>
+            <View
+              style={{
+                height: 44,
+                width: "100%",
+                borderColor: "rgba(84, 76, 76, 0.14)",
+                borderWidth: 1,
+                borderRadius: 4,
+                marginVertical: 6,
+                justifyContent: "center",
+                paddingLeft: 8,
+              }}
+            >
+              <TextInput
+                value={description}
+                onChangeText={(value) => setDescription(value)}
+                editable={true}
+                multiline={true}
+                numberOfLines={4}
+              />
+            </View>
+          </View>
+        </View>
       </View>
       <View style={{ paddingHorizontal: 22 }}>
         <TouchableOpacity

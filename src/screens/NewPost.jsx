@@ -57,7 +57,7 @@ export default function NewPost() {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
-      aspect: [4, 3],
+      aspect: [16, 20],
       quality: 1,
     });
 
@@ -221,7 +221,7 @@ export default function NewPost() {
           {selectedImage && (
             <Image
               source={{ uri: selectedImage }}
-              style={{ width: "100%", height: 240, marginVertical: 20 }}
+              style={{ width: "100%", height: 600, marginVertical: 20 }}
             />
           )}
         </View>
