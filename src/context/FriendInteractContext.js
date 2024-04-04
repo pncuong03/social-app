@@ -1,22 +1,22 @@
 import axios from "axios";
 import { BASE_URL } from "../config";
 
-// export const fetchDetailPost = async (accessToken) => {
-//   try {
-//     const response = await axios.get(
-//       `${BASE_URL}/user/post/interaction?postId=${id}`,
-//       {
-//         headers: {
-//           Authorization: `Bearer ${accessToken}`,
-//         },
-//       }
-//     );
-//     return response.data;
-//   } catch (error) {
-//     console.error(error);
-//     throw error;
-//   }
-// };
+export const fetchDetailPost = async (postId, accessToken) => {
+  try {
+    const response = await axios.get(
+      `${BASE_URL}/user/post/interaction?postId=${postId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
 
 export const fetchLike = async (postId, accessToken) => {
   try {
@@ -96,7 +96,7 @@ export const fetchComment = async (postId, comment, accessToken) => {
 export const fetchUnComment = async (id, accessToken) => {
   try {
     const response = await axios.delete(
-      `${BASE_URL}/user/post/interaction/comment/delete?commentId=${id}&accessToken=${token}`,
+      `${BASE_URL}/user/post/interaction/comment/delete?commentId=${id}`,
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,

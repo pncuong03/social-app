@@ -29,7 +29,7 @@ export const userPost = async (accessToken, formData) => {
   } catch (error) {
     console.error("Error:", error);
   }
-};
+}
 export const getPostofMe = async (accessToken) => {
   try {
     const response = await axios({
@@ -44,4 +44,22 @@ export const getPostofMe = async (accessToken) => {
   } catch (error) {
     console.error("Error:", error);
   }
-};
+}
+export const getPostsOfUser = async (accessToken, userId) => {
+  try {
+    const response = await axios({
+      method: "get",
+      url: `${BASE_URL}/post/list/post-user`,
+      params: {
+        userId: userId
+      },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error:", error);
+  }
+}

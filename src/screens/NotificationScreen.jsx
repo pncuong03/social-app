@@ -21,7 +21,10 @@ const NotificationScreen = () => {
     const fetchData = async () => {
       try {
         const data = await fetchNotifications(userInfo.accessToken);
-        setNotification(data.content);
+        const sorted = data.content.sort(
+          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+        );
+        setNotification(sorted);
       } catch (error) {
         console.error("Error fetching data:", error);
       }

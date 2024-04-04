@@ -24,8 +24,8 @@ import GroupMemberListScreen from "./src/screens/GroupMemberListScreen";
 import MessageDetail from "./src/screens/MessageDetail";
 import ManageMember from "./src/screens/ManageMember";
 import AddMemberGroup from "./src/screens/AddMemberGroup";
+import CommentDetail from "./src/components/CommentDetail";
 import { Colors } from "./src/utils/Colors";
-import FriendList from "./src/screens/FriendList";
 
 const Stack = createStackNavigator();
 
@@ -78,7 +78,7 @@ const AppContent = () => {
             <Stack.Screen name="MessageDetail" component={MessageDetail} />
             <Stack.Screen name="ManageMember" component={ManageMember} />
             <Stack.Screen name="AddMemberGroup" component={AddMemberGroup} />
-            <Stack.Screen name="FriendList" component={FriendList} />
+            <Stack.Screen name="CommentDetail" component={CommentDetail} />
           </>
         ) : (
           <>

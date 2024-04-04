@@ -19,22 +19,23 @@ import { AuthContext } from "../context/AuthContext";
 import { fetchUserInfo } from "../context/ProfileContext";
 import { fetchListFriend } from "../context/FriendContext";
 import UserPost from "../components/UserPost";
+import { getPostsOfUser } from "../context/PostContext";
 const ProfileScreen = () => {
   const { userInfo } = useContext(AuthContext);
+  console.log(userInfo.accessToken);
   const navigation = useNavigation();
   const [user, setUser] = useState({
-    birthday: null,
-    fullName: "",
-    gender: null,
     id: null,
+    fullName: "",
     imageUrl: "",
+    description: ""
   });
   const [posts, setPosts] = useState([]);
   const [friends, setFriends] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
     const fetchFriends = async () => {
       try {
-        console.log(userInfo.accessToken);
         const friendsData = await fetchListFriend(userInfo.accessToken);
         console.log(friendsData.content);
         setFriends(friendsData.content);
@@ -47,27 +48,28 @@ const ProfileScreen = () => {
   }, []);
 
   useEffect(() => {
-    const getUserInfo = async () => {
+    const fetchData = async () => {
+      setIsLoading(true);
       try {
-        const data = await fetchUserInfo(userInfo.accessToken);
-        console.log(data);
+        const userData = await fetchUserInfo(userInfo.accessToken);
         setUser({
-          birthday: data.birthday,
-          fullName: data.fullName,
-          gender: data.gender,
-          id: data.id,
-          imageUrl: data.imageUrl,
+          birthday: userData.birthday,
+          fullName: userData.fullName,
+          gender: userData.gender,
+          id: userData.id,
+          imageUrl: userData.imageUrl,
+          description: userData.description
         });
-        setPosts(data.posts);
-        setFollowers(data.followers);
-        setPosts(data.posts);
-        setFollowers(data.followers);
+        const postData = await getPostsOfUser(userInfo.accessToken, userData.id);
+        setPosts(postData.content);
       } catch (error) {
         console.error("Error:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
-    getUserInfo();
+    fetchData();
   }, []);
   return (
     <ScrollView style={styles.container}>
@@ -85,6 +87,13 @@ const ProfileScreen = () => {
       <View style={styles.profileInfoContainer}>
         <Image source={{ uri: user.imageUrl }} style={styles.profileImage} />
         <Text style={styles.profileName}>{user.fullName}</Text>
+        {user.description && user.description.split("\\n").map((item, key) => {
+          return (
+            <Text key={key} style={styles.profileDescription}>
+              {item}
+            </Text>
+          );
+        })}
         <TouchableOpacity
           onPress={() => navigation.push("EditProfile")}
           style={styles.editProfileButton}
@@ -94,7 +103,7 @@ const ProfileScreen = () => {
         <View style={styles.profileStatsContainer}>
           <View style={styles.profileStatsItem}>
             <Text style={styles.profileStatsLabel}>Posts</Text>
-            <Text style={styles.profileStatsValue}>3</Text>
+            <Text style={styles.profileStatsValue}>{posts.length}</Text>
           </View>
           <View>
             <TouchableOpacity
@@ -108,7 +117,7 @@ const ProfileScreen = () => {
         </View>
       </View>
 
-      <UserPost />
+      <UserPost accessToken={userInfo.accessToken} userId={user.id} />
     </ScrollView>
   );
 };
@@ -161,6 +170,12 @@ const styles = StyleSheet.create({
     lineHeight: 22,
     color: "black",
     marginVertical: 8,
+  },
+  profileDescription: {
+    fontSize: 16,
+    lineHeight: 20,
+    color: "black",
+    marginVertical: 4,
   },
   editProfileButton: {
     backgroundColor: "black",
