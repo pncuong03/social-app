@@ -6,16 +6,34 @@ import {
   TouchableOpacity,
   ScrollView,
 } from "react-native";
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 import { Colors } from "../utils/Colors";
 import { useNavigation } from "@react-navigation/native";
 import VectorIcon from "../utils/VectorIcon";
 import ChatHeader from "../components/ChatHeader";
 import { messageResponse } from "../data/MessageData";
+import { fetchUserChat } from "../context/UserContext";
+import { AuthContext } from "../context/AuthContext";
 
 const MessageScreen = () => {
   const navigation = useNavigation();
+  const { userInfo } = useContext(AuthContext);
+
+  const [listChat, setListChat] = useState([]);
+  useEffect(() => {
+    const getListChat = async () => {
+      try {
+        const data = await fetchUserChat(userInfo.accessToken);
+        setListChat(data.content);
+      } catch (error) {
+        console.log("Chat error: ", error);
+      }
+    };
+    getListChat();
+  }, []);
+
+  console.log(listChat);
   return (
     <ScrollView style={{ flex: 1 }}>
       <View style={style.container}>
@@ -32,38 +50,39 @@ const MessageScreen = () => {
         <View>
           <ChatHeader />
         </View>
-        {
-          messageResponse.map((message) => (
-            <TouchableOpacity key={message.id} onPress={() => navigation.push("ChatPrivate")}>
-              <View style={style.chatView} >
-                <View style={{ flexDirection: "row", alignItems: "center" }}>
-                  <Image
-                    style={{
-                      width: 35,
-                      height: 35,
-                      marginLeft: 10,
-                      marginRight: 10,
-                      borderRadius: 10,
-                    }}
-                    source={message.img}
-                  />
-                  <View>
-                    <Text>{message.name}</Text>
-                    <Text>{message.content}</Text>
-                  </View>
-                </View>
-                <View style={{ marginRight: 10 }}>
-                  <VectorIcon
-                    name="checkbox-marked-circle-outline"
-                    type="MaterialCommunityIcons"
-                    size={20}
-                    color={Colors.black}
-                  />
+        {listChat.map((message) => (
+          <TouchableOpacity
+            key={message.id}
+            onPress={() => navigation.push("ChatPrivate")}
+          >
+            <View style={style.chatView}>
+              <View style={{ flexDirection: "row", alignItems: "center" }}>
+                <Image
+                  style={{
+                    width: 35,
+                    height: 35,
+                    marginLeft: 10,
+                    marginRight: 10,
+                    borderRadius: 10,
+                  }}
+                  source={message.img}
+                />
+                <View>
+                  <Text>{message.name}</Text>
+                  <Text>{message.content}</Text>
                 </View>
               </View>
-            </TouchableOpacity>
-          ))
-        }
+              <View style={{ marginRight: 10 }}>
+                <VectorIcon
+                  name="checkbox-marked-circle-outline"
+                  type="MaterialCommunityIcons"
+                  size={20}
+                  color={Colors.black}
+                />
+              </View>
+            </View>
+          </TouchableOpacity>
+        ))}
       </View>
     </ScrollView>
   );

@@ -12,7 +12,7 @@ import { AuthContext } from "../context/AuthContext";
 import {
   fetchComment,
   fetchDetailPost,
-} from "../context/FriendInteractContext"; // Import fetchDetailPost
+} from "../context/FriendInteractContext";
 import PostHeader from "./PostHeader";
 import Carousel from "react-native-snap-carousel";
 import PostFooter from "./PostFooter";
@@ -24,12 +24,13 @@ import TimeComparison from "../utils/Time";
 
 const CommentDetail = ({ route }) => {
   const navigation = useNavigation();
-  const { userInfo } = useContext(AuthContext);
-  const { postId, data } = route.params;
-  const windowWidth = Dimensions.get("window").width;
 
+  const { userInfo } = useContext(AuthContext);
+  const { postId, data, notifyData } = route.params;
+  const windowWidth = Dimensions.get("window").width;
+  console.log(11111111, notifyData);
   const [commentText, setCommentText] = useState("");
-  const [commentCount, setCommentCount] = useState(data.commentCount);
+  // const [commentCount, setCommentCount] = useState(data.commentCount);
   const [listComment, setListComment] = useState([]);
 
   useEffect(() => {
@@ -53,7 +54,7 @@ const CommentDetail = ({ route }) => {
         await fetchComment(postId, comment, userInfo.accessToken);
         const newComment = { text: commentText };
         setListComment([newComment, ...listComment]);
-        setCommentCount((prevCount) => prevCount + 1);
+        // setCommentCount((prevCount) => prevCount + 1);
         setCommentText("");
       } catch (error) {
         console.error("Error commenting:", error);
