@@ -125,7 +125,7 @@ const ProfileScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "white",
+    backgroundColor: "#F0F2F5", 
   },
   backgroundImage: {
     height: 180,
@@ -134,7 +134,7 @@ const styles = StyleSheet.create({
   backButton: {
     zIndex: 99,
     position: "absolute",
-    left: 0,
+    left: 10, 
     top: 10,
   },
   profileText: {
@@ -145,23 +145,22 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     textAlign: "center",
-  },
-  profileBirthday: {
-    fontSize: 16,
-    lineHeight: 20,
-    color: "black",
-    marginVertical: 4,
+    color: "#4267B2", 
   },
   profileInfoContainer: {
     flex: 1,
     alignItems: "center",
+    backgroundColor: "white", 
+    margin: 10,
+    padding: 10,
+    borderRadius: 10, 
   },
   profileImage: {
     height: 170,
     width: 170,
-    borderRadius: 20,
+    borderRadius: 85, 
     borderWidth: 2,
-    borderColor: "#242760",
+    borderColor: "#4267B2", 
     overflow: "hidden",
     marginTop: -90,
   },
@@ -178,7 +177,7 @@ const styles = StyleSheet.create({
     marginVertical: 4,
   },
   editProfileButton: {
-    backgroundColor: "black",
+    backgroundColor: "#4267B2", 
     height: 40,
     borderRadius: 6,
     alignItems: "center",
@@ -203,11 +202,11 @@ const styles = StyleSheet.create({
   },
   profileStatsLabel: {
     fontSize: 16,
-    color: "#242760",
+    color: "#4267B2", 
   },
   profileStatsValue: {
     fontSize: 20,
-    color: "#242760",
+    color: "#4267B2",
   },
   postsContainer: {
     flex: 1,
@@ -219,7 +218,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     borderWidth: 1,
     borderColor: "#ccc",
-    borderRadius: 10,
+    borderRadius: 10, 
   },
   postImg: {
     width: "100%",
