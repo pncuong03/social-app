@@ -15,6 +15,7 @@ import ChatHeader from "../components/ChatHeader";
 import { messageResponse } from "../data/MessageData";
 import { fetchUserChat } from "../context/UserContext";
 import { AuthContext } from "../context/AuthContext";
+import TimeComparison from "../utils/Time";
 
 const MessageScreen = () => {
   const navigation = useNavigation();
@@ -33,7 +34,7 @@ const MessageScreen = () => {
     getListChat();
   }, []);
 
-  console.log(listChat);
+  // console.log(listChat);
   return (
     <ScrollView style={{ flex: 1 }}>
       <View style={style.container}>
@@ -65,14 +66,17 @@ const MessageScreen = () => {
                     marginRight: 10,
                     borderRadius: 10,
                   }}
-                  source={message.img}
+                  source={{ uri: message.imageUrl }}
                 />
                 <View>
                   <Text>{message.name}</Text>
-                  <Text>{message.content}</Text>
+                  <Text>{message.newestMessage}</Text>
                 </View>
               </View>
-              <View style={{ marginRight: 10 }}>
+              <View style={{ marginRight: 10, flexDirection: "row", gap: 2 }}>
+                <Text>
+                  <TimeComparison time={message.newestChatTime} />
+                </Text>
                 <VectorIcon
                   name="checkbox-marked-circle-outline"
                   type="MaterialCommunityIcons"
