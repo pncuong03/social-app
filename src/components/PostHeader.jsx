@@ -12,16 +12,16 @@ const PostHeader = ({ data, onClose }) => {
     onClose();
   };
 
-  const handleProfile = (userId) => {
-    navigation.navigate("UserProfile", { userId: userId });
-  };
+  const handlePress = (friendId) => {
+    navigation.navigate('FriendProfile', { friendId });
+};
   return (
     <View style={styles.postHeaderContainer}>
       <View key={data.id}>
         <View style={styles.postTopSec}>
           <TouchableOpacity
             style={styles.row}
-            onPress={() => handleProfile(data.userId)}
+            onPress={() => handlePress(data.userId)}
           >
             <Image source={{ uri: data.imageUrl }} style={styles.userProfile} />
             <View style={styles.userSection}>

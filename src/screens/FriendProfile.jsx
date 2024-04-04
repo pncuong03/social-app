@@ -1,14 +1,18 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import {
+  Animated,
   View,
   Text,
   Image,
   TouchableOpacity,
   ScrollView,
   StyleSheet,
+  Modal, TouchableWithoutFeedback
 } from "react-native";
+import { BlurView } from "@react-native-community/blur";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { MaterialIcons } from "@expo/vector-icons";
+
 import member from "../assets/images/img1.jpeg";
 import { PostData } from "../data/PostData";
 import PostFooter from "../components/PostFooter";
@@ -17,16 +21,20 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { AuthContext } from "../context/AuthContext";
 import { fetchUserInfo } from '../context/ProfileContext';
-import { fetchListFriend } from '../context/FriendContext'
+import { fetchListFriend, fetchUnfriend } from '../context/FriendContext'
 import UserPost from "../components/UserPost";
 import { getPostsOfUser } from "../context/PostContext";
 export default function FriendProfile({ route }) {
   const { userInfo } = useContext(AuthContext);
   const { friendId } = route.params;
+  console.log(friendId);
   const navigation = useNavigation();
   const [friends, setFriends] = useState([]);
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [showUnfriend, setShowUnfriend] = useState(false);
+  const modalY = useRef(new Animated.Value(0)).current; // Add this line
+  const [modalVisible, setModalVisible] = useState(false);
   useFocusEffect(
     React.useCallback(() => {
       const fetchFriends = async () => {
@@ -52,6 +60,21 @@ export default function FriendProfile({ route }) {
     }, [userInfo.accessToken, friendId])
   );
   const friend = friends.find((f) => f.id === friendId);
+  const toggleUnfriendButton = () => {
+    setShowUnfriend(!showUnfriend);
+  };
+  // const handleUnfriend = async (friendId) => {
+  //   try {
+  //     await fetchUnfriend(friendId, userInfo.accessToken);
+  //       // Update the friends list after unfriending
+  //       const updatedFriends = friends.filter(f => f.id !== friendId);
+  //       setFriends(updatedFriends);
+  //       // Hide the Unfriend button
+  //       setShowUnfriend(false);
+  //   } catch (error) {
+  //     console.error('Error unfriending:', error);
+  //   }
+  // };
   if (loading) {
     return <Text>Loading...</Text>;
   }
@@ -60,7 +83,7 @@ export default function FriendProfile({ route }) {
       <View>
         <Image source={member} style={styles.backgroundImage} />
         <TouchableOpacity
-          onPress={() => navigation.push("FriendList")}
+          onPress={() => navigation.goBack()}
           style={styles.backButton}
         >
           <MaterialIcons name="keyboard-arrow-left" size={35} color={"black"} />
@@ -71,6 +94,28 @@ export default function FriendProfile({ route }) {
       <View style={styles.profileInfoContainer}>
         <Image source={{ uri: friend.imageUrl }} style={styles.profileImage} />
         <Text style={styles.profileName}>{friend.fullName}</Text>
+        {friend.description && friend.description.split("\\n").map((item, key) => {
+          return (
+            <Text key={key} style={styles.profileDescription}>
+              {item}
+            </Text>
+          );
+        })}
+        <TouchableOpacity
+          onPress={toggleUnfriendButton}
+          style={styles.editProfileButton}
+        >
+          <Text style={styles.editProfileButtonText}>Friend</Text>
+        </TouchableOpacity>
+
+        {showUnfriend && (
+          <TouchableOpacity
+            // onPress={() =>handleUnfriend(friendId)} 
+            style={[styles.editProfileButton, styles.unfriendButton]}
+          >
+            <Text style={styles.editProfileButtonText}>Unfriend</Text>
+          </TouchableOpacity>
+        )}
         <View style={styles.profileStatsContainer}>
           <View style={styles.profileStatsItem}>
             <Text style={styles.profileStatsLabel}>Posts</Text>
@@ -91,7 +136,7 @@ export default function FriendProfile({ route }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "white",
+    backgroundColor: "#F0F2F5",
   },
   backgroundImage: {
     height: 180,
@@ -100,7 +145,7 @@ const styles = StyleSheet.create({
   backButton: {
     zIndex: 99,
     position: "absolute",
-    left: 0,
+    left: 10,
     top: 10,
   },
   profileText: {
@@ -111,23 +156,22 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     textAlign: "center",
-  },
-  profileBirthday: {
-    fontSize: 16,
-    lineHeight: 20,
-    color: "black",
-    marginVertical: 4,
+    color: "#4267B2",
   },
   profileInfoContainer: {
     flex: 1,
     alignItems: "center",
+    backgroundColor: "white",
+    margin: 10,
+    padding: 10,
+    borderRadius: 10,
   },
   profileImage: {
     height: 170,
     width: 170,
-    borderRadius: 20,
+    borderRadius: 85,
     borderWidth: 2,
-    borderColor: "#242760",
+    borderColor: "#4267B2",
     overflow: "hidden",
     marginTop: -90,
   },
@@ -137,8 +181,14 @@ const styles = StyleSheet.create({
     color: "black",
     marginVertical: 8,
   },
+  profileDescription: {
+    fontSize: 16,
+    lineHeight: 20,
+    color: "black",
+    marginVertical: 4,
+  },
   editProfileButton: {
-    backgroundColor: "black",
+    backgroundColor: "#4267B2",
     height: 40,
     borderRadius: 6,
     alignItems: "center",
@@ -148,6 +198,14 @@ const styles = StyleSheet.create({
   editProfileButtonText: {
     color: "white",
     fontSize: 16,
+  },
+  buttonContainer: {
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  unfriendButton: {
+    marginTop: 10,
   },
   profileStatsContainer: {
     paddingVertical: 8,
@@ -163,11 +221,11 @@ const styles = StyleSheet.create({
   },
   profileStatsLabel: {
     fontSize: 16,
-    color: "#242760",
+    color: "#4267B2",
   },
   profileStatsValue: {
     fontSize: 20,
-    color: "#242760",
+    color: "#4267B2",
   },
   postsContainer: {
     flex: 1,
@@ -182,7 +240,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   postImg: {
-    width: '100%',
+    width: "100%",
     height: 250,
   },
 });
