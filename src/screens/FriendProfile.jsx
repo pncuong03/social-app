@@ -113,7 +113,7 @@ export default function FriendProfile({ route }) {
       <View>
         <Image source={member} style={styles.backgroundImage} />
         <TouchableOpacity
-          onPress={() => navigation.goBack()}
+          onPress={() => navigation.navigate("MainScreen")}
           style={styles.backButton}
         >
           <MaterialIcons name="keyboard-arrow-left" size={35} color={"black"} />
