@@ -1,6 +1,25 @@
 import axios from "axios";
 import { BASE_URL } from "../config";
 
+export const fetchFriendInfo = async (accessToken,checkId) => {
+  try {
+    const response = await axios({
+      method: "get",
+      url: `${BASE_URL}/friend/friend-information`,
+      params: {
+        checkId: checkId
+      },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error:", error);
+  }
+};
+
 export const fetchFriendRequests = async (accessToken) => {
   try {
     const response = await axios.get(`${BASE_URL}/friend/request/list`, {

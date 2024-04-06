@@ -29,7 +29,7 @@ export default function FriendList() {
             const fetchFriends = async () => {
                 try {
                     const friendsData = await fetchListFriend(userInfo.accessToken);
-                    console.log(userInfo.accessToken);
+                   
                     console.log(friendsData.content);
                     setFriends(friendsData.content);
                 } catch (error) {

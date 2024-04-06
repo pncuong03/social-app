@@ -43,10 +43,8 @@ const ProfileScreen = () => {
         console.error("Error:", error);
       }
     };
-
     fetchFriends();
   }, []);
-
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
@@ -71,6 +69,7 @@ const ProfileScreen = () => {
 
     fetchData();
   }, []);
+  console.log(user);
   return (
     <ScrollView style={styles.container}>
       <View>

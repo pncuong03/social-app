@@ -12,16 +12,10 @@ import {
 import { BlurView } from "@react-native-community/blur";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { MaterialIcons } from "@expo/vector-icons";
-
 import member from "../assets/images/img1.jpeg";
-import { PostData } from "../data/PostData";
-import PostFooter from "../components/PostFooter";
-import PostHeader from "../components/PostHeader";
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import axios from 'axios';
 import { AuthContext } from "../context/AuthContext";
 import { fetchUserInfo } from '../context/ProfileContext';
-import { fetchListFriend, fetchUnfriend } from '../context/FriendContext'
+import { fetchAddFriend, fetchFriendInfo, fetchListFriend, fetchUnfriend } from '../context/FriendContext'
 import UserPost from "../components/UserPost";
 import { getPostsOfUser } from "../context/PostContext";
 export default function FriendProfile({ route }) {
@@ -29,19 +23,31 @@ export default function FriendProfile({ route }) {
   const { friendId } = route.params;
   console.log(friendId);
   const navigation = useNavigation();
+  const [user, setUser] = useState({
+    id: friendId,
+    fullName: "",
+    imageUrl: "",
+    description: "",
+    state: ""
+  });
   const [friends, setFriends] = useState([]);
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showUnfriend, setShowUnfriend] = useState(false);
-  const modalY = useRef(new Animated.Value(0)).current; // Add this line
-  const [modalVisible, setModalVisible] = useState(false);
   useFocusEffect(
     React.useCallback(() => {
       const fetchFriends = async () => {
         try {
-          const friendsData = await fetchListFriend(userInfo.accessToken);
-          // console.log(friendsData.content);
-          setFriends(friendsData.content);
+          console.log(friendId);
+          console.log(userInfo.accessToken);
+          const friendsData = await fetchFriendInfo(userInfo.accessToken, friendId);
+          console.log(friendsData);
+          setUser({
+            fullName: friendsData.fullName,
+            imageUrl: friendsData.imageUrl,
+            description: friendsData.description,
+            state: friendsData.state
+          });
           setLoading(false);
         } catch (error) {
           console.error('Error:', error);
@@ -59,25 +65,49 @@ export default function FriendProfile({ route }) {
       fetchPosts();
     }, [userInfo.accessToken, friendId])
   );
-  const friend = friends.find((f) => f.id === friendId);
+  console.log(user);
   const toggleUnfriendButton = () => {
     setShowUnfriend(!showUnfriend);
   };
-  // const handleUnfriend = async (friendId) => {
-  //   try {
-  //     await fetchUnfriend(friendId, userInfo.accessToken);
-  //       // Update the friends list after unfriending
-  //       const updatedFriends = friends.filter(f => f.id !== friendId);
-  //       setFriends(updatedFriends);
-  //       // Hide the Unfriend button
-  //       setShowUnfriend(false);
-  //   } catch (error) {
-  //     console.error('Error unfriending:', error);
-  //   }
-  // };
+  const addFriend = async (friendId) => {
+    try {
+      const response = await fetchAddFriend(friendId, userInfo.accessToken);
+      console.log(response); 
+  
+    
+      const friendsData = await fetchFriendInfo(userInfo.accessToken, friendId);
+      setUser({
+        fullName: friendsData.fullName,
+        imageUrl: friendsData.imageUrl,
+        description: friendsData.description,
+        state: friendsData.state
+      });
+  
+    } catch (error) {
+      console.error('Error adding friend:', error);
+    }
+  };
+  const handleUnfriend = async (friendId) => {
+    try {
+      const response = await fetchUnfriend(friendId, userInfo.accessToken);
+      console.log(response); 
+      
+      const friendsData = await fetchFriendInfo(userInfo.accessToken, friendId);
+      setUser({
+        fullName: friendsData.fullName,
+        imageUrl: friendsData.imageUrl,
+        description: friendsData.description,
+        state: friendsData.state
+      });
+  
+    } catch (error) {
+      console.error('Error unfriending:', error);
+    }
+  };
   if (loading) {
     return <Text>Loading...</Text>;
-  }
+  };
+ 
   return (
     <ScrollView style={styles.container}>
       <View>
@@ -92,28 +122,50 @@ export default function FriendProfile({ route }) {
       </View>
 
       <View style={styles.profileInfoContainer}>
-        <Image source={{ uri: friend.imageUrl }} style={styles.profileImage} />
-        <Text style={styles.profileName}>{friend.fullName}</Text>
-        {friend.description && friend.description.split("\\n").map((item, key) => {
+        <Image source={{ uri: user.imageUrl }} style={styles.profileImage} />
+        <Text style={styles.profileName}>{user.fullName}</Text>
+        {user.description && user.description.split("\\n").map((item, key) => {
           return (
             <Text key={key} style={styles.profileDescription}>
               {item}
             </Text>
           );
         })}
-        <TouchableOpacity
-          onPress={toggleUnfriendButton}
-          style={styles.editProfileButton}
-        >
-          <Text style={styles.editProfileButtonText}>Friend</Text>
-        </TouchableOpacity>
+        {user.state === "FRIEND" && (
+          <>
+            <TouchableOpacity
+              onPress={toggleUnfriendButton}
+              style={styles.editProfileButton}
+            >
+              <Text style={styles.editProfileButtonText}>Friend</Text>
+            </TouchableOpacity>
 
-        {showUnfriend && (
+            {showUnfriend && (
+              <TouchableOpacity
+                onPress={() => handleUnfriend(friendId)}
+                style={[styles.editProfileButton, styles.unfriendButton]}
+              >
+                <Text style={styles.editProfileButtonText}>Unfriend</Text>
+              </TouchableOpacity>
+            )}
+          </>
+        )}
+
+        {user.state === "REQUESTING" && (
           <TouchableOpacity
-            // onPress={() =>handleUnfriend(friendId)} 
-            style={[styles.editProfileButton, styles.unfriendButton]}
+            // onPress={/* handle action */}
+            style={styles.editProfileButton}
           >
-            <Text style={styles.editProfileButtonText}>Unfriend</Text>
+            <Text style={styles.editProfileButtonText}>Requesting</Text>
+          </TouchableOpacity>
+        )}
+
+        {user.state === "STRANGER" && (
+          <TouchableOpacity
+            onPress={() => addFriend(friendId)}
+            style={styles.editProfileButton}
+          >
+            <Text style={styles.editProfileButtonText}>Add Friend</Text>
           </TouchableOpacity>
         )}
         <View style={styles.profileStatsContainer}>
