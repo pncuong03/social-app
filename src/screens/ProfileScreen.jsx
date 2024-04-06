@@ -19,7 +19,7 @@ import { AuthContext } from "../context/AuthContext";
 import { fetchUserInfo } from "../context/ProfileContext";
 import { fetchListFriend } from "../context/FriendContext";
 import UserPost from "../components/UserPost";
-import { getPostsOfUser } from "../context/PostContext";
+import { getPostofMe, getPostsOfUser } from "../context/PostContext";
 const ProfileScreen = () => {
   const { userInfo } = useContext(AuthContext);
   console.log(userInfo.accessToken);
@@ -58,7 +58,7 @@ const ProfileScreen = () => {
           imageUrl: userData.imageUrl,
           description: userData.description
         });
-        const postData = await getPostsOfUser(userInfo.accessToken, userData.id);
+        const postData = await getPostofMe(userInfo.accessToken);
         setPosts(postData.content);
       } catch (error) {
         console.error("Error:", error);
