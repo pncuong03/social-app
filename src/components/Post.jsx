@@ -1,9 +1,9 @@
-import { View, StyleSheet, Image, Dimensions } from "react-native";
-import React, { useContext, useEffect, useState } from "react";
+import { View, StyleSheet, Dimensions } from "react-native";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { Colors } from "../utils/Colors";
 import PostHeader from "./PostHeader";
 import PostFooter from "./PostFooter";
-import { fetchPostMe, fetchPostPublic } from "../context/PostContext";
+import { fetchPostPublic } from "../context/PostContext";
 import { AuthContext } from "../context/AuthContext";
 import Spinner from "react-native-loading-spinner-overlay";
 import ImageCarousel from "./ImageCarousel";
@@ -19,24 +19,24 @@ const Post = () => {
     setPosts(updatedPosts);
   };
 
-  useEffect(() => {
-    const fetchNewPosts = async () => {
-      setIsLoading(true);
-      try {
-        const data = await fetchPostPublic(userInfo.accessToken);
-        const sorted = data.content.sort(
-          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
-        );
-        setPosts(sorted);
-      } catch (error) {
-        console.error("Error fetching new posts:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
+  const fetchNewPosts = useCallback(async () => {
+    setIsLoading(true);
+    try {
+      const data = await fetchPostPublic(userInfo.accessToken);
+      const sorted = data.content.sort(
+        (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+      );
+      setPosts(sorted);
+    } catch (error) {
+      console.error("Error fetching new posts:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [userInfo.accessToken]);
 
+  useEffect(() => {
     fetchNewPosts();
-  }, []);
+  }, [fetchNewPosts]);
 
   return (
     <View style={styles.postContainer}>

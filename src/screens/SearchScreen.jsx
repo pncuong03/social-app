@@ -34,7 +34,8 @@ const SearchScreen = () => {
     };
     getListUser(listUser);
   }, [currentPage]);
-  // console.log(listUser);
+  // console.log(1111111, listUser);
+
   const onAdd = async (id) => {
     try {
       await fetchAddFriend(id, userInfo.accessToken);
@@ -68,15 +69,13 @@ const SearchScreen = () => {
     }
   }, [searchTerm, listUser]);
 
-  // const checkFriendStatus = (user) => {
-  //   if (user.isFriend) {
-  //     return "Friend";
-  //   } else if (user.hadSendFriendRequest) {
-  //     return "Await Accept";
-  //   } else {
-  //     return "Add Friend";
-  //   }
-  // };
+  const checkFriendStatus = (user) => {
+    if (user.isFriend) {
+      return "Friend";
+    } else {
+      return "Add Friend";
+    }
+  };
   // console.log(filteredUsers);
   return (
     <ScrollView style={styles.container}>
@@ -121,9 +120,14 @@ const SearchScreen = () => {
             >
               <TouchableOpacity
                 style={styles.button}
-                onPress={() => onAdd(item.id)}
+                onPress={() => {
+                  if (!item.isFriend) {
+                    onAdd(item.id);
+                  }
+                }}
+                disabled={item.isFriend}
               >
-                <Text style={styles.buttonText}>Add friend</Text>
+                <Text style={styles.buttonText}>{checkFriendStatus(item)}</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={[styles.button, { backgroundColor: "gray" }]}

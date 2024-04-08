@@ -34,7 +34,6 @@ const NotificationScreen = () => {
     };
     fetchData();
   }, []);
-  // console.log(notification);
   return (
     <ScrollView style={styles.container}>
       <View style={styles.subNav}>

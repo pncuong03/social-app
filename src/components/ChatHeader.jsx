@@ -1,4 +1,11 @@
-import { View, Text, Image, StyleSheet, TouchableOpacity, TextInput } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  TextInput,
+} from "react-native";
 import React from "react";
 import { Colors } from "../utils/Colors";
 import Avatar from "../assets/images/avatarChat.png";
@@ -7,6 +14,7 @@ import { useNavigation } from "@react-navigation/native";
 
 const ChatHeader = () => {
   const navigation = useNavigation();
+
   return (
     <View>
       <View style={style.header}>

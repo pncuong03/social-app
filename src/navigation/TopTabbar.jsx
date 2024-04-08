@@ -1,8 +1,8 @@
-import React from 'react';
-import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import VectorIcon from '../utils/VectorIcon';
-import { Colors } from '../utils/Colors';
-import { TabData } from '../data/TabData';
+import React from "react";
+import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
+import VectorIcon from "../utils/VectorIcon";
+import { Colors } from "../utils/Colors";
+import { TabData } from "../data/TabData";
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -14,8 +14,9 @@ const TopTabbar = () => {
           tabBarShowLabel: false,
           tabBarActiveTintColor: Colors.primaryColor,
           tabBarInactiveTintColor: Colors.grey,
-        })}>
-        {TabData.map(tab => (
+        })}
+      >
+        {TabData.map((tab) => (
           <Tab.Screen
             key={tab.id}
             name={tab.name}

@@ -2,16 +2,22 @@ import { View, Text, TouchableOpacity, Image, StyleSheet } from "react-native";
 import React from "react";
 import VectorIcon from "../utils/VectorIcon";
 import { Colors } from "../utils/Colors";
-import img1 from "../assets/images/img1.jpeg";
 import { useNavigation } from "@react-navigation/native";
 
-export default function MessageDetail() {
+const MessageDetail = ({ route }) => {
   const navigation = useNavigation();
+  const { chatId1, fullname1, img1 } = route.params;
   return (
     <View style={styles.container}>
       <TouchableOpacity
         style={{ marginLeft: 10 }}
-        onPress={() => navigation.push("ChatPrivate")}
+        onPress={() =>
+          navigation.push("ChatPrivate", {
+            chatId: chatId1,
+            fullname: fullname1,
+            img: img1,
+          })
+        }
       >
         <VectorIcon
           name="arrowleft"
@@ -28,9 +34,9 @@ export default function MessageDetail() {
             borderRadius: 5,
             marginBottom: 15,
           }}
-          source={img1}
+          source={{ uri: img1 }}
         />
-        <Text style={{ fontSize: 22, fontWeight: 600 }}>Hello</Text>
+        <Text style={{ fontSize: 22, fontWeight: 600 }}>{fullname1}</Text>
         <View style={styles.icon}>
           <TouchableOpacity
             style={{ alignItems: "center" }}
@@ -88,7 +94,7 @@ export default function MessageDetail() {
       </View>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -111,3 +117,5 @@ const styles = StyleSheet.create({
     padding: 12,
   },
 });
+
+export default MessageDetail;

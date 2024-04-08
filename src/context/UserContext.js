@@ -14,17 +14,3 @@ export const fetchListUser = async (page, accessToken) => {
     throw error;
   }
 };
-
-export const fetchUserChat = async (accessToken) => {
-  try {
-    const response = await axios.get(`${BASE_URL}/chat`, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
-    return response.data;
-  } catch (error) {
-    console.error("Error list chat:", error);
-    throw error;
-  }
-};

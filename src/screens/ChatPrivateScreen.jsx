@@ -1,4 +1,10 @@
-import React, { useRef, useState } from "react";
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import {
   View,
   Text,
@@ -12,33 +18,73 @@ import {
 import { Colors } from "../utils/Colors";
 import { useNavigation } from "@react-navigation/native";
 import VectorIcon from "../utils/VectorIcon";
-import img1 from "../assets/images/img1.jpeg";
+import { AuthContext } from "../context/AuthContext";
+import { fetchChatMessage, fetchSendMessage } from "../context/ChatContext";
+import TimeComparison from "../utils/Time";
+import { fetchEventNoti } from "../context/NotificationContext";
 
-const ChatPrivateScreen = () => {
+const ChatPrivateScreen = ({ route }) => {
   const navigation = useNavigation();
   const scrollViewRef = useRef();
+  const { userInfo } = useContext(AuthContext);
+  const { chatId, fullname, img } = route.params;
+
   const [messages, setMessages] = useState([]);
   const [messageText, setMessageText] = useState("");
+
+  const getAllMessage = useCallback(async () => {
+    try {
+      const data = await fetchChatMessage(chatId, userInfo.accessToken);
+      setMessages(data.content.reverse());
+      scrollToBottom();
+    } catch (error) {
+      console.log("Message chat: ", error);
+    }
+  }, [chatId]);
+
+  useEffect(() => {
+    getAllMessage();
+  }, [chatId, getAllMessage]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      updateNew();
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const updateNew = async () => {
+    try {
+      const updateNew = await fetchEventNoti(userInfo.accessToken);
+      if (updateNew.messages.length > 0) {
+        setMessages((prevMessages) => [
+          updateNew.messages[0]?.message,
+          ...prevMessages,
+        ]);
+        scrollToBottom();
+      }
+    } catch (error) {
+      console.log("Message chat: ", error);
+    }
+  };
+
+  const onSendMessage = async () => {
+    if (messageText.trim() !== "") {
+      try {
+        await fetchSendMessage(userInfo.accessToken, chatId, messageText);
+        scrollToBottom();
+        setMessageText("");
+      } catch (error) {
+        console.error("Error sending message:", error);
+      }
+    }
+  };
 
   const scrollToBottom = () => {
     if (scrollViewRef.current) {
       scrollViewRef.current.scrollToEnd({ animated: true });
     }
-  };
-
-  const handleSendMessage = () => {
-    if (messageText.trim() === "") return;
-
-    const newMessage = {
-      id: messages.length + 1,
-      content: messageText,
-      sender: "Me",
-      timestamp: new Date().toLocaleTimeString(),
-    };
-
-    setMessages([...messages, newMessage]);
-    setMessageText(""); // Clear the message text after sending
-    scrollToBottom();
   };
 
   return (
@@ -54,7 +100,13 @@ const ChatPrivateScreen = () => {
             />
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => navigation.push("MessageDetail")}
+            onPress={() =>
+              navigation.push("MessageDetail", {
+                chatId1: chatId,
+                fullname1: fullname,
+                img1: img,
+              })
+            }
             style={{ flexDirection: "row", alignItems: "center" }}
           >
             <Image
@@ -65,9 +117,9 @@ const ChatPrivateScreen = () => {
                 marginRight: 10,
                 borderRadius: 20,
               }}
-              source={img1}
+              source={{ uri: img }}
             />
-            <Text style={{ fontWeight: "bold" }}>Phạm Thanh Phúc </Text>
+            <Text style={{ fontWeight: "bold" }}>{fullname}</Text>
           </TouchableOpacity>
         </View>
         <TouchableOpacity
@@ -89,9 +141,9 @@ const ChatPrivateScreen = () => {
         contentContainerStyle={styles.chatContentContainer}
         onContentSizeChange={scrollToBottom}
       >
-        {messages.map((message) => (
+        {messages.map((message, index) => (
           <View
-            key={message.id}
+            key={index}
             style={{ flexDirection: "row", alignItems: "center" }}
           >
             <Image
@@ -102,14 +154,16 @@ const ChatPrivateScreen = () => {
                 marginRight: 10,
                 borderRadius: 20,
               }}
-              source={img1}
+              source={{ uri: message?.imageUrl }}
             />
             <View style={{ flex: 1 }}>
               <View style={styles.detail}>
-                <Text style={{ color: Colors.textGrey }}>{message.sender}</Text>
-                <Text>{message.content}</Text>
+                <Text style={{ color: Colors.textGrey }}>
+                  {message?.fullName}
+                </Text>
+                <Text>{message?.message}</Text>
                 <Text style={{ fontStyle: "italic", fontSize: 12 }}>
-                  {message.timestamp}
+                  <TimeComparison time={message?.createdAt} />
                 </Text>
               </View>
             </View>
@@ -122,12 +176,10 @@ const ChatPrivateScreen = () => {
           <TextInput
             style={styles.textInput}
             placeholder="Type a message"
-            multiline
             value={messageText}
-            onChangeText={setMessageText}
-            onSubmitEditing={handleSendMessage}
+            onChangeText={(text) => setMessageText(text)}
           />
-          <TouchableOpacity onPress={handleSendMessage}>
+          <TouchableOpacity onPress={() => onSendMessage()}>
             <VectorIcon
               name="send"
               type="MaterialIcons"

@@ -12,15 +12,13 @@ import { Colors } from "../utils/Colors";
 import { useNavigation } from "@react-navigation/native";
 import VectorIcon from "../utils/VectorIcon";
 import ChatHeader from "../components/ChatHeader";
-import { messageResponse } from "../data/MessageData";
-import { fetchUserChat } from "../context/UserContext";
 import { AuthContext } from "../context/AuthContext";
 import TimeComparison from "../utils/Time";
+import { fetchUserChat } from "../context/ChatContext";
 
 const MessageScreen = () => {
   const navigation = useNavigation();
   const { userInfo } = useContext(AuthContext);
-
   const [listChat, setListChat] = useState([]);
   useEffect(() => {
     const getListChat = async () => {
@@ -33,8 +31,6 @@ const MessageScreen = () => {
     };
     getListChat();
   }, []);
-
-  // console.log(listChat);
   return (
     <ScrollView style={{ flex: 1 }}>
       <View style={style.container}>
@@ -54,8 +50,15 @@ const MessageScreen = () => {
         {listChat.map((message) => (
           <TouchableOpacity
             key={message.id}
-            onPress={() => navigation.push("ChatPrivate")}
+            onPress={() =>
+              navigation.push("ChatPrivate", {
+                chatId: message.id,
+                fullname: message.name,
+                img: message.imageUrl,
+              })
+            }
           >
+            {console.log(message.id)}
             <View style={style.chatView}>
               <View style={{ flexDirection: "row", alignItems: "center" }}>
                 <Image
@@ -70,19 +73,39 @@ const MessageScreen = () => {
                 />
                 <View>
                   <Text>{message.name}</Text>
-                  <Text>{message.newestMessage}</Text>
+                  {message.isMe ? (
+                    <Text>You: {message.newestMessage}</Text>
+                  ) : (
+                    <Text>{message.newestMessage}</Text>
+                  )}
                 </View>
               </View>
               <View style={{ marginRight: 10, flexDirection: "row", gap: 2 }}>
                 <Text>
                   <TimeComparison time={message.newestChatTime} />
                 </Text>
-                <VectorIcon
-                  name="checkbox-marked-circle-outline"
-                  type="MaterialCommunityIcons"
-                  size={20}
-                  color={Colors.black}
-                />
+                {message.messageCount > 0 && (
+                  <View
+                    style={{
+                      marginLeft: 5,
+                      backgroundColor: "red",
+                      borderRadius: 10,
+                      minWidth: 20,
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <Text
+                      style={{
+                        color: "white",
+                        fontSize: 12,
+                        fontWeight: "bold",
+                      }}
+                    >
+                      {message.messageCount}
+                    </Text>
+                  </View>
+                )}
               </View>
             </View>
           </TouchableOpacity>

@@ -23,7 +23,6 @@ const SubHeader = () => {
     const getUserInfo = async () => {
       try {
         const data = await fetchUserInfo(userInfo.accessToken);
-        // console.log(data);
         setImage(data.imageUrl);
       } catch (error) {
         console.error("Error:", error);

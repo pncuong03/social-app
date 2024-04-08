@@ -1,17 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
-import {
-  View,
-  Text,
-  Image,
-  StyleSheet,
-  TouchableOpacity,
-  TextInput,
-} from "react-native";
+import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
 import Like from "../assets/images/like.jpeg";
 import { AuthContext } from "../context/AuthContext";
 import {
   fetchLike,
-  fetchComment,
   fetchUnLike,
   fetchShare,
 } from "../context/FriendInteractContext";
@@ -73,7 +65,7 @@ const PostFooter = ({ data }) => {
           <TouchableOpacity>
             <Image source={Like} style={styles.reactionIcon} />
           </TouchableOpacity>
-          <Text style={styles.reactionCount}>{likeCount} like</Text>
+          <Text style={styles.reactionCount}>{likeCount}</Text>
         </View>
         <View style={{ flexDirection: "row", gap: 10 }}>
           <Text style={styles.reactionCount}>{commentCount} comment</Text>
@@ -96,14 +88,10 @@ const PostFooter = ({ data }) => {
           </View>
         </TouchableOpacity>
         <TouchableOpacity
-          // onPress={() => {
-          //   getPostDetail(data.id);
-          //   setIsCommented(!isCommented);
-          // }}
           onPress={() => {
             navigation.push("CommentDetail", {
               postId: data.id,
-              data: data,
+              data1: data,
             });
           }}
         >

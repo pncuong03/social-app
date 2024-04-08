@@ -96,14 +96,14 @@ const FriendScreen = () => {
     <ScrollView style={styles.container}>
       <View style={styles.subNav}>
         <Text style={{ fontWeight: "bold", fontSize: 30 }}>Friends</Text>
-        <TouchableOpacity onPress={toggleSearch}>
+        {/* <TouchableOpacity onPress={toggleSearch}>
           <VectorIcon
             name="search1"
             type="AntDesign"
             size={24}
             color={Colors.black}
           />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
         {isSearch && (
           <TextInput
             style={{ fontSize: 17 }}

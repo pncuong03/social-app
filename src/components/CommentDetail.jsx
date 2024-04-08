@@ -26,12 +26,11 @@ const CommentDetail = ({ route }) => {
   const navigation = useNavigation();
 
   const { userInfo } = useContext(AuthContext);
-  const { postId, data, notifyData } = route.params;
+  const { postId, data1 } = route.params;
   const windowWidth = Dimensions.get("window").width;
-  console.log(11111111, notifyData);
   const [commentText, setCommentText] = useState("");
-  // const [commentCount, setCommentCount] = useState(data.commentCount);
   const [listComment, setListComment] = useState([]);
+  const [commentCount, setCommentCount] = useState([]);
 
   useEffect(() => {
     const getPostDetail = async (postId) => {
@@ -48,23 +47,34 @@ const CommentDetail = ({ route }) => {
     getPostDetail(postId);
   }, [postId]);
 
-  const onComment = async (postId, comment) => {
+  const onComment = async () => {
     if (commentText.trim() !== "") {
       try {
-        await fetchComment(postId, comment, userInfo.accessToken);
-        const newComment = { text: commentText };
-        setListComment([newComment, ...listComment]);
-        // setCommentCount((prevCount) => prevCount + 1);
+        await fetchComment(postId, commentText, userInfo.accessToken);
+
+        const updatedPost = await fetchDetailPost(postId, userInfo.accessToken);
+
+        const newComments = updatedPost.comments;
+
+        const filteredNewComments = newComments.filter((newComment) => {
+          return !listComment.find((existingComment) => {
+            return existingComment.id === newComment.id;
+          });
+        });
+
+        const updatedComments = [...filteredNewComments, ...listComment];
+
+        setListComment(updatedComments);
+
         setCommentText("");
       } catch (error) {
         console.error("Error commenting:", error);
       }
     }
   };
-
   return (
     <ScrollView style={styles.postContainer}>
-      <View key={data.id}>
+      <View>
         <TouchableOpacity
           onPress={() => navigation.push("MainScreen")}
           style={{ marginLeft: 5, marginTop: 10 }}
@@ -77,10 +87,10 @@ const CommentDetail = ({ route }) => {
           />
         </TouchableOpacity>
 
-        <PostHeader data={data} />
+        <PostHeader data={data1} />
 
         <Carousel
-          data={data.imageUrls}
+          data={data1.imageUrls || []}
           renderItem={({ item }) => (
             <Image
               source={{ uri: item }}
@@ -90,7 +100,7 @@ const CommentDetail = ({ route }) => {
           sliderWidth={windowWidth}
           itemWidth={windowWidth}
         />
-        <PostFooter data={data} />
+        <PostFooter data={data1} />
 
         <View style={styles.commentInputContainer}>
           <TextInput
@@ -99,7 +109,7 @@ const CommentDetail = ({ route }) => {
             value={commentText}
             onChangeText={(text) => setCommentText(text)}
           />
-          <TouchableOpacity onPress={() => onComment(data.id, commentText)}>
+          <TouchableOpacity onPress={onComment}>
             <VectorIcon
               name="caretright"
               type="AntDesign"
