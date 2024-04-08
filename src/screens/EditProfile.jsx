@@ -8,7 +8,8 @@ import {
   Alert,
   Button,
   Platform,
-  KeyboardAvoidingView
+  KeyboardAvoidingView,
+  Dimensions
 } from "react-native";
 import React, { useState, useEffect, useContext } from "react";
 import { useNavigation } from "@react-navigation/native";
@@ -25,6 +26,7 @@ export default function EditProfile() {
   const { userInfo } = useContext(AuthContext);
   const navigation = useNavigation();
   const [selectedImage, setSelectedImage] = useState(null);
+  const [backgroundImage, setBackgroundImage] = useState("https://plainbackground.com/download.php?imagename=39569c.png");
   const [fullName, setFullName] = useState("");
   const [description, setDescription] = useState("");
   const [email, setEmail] = useState("");
@@ -58,6 +60,21 @@ export default function EditProfile() {
       setSelectedImage(result.assets[0].uri);
     }
   };
+  const handleImageSelection1 = async () => {
+    const { width, height } = Dimensions.get('window');
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [60, 80],
+      quality: 1,
+    });
+
+
+
+    if (!result.canceled) {
+      setBackgroundImage(result.assets[0].uri);
+    }
+  };
   const handleUpdate = async () => {
     let changeInfoUserRequest = {
       fullName: fullName,
@@ -75,8 +92,9 @@ export default function EditProfile() {
 
     // Append the blob object as a file to the form data
     let file = { uri: selectedImage, type: `image/${selectedImage.split('.').pop()}`, name: `image.${selectedImage.split('.').pop()}` };
-    console.log(file);
-    formData.append('image', file)
+    let file1 = { uri: backgroundImage, type: `image/${backgroundImage.split('.').pop()}`, name: `image.${backgroundImage.split('.').pop()}` };
+    formData.append('image', file);
+    formData.append('image_background', file1);
 
 
     try {
@@ -104,15 +122,19 @@ export default function EditProfile() {
           width: "100%",
         }}
       >
+      <TouchableOpacity onPress={handleImageSelection1}>
         <Image
-          source={{
-            uri: "https://plainbackground.com/download.php?imagename=39569c.png",
-          }}
+           source={
+            typeof backgroundImage === "string"
+              ? { uri: backgroundImage }
+              : backgroundImage
+          }
           style={{
             height: 228,
             width: "100%",
           }}
         />
+         </TouchableOpacity>
 
         <TouchableOpacity
           onPress={() => navigation.push("ProfileScreen")}

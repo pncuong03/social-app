@@ -104,7 +104,7 @@ export const fetchAddFriend = async (id, accessToken) => {
 };
 export const fetchUnfriend = async (friendId, accessToken) => { 
   try {
-    const response = await axios.delete(`http://192.168.1.204:8080/api/v1/friend/delete?friendId=${friendId}`,
+    const response = await axios.delete(`${BASE_URL}/friend/delete?friendId=${friendId}`,
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -114,6 +114,21 @@ export const fetchUnfriend = async (friendId, accessToken) => {
     return response.data;
   } catch (error) {
     console.error("Error delete friend:", error);
+    throw error;
+  }
+};
+export const fetchCancelfriend = async (friendId, accessToken) => { 
+  try {
+    const response = await axios.delete(`${BASE_URL}/friend/delete-request/user?receiverId=${friendId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error cancel friend:", error);
     throw error;
   }
 };

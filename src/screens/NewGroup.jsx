@@ -9,11 +9,16 @@ import {
   Button,
   Alert,
 } from "react-native";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useContext } from "react";
 import { MaterialIcons } from "@expo/vector-icons";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import * as ImagePicker from "expo-image-picker";
+import { fetchListFriend } from "../context/FriendContext";
+import { AuthContext } from "../context/AuthContext";
+import { userPost } from "../context/PostContext";
 export default function NewGroup() {
+  const { userInfo } = useContext(AuthContext);
+  const [friends, setFriends] = useState([]);
   const [selectedImage, setSelectedImage] = useState("");
   const [name, setName] = useState("");
   const [selectedMember, setSelectedMember] = useState([]);
@@ -40,6 +45,21 @@ export default function NewGroup() {
       }
     });
   };
+  useFocusEffect(
+    React.useCallback(() => {
+        const fetchFriends = async () => {
+            try {
+                const friendsData = await fetchListFriend(userInfo.accessToken);
+                console.log(friendsData.content);
+                setFriends(friendsData.content);
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        };
+
+        fetchFriends();
+    }, [])
+);
   return (
     <View style={{ marginTop: 100 }}>
       <View
@@ -120,7 +140,7 @@ export default function NewGroup() {
       <View style={{ paddingHorizontal: 22 }}>
         <Text style={{ fontSize: 24, marginBottom: 10 }}>Add member:</Text>
         <ScrollView>
-          {friendRequests.map((member) => (
+          {friends.map((member) => (
             <View
               key={member.id}
               style={{ flexDirection: "row", alignItems: "center" }}

@@ -28,7 +28,8 @@ const ProfileScreen = () => {
     id: null,
     fullName: "",
     imageUrl: "",
-    description: ""
+    description: "",
+    backgroundImage:"https://plainbackground.com/download.php?imagename=39569c.png",
   });
   const [posts, setPosts] = useState([]);
   const [friends, setFriends] = useState([]);
@@ -56,7 +57,9 @@ const ProfileScreen = () => {
           gender: userData.gender,
           id: userData.id,
           imageUrl: userData.imageUrl,
-          description: userData.description
+          description: userData.description,
+          backgroundImage: userData.backgroundUrl,
+          
         });
         const postData = await getPostofMe(userInfo.accessToken);
         setPosts(postData.content);
@@ -73,7 +76,7 @@ const ProfileScreen = () => {
   return (
     <ScrollView style={styles.container}>
       <View>
-        <Image source={member} style={styles.backgroundImage} />
+        <Image source={{uri:user.backgroundImage}} style={styles.backgroundImage} />
         <TouchableOpacity
           onPress={() => navigation.push("MainScreen")}
           style={styles.backButton}
