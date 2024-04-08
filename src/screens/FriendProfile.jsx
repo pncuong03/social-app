@@ -15,7 +15,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import member from "../assets/images/img1.jpeg";
 import { AuthContext } from "../context/AuthContext";
 import { fetchUserInfo } from '../context/ProfileContext';
-import { fetchAddFriend, fetchFriendInfo, fetchListFriend, fetchUnfriend } from '../context/FriendContext'
+import { fetchAddFriend, fetchCancelfriend, fetchFriendInfo, fetchListFriend, fetchUnfriend } from '../context/FriendContext'
 import UserPost from "../components/UserPost";
 import { getPostsOfUser } from "../context/PostContext";
 export default function FriendProfile({ route }) {
@@ -34,6 +34,8 @@ export default function FriendProfile({ route }) {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showUnfriend, setShowUnfriend] = useState(false);
+  const [showCancel, setShowCancel] = useState(false);
+  
   useFocusEffect(
     React.useCallback(() => {
       const fetchFriends = async () => {
@@ -69,6 +71,9 @@ export default function FriendProfile({ route }) {
   const toggleUnfriendButton = () => {
     setShowUnfriend(!showUnfriend);
   };
+  const toggleCancelButton = () => {
+    setShowCancel(!showCancel);
+  };
   const addFriend = async (friendId) => {
     try {
       const response = await fetchAddFriend(friendId, userInfo.accessToken);
@@ -102,6 +107,21 @@ export default function FriendProfile({ route }) {
   
     } catch (error) {
       console.error('Error unfriending:', error);
+    }
+  };
+  const handleCancelRequest = async (friendId) => {
+    try {
+      await fetchCancelfriend(friendId, userInfo.accessToken);
+      const friendsData = await fetchFriendInfo(userInfo.accessToken, friendId);
+      setUser({
+        fullName: friendsData.fullName,
+        imageUrl: friendsData.imageUrl,
+        description: friendsData.description,
+        state: friendsData.state
+      });
+      setShowCancel(false);
+    } catch (error) {
+      console.error("Error confirming friend:", error);
     }
   };
   if (loading) {
@@ -152,12 +172,23 @@ export default function FriendProfile({ route }) {
         )}
 
         {user.state === "REQUESTING" && (
+          <>
           <TouchableOpacity
-            // onPress={/* handle action */}
+            onPress={toggleCancelButton}
             style={styles.editProfileButton}
           >
             <Text style={styles.editProfileButtonText}>Requesting</Text>
           </TouchableOpacity>
+
+          {showCancel && (
+            <TouchableOpacity
+              onPress={() => handleCancelRequest(friendId)}
+              style={[styles.editProfileButton, styles.unfriendButton]}
+            >
+              <Text style={styles.editProfileButtonText}>Cancel</Text>
+            </TouchableOpacity>
+          )}
+        </>
         )}
 
         {user.state === "STRANGER" && (

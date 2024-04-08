@@ -49,6 +49,7 @@ export default function NewPost() {
 
     getUserInfo();
   }, []);
+
   const handlePrivacyOption = (value) => {
     console.log("Privacy option selected:", value);
     setPrivacyOption(value === "PUBLIC" ? "PUBLIC" : "PRIVATE");
