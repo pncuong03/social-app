@@ -1,52 +1,139 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import {
+  Animated,
   View,
   Text,
   Image,
   TouchableOpacity,
   ScrollView,
   StyleSheet,
+  Modal, TouchableWithoutFeedback
 } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { BlurView } from "@react-native-community/blur";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { MaterialIcons } from "@expo/vector-icons";
 import member from "../assets/images/img1.jpeg";
-import { PostData } from "../data/PostData";
-import PostFooter from "../components/PostFooter";
-import PostHeader from "../components/PostHeader";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import axios from "axios";
 import { AuthContext } from "../context/AuthContext";
-import { fetchUserInfo } from "../context/ProfileContext";
-import { fetchListFriend } from "../context/FriendContext";
+import { fetchUserInfo } from '../context/ProfileContext';
+import { fetchAddFriend, fetchCancelfriend, fetchFriendInfo, fetchListFriend, fetchUnfriend } from '../context/FriendContext'
+import UserPost from "../components/UserPost";
+import { getPostsOfUser } from "../context/PostContext";
 export default function FriendProfile({ route }) {
   const { userInfo } = useContext(AuthContext);
   const { friendId } = route.params;
+  console.log(friendId);
   const navigation = useNavigation();
+  const [user, setUser] = useState({
+    id: friendId,
+    fullName: "",
+    imageUrl: "",
+    description: "",
+    state: ""
+  });
   const [friends, setFriends] = useState([]);
+  const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
-  useEffect(() => {
-    const fetchFriends = async () => {
-      try {
-        const friendsData = await fetchListFriend(userInfo.accessToken);
-        console.log(friendsData.content);
-        setFriends(friendsData.content);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error:", error);
-      }
-    };
-    fetchFriends();
-  }, []);
-  const friend = friends.find((f) => f.id === friendId);
+  const [showUnfriend, setShowUnfriend] = useState(false);
+  const [showCancel, setShowCancel] = useState(false);
+  
+  useFocusEffect(
+    React.useCallback(() => {
+      const fetchFriends = async () => {
+        try {
+          console.log(friendId);
+          console.log(userInfo.accessToken);
+          const friendsData = await fetchFriendInfo(userInfo.accessToken, friendId);
+          console.log(friendsData);
+          setUser({
+            fullName: friendsData.fullName,
+            imageUrl: friendsData.imageUrl,
+            description: friendsData.description,
+            state: friendsData.state
+          });
+          setLoading(false);
+        } catch (error) {
+          console.error('Error:', error);
+        }
+      };
+      const fetchPosts = async () => {
+        try {
+          const postData = await getPostsOfUser(userInfo.accessToken, friendId);
+          setPosts(postData.content);
+        } catch (error) {
+          console.error("Error:", error);
+        }
+      };
+      fetchFriends();
+      fetchPosts();
+    }, [userInfo.accessToken, friendId])
+  );
+  console.log(user);
+  const toggleUnfriendButton = () => {
+    setShowUnfriend(!showUnfriend);
+  };
+  const toggleCancelButton = () => {
+    setShowCancel(!showCancel);
+  };
+  const addFriend = async (friendId) => {
+    try {
+      const response = await fetchAddFriend(friendId, userInfo.accessToken);
+      console.log(response); 
+  
+    
+      const friendsData = await fetchFriendInfo(userInfo.accessToken, friendId);
+      setUser({
+        fullName: friendsData.fullName,
+        imageUrl: friendsData.imageUrl,
+        description: friendsData.description,
+        state: friendsData.state
+      });
+  
+    } catch (error) {
+      console.error('Error adding friend:', error);
+    }
+  };
+  const handleUnfriend = async (friendId) => {
+    try {
+      const response = await fetchUnfriend(friendId, userInfo.accessToken);
+      console.log(response); 
+      
+      const friendsData = await fetchFriendInfo(userInfo.accessToken, friendId);
+      setUser({
+        fullName: friendsData.fullName,
+        imageUrl: friendsData.imageUrl,
+        description: friendsData.description,
+        state: friendsData.state
+      });
+  
+    } catch (error) {
+      console.error('Error unfriending:', error);
+    }
+  };
+  const handleCancelRequest = async (friendId) => {
+    try {
+      await fetchCancelfriend(friendId, userInfo.accessToken);
+      const friendsData = await fetchFriendInfo(userInfo.accessToken, friendId);
+      setUser({
+        fullName: friendsData.fullName,
+        imageUrl: friendsData.imageUrl,
+        description: friendsData.description,
+        state: friendsData.state
+      });
+      setShowCancel(false);
+    } catch (error) {
+      console.error("Error confirming friend:", error);
+    }
+  };
   if (loading) {
     return <Text>Loading...</Text>;
-  }
+  };
+ 
   return (
     <ScrollView style={styles.container}>
       <View>
         <Image source={member} style={styles.backgroundImage} />
         <TouchableOpacity
-          onPress={() => navigation.push("MainScreen")}
+          onPress={() => navigation.navigate("MainScreen")}
           style={styles.backButton}
         >
           <MaterialIcons name="keyboard-arrow-left" size={35} color={"black"} />
@@ -55,12 +142,67 @@ export default function FriendProfile({ route }) {
       </View>
 
       <View style={styles.profileInfoContainer}>
-        <Image source={{ uri: friend.imageUrl }} style={styles.profileImage} />
-        <Text style={styles.profileName}>{friend.fullName}</Text>
+        <Image source={{ uri: user.imageUrl }} style={styles.profileImage} />
+        <Text style={styles.profileName}>{user.fullName}</Text>
+        {user.description && user.description.split("\\n").map((item, key) => {
+          return (
+            <Text key={key} style={styles.profileDescription}>
+              {item}
+            </Text>
+          );
+        })}
+        {user.state === "FRIEND" && (
+          <>
+            <TouchableOpacity
+              onPress={toggleUnfriendButton}
+              style={styles.editProfileButton}
+            >
+              <Text style={styles.editProfileButtonText}>Friend</Text>
+            </TouchableOpacity>
+
+            {showUnfriend && (
+              <TouchableOpacity
+                onPress={() => handleUnfriend(friendId)}
+                style={[styles.editProfileButton, styles.unfriendButton]}
+              >
+                <Text style={styles.editProfileButtonText}>Unfriend</Text>
+              </TouchableOpacity>
+            )}
+          </>
+        )}
+
+        {user.state === "REQUESTING" && (
+          <>
+          <TouchableOpacity
+            onPress={toggleCancelButton}
+            style={styles.editProfileButton}
+          >
+            <Text style={styles.editProfileButtonText}>Requesting</Text>
+          </TouchableOpacity>
+
+          {showCancel && (
+            <TouchableOpacity
+              onPress={() => handleCancelRequest(friendId)}
+              style={[styles.editProfileButton, styles.unfriendButton]}
+            >
+              <Text style={styles.editProfileButtonText}>Cancel</Text>
+            </TouchableOpacity>
+          )}
+        </>
+        )}
+
+        {user.state === "STRANGER" && (
+          <TouchableOpacity
+            onPress={() => addFriend(friendId)}
+            style={styles.editProfileButton}
+          >
+            <Text style={styles.editProfileButtonText}>Add Friend</Text>
+          </TouchableOpacity>
+        )}
         <View style={styles.profileStatsContainer}>
           <View style={styles.profileStatsItem}>
             <Text style={styles.profileStatsLabel}>Posts</Text>
-            <Text style={styles.profileStatsValue}>3</Text>
+            <Text style={styles.profileStatsValue}>{posts.length}</Text>
           </View>
           <View style={styles.profileStatsItem}>
             <Text style={styles.profileStatsLabel}>Friends</Text>
@@ -69,23 +211,15 @@ export default function FriendProfile({ route }) {
         </View>
       </View>
 
-      <View style={styles.postContainer}>
-        {PostData.map((item) => (
-          <View key={item.id}>
-            <PostHeader data={item} />
-            <Image source={item.postImg} style={styles.postImg} />
-            <PostFooter data={item} />
-          </View>
-        ))}
-      </View>
+      <UserPost accessToken={userInfo.accessToken} userId={friendId} />
     </ScrollView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "white",
+    backgroundColor: "#F0F2F5",
   },
   backgroundImage: {
     height: 180,
@@ -94,7 +228,7 @@ const styles = StyleSheet.create({
   backButton: {
     zIndex: 99,
     position: "absolute",
-    left: 0,
+    left: 10,
     top: 10,
   },
   profileText: {
@@ -105,23 +239,22 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     textAlign: "center",
-  },
-  profileBirthday: {
-    fontSize: 16,
-    lineHeight: 20,
-    color: "black",
-    marginVertical: 4,
+    color: "#4267B2",
   },
   profileInfoContainer: {
     flex: 1,
     alignItems: "center",
+    backgroundColor: "white",
+    margin: 10,
+    padding: 10,
+    borderRadius: 10,
   },
   profileImage: {
     height: 170,
     width: 170,
-    borderRadius: 20,
+    borderRadius: 85,
     borderWidth: 2,
-    borderColor: "#242760",
+    borderColor: "#4267B2",
     overflow: "hidden",
     marginTop: -90,
   },
@@ -131,8 +264,14 @@ const styles = StyleSheet.create({
     color: "black",
     marginVertical: 8,
   },
+  profileDescription: {
+    fontSize: 16,
+    lineHeight: 20,
+    color: "black",
+    marginVertical: 4,
+  },
   editProfileButton: {
-    backgroundColor: "black",
+    backgroundColor: "#4267B2",
     height: 40,
     borderRadius: 6,
     alignItems: "center",
@@ -142,6 +281,14 @@ const styles = StyleSheet.create({
   editProfileButtonText: {
     color: "white",
     fontSize: 16,
+  },
+  buttonContainer: {
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  unfriendButton: {
+    marginTop: 10,
   },
   profileStatsContainer: {
     paddingVertical: 8,
@@ -157,11 +304,11 @@ const styles = StyleSheet.create({
   },
   profileStatsLabel: {
     fontSize: 16,
-    color: "#242760",
+    color: "#4267B2",
   },
   profileStatsValue: {
     fontSize: 20,
-    color: "#242760",
+    color: "#4267B2",
   },
   postsContainer: {
     flex: 1,

@@ -1,4 +1,4 @@
-import { View, StyleSheet, Dimensions } from "react-native";
+import { View, StyleSheet, Dimensions, Image } from "react-native";
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import { Colors } from "../utils/Colors";
 import PostHeader from "./PostHeader";
@@ -6,7 +6,7 @@ import PostFooter from "./PostFooter";
 import { fetchPostPublic } from "../context/PostContext";
 import { AuthContext } from "../context/AuthContext";
 import Spinner from "react-native-loading-spinner-overlay";
-import ImageCarousel from "./ImageCarousel";
+import Carousel from "react-native-snap-carousel";
 
 const Post = () => {
   const { userInfo } = useContext(AuthContext);
@@ -38,13 +38,28 @@ const Post = () => {
     fetchNewPosts();
   }, [fetchNewPosts]);
 
+  const ImageSlider = ({ item }) => (
+    <View style={styles.slide}>
+      <Image
+        source={{ uri: item }}
+        style={[styles.postImg, { width: windowWidth }]}
+      />
+    </View>
+  );
+
   return (
     <View style={styles.postContainer}>
       <Spinner visible={isLoading} />
       {posts.map((item) => (
         <View key={item.id}>
           <PostHeader data={item} onClose={() => onClosePost(item.id)} />
-          <ImageCarousel data={item.imageUrls} windowWidth={windowWidth} />
+          <Carousel
+            data={item.imageUrls}
+            renderItem={ImageSlider}
+            sliderWidth={windowWidth}
+            itemWidth={windowWidth}
+          />
+
           <PostFooter data={item} />
         </View>
       ))}
@@ -56,6 +71,14 @@ const styles = StyleSheet.create({
   postContainer: {
     backgroundColor: Colors.white,
     marginTop: 8,
+  },
+  postImg: {
+    height: 300,
+  },
+  slide: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
 

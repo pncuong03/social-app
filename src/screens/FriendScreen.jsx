@@ -129,7 +129,7 @@ const FriendScreen = () => {
       </View>
       {filteredRequests.map((request) => (
         <View key={request.id} style={styles.friendView}>
-          <Image style={styles.avatar} source={request.image} />
+          <Image style={styles.avatar} source={{uri:request.image}} />
           <View style={styles.headerBox}>
             <View
               style={{ flexDirection: "row", justifyContent: "space-between" }}

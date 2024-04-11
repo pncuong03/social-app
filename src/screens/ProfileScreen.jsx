@@ -14,18 +14,21 @@ import { AuthContext } from "../context/AuthContext";
 import { fetchUserInfo } from "../context/ProfileContext";
 import { fetchListFriend } from "../context/FriendContext";
 import UserPost from "../components/UserPost";
+import { getPostofMe, getPostsOfUser } from "../context/PostContext";
 const ProfileScreen = () => {
   const { userInfo } = useContext(AuthContext);
+  console.log(userInfo.accessToken);
   const navigation = useNavigation();
   const [user, setUser] = useState({
-    birthday: null,
-    fullName: "",
-    gender: null,
     id: null,
+    fullName: "",
     imageUrl: "",
+    description: "",
+    backgroundImage:"https://plainbackground.com/download.php?imagename=39569c.png",
   });
   const [posts, setPosts] = useState([]);
   const [friends, setFriends] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
     const fetchFriends = async () => {
       try {
@@ -36,37 +39,39 @@ const ProfileScreen = () => {
         console.error("Error:", error);
       }
     };
-
     fetchFriends();
   }, []);
-
   useEffect(() => {
-    const getUserInfo = async () => {
+    const fetchData = async () => {
+      setIsLoading(true);
       try {
-        const data = await fetchUserInfo(userInfo.accessToken);
-        console.log(data);
+        const userData = await fetchUserInfo(userInfo.accessToken);
         setUser({
-          birthday: data.birthday,
-          fullName: data.fullName,
-          gender: data.gender,
-          id: data.id,
-          imageUrl: data.imageUrl,
+          birthday: userData.birthday,
+          fullName: userData.fullName,
+          gender: userData.gender,
+          id: userData.id,
+          imageUrl: userData.imageUrl,
+          description: userData.description,
+          backgroundImage: userData.backgroundUrl,
+          
         });
-        setPosts(data.posts);
-        setFollowers(data.followers);
-        setPosts(data.posts);
-        setFollowers(data.followers);
+        const postData = await getPostofMe(userInfo.accessToken);
+        setPosts(postData.content);
       } catch (error) {
         console.error("Error:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
-    getUserInfo();
+    fetchData();
   }, []);
+  console.log(user);
   return (
     <ScrollView style={styles.container}>
       <View>
-        <Image source={member} style={styles.backgroundImage} />
+        <Image source={{uri:user.backgroundImage}} style={styles.backgroundImage} />
         <TouchableOpacity
           onPress={() => navigation.push("MainScreen")}
           style={styles.backButton}
@@ -79,6 +84,13 @@ const ProfileScreen = () => {
       <View style={styles.profileInfoContainer}>
         <Image source={{ uri: user.imageUrl }} style={styles.profileImage} />
         <Text style={styles.profileName}>{user.fullName}</Text>
+        {user.description && user.description.split("\\n").map((item, key) => {
+          return (
+            <Text key={key} style={styles.profileDescription}>
+              {item}
+            </Text>
+          );
+        })}
         <TouchableOpacity
           onPress={() => navigation.push("EditProfile")}
           style={styles.editProfileButton}
@@ -88,7 +100,7 @@ const ProfileScreen = () => {
         <View style={styles.profileStatsContainer}>
           <View style={styles.profileStatsItem}>
             <Text style={styles.profileStatsLabel}>Posts</Text>
-            <Text style={styles.profileStatsValue}>3</Text>
+            <Text style={styles.profileStatsValue}>{posts.length}</Text>
           </View>
           <View>
             <TouchableOpacity
@@ -102,7 +114,7 @@ const ProfileScreen = () => {
         </View>
       </View>
 
-      <UserPost />
+      <UserPost accessToken={userInfo.accessToken} userId={user.id} />
     </ScrollView>
   );
 };
@@ -110,7 +122,7 @@ const ProfileScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "white",
+    backgroundColor: "#F0F2F5", 
   },
   backgroundImage: {
     height: 180,
@@ -119,7 +131,7 @@ const styles = StyleSheet.create({
   backButton: {
     zIndex: 99,
     position: "absolute",
-    left: 0,
+    left: 10, 
     top: 10,
   },
   profileText: {
@@ -130,23 +142,22 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     textAlign: "center",
-  },
-  profileBirthday: {
-    fontSize: 16,
-    lineHeight: 20,
-    color: "black",
-    marginVertical: 4,
+    color: "#4267B2", 
   },
   profileInfoContainer: {
     flex: 1,
     alignItems: "center",
+    backgroundColor: "white", 
+    margin: 10,
+    padding: 10,
+    borderRadius: 10, 
   },
   profileImage: {
     height: 170,
     width: 170,
-    borderRadius: 20,
+    borderRadius: 85, 
     borderWidth: 2,
-    borderColor: "#242760",
+    borderColor: "#4267B2", 
     overflow: "hidden",
     marginTop: -90,
   },
@@ -156,8 +167,14 @@ const styles = StyleSheet.create({
     color: "black",
     marginVertical: 8,
   },
+  profileDescription: {
+    fontSize: 16,
+    lineHeight: 20,
+    color: "black",
+    marginVertical: 4,
+  },
   editProfileButton: {
-    backgroundColor: "black",
+    backgroundColor: "#4267B2", 
     height: 40,
     borderRadius: 6,
     alignItems: "center",
@@ -182,11 +199,11 @@ const styles = StyleSheet.create({
   },
   profileStatsLabel: {
     fontSize: 16,
-    color: "#242760",
+    color: "#4267B2", 
   },
   profileStatsValue: {
     fontSize: 20,
-    color: "#242760",
+    color: "#4267B2",
   },
   postsContainer: {
     flex: 1,
@@ -198,7 +215,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     borderWidth: 1,
     borderColor: "#ccc",
-    borderRadius: 10,
+    borderRadius: 10, 
   },
   postImg: {
     width: "100%",

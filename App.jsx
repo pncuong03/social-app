@@ -7,7 +7,6 @@ import LoginScreen from "./src/screens/LoginScreen";
 import RegisterScreen from "./src/screens/RegisterScreen";
 import MainScreen from "./src/screens/MainScreen";
 import SplashScreen from "./src/screens/SplashScreen";
-import { Colors } from "react-native/Libraries/NewAppScreen";
 import MessageScreen from "./src/screens/MessageScreen";
 import EditProfile from "./src/screens/EditProfile";
 import ProfileScreen from "./src/screens/ProfileScreen";
@@ -26,6 +25,9 @@ import MessageDetail from "./src/screens/MessageDetail";
 import ManageMember from "./src/screens/ManageMember";
 import AddMemberGroup from "./src/screens/AddMemberGroup";
 import CommentDetail from "./src/components/CommentDetail";
+import { Colors } from "./src/utils/Colors";
+import FriendList from "./src/screens/FriendList";
+import FriendProfile from "./src/screens/FriendProfile";
 
 const Stack = createStackNavigator();
 
@@ -65,6 +67,8 @@ const AppContent = () => {
               component={GroupMessageScreen}
             />
             <Stack.Screen name="NewPost" component={NewPost} />
+            <Stack.Screen name="FriendList" component={FriendList} />
+            <Stack.Screen name="FriendProfile" component={FriendProfile} />
             <Stack.Screen name="MenuScreen" component={MenuScreen} />
             <Stack.Screen name="GroupScreen" component={GroupScreen} />
             <Stack.Screen name="Group for you" component={GroupListsScreen} />

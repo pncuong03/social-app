@@ -8,11 +8,12 @@ import {
   ScrollView,
   TextInput,
 } from "react-native";
+
 import { Colors } from "../utils/Colors";
 import { AuthContext } from "../context/AuthContext";
 import { fetchListUser } from "../context/UserContext";
 import { fetchAddFriend } from "../context/FriendContext";
-
+import { useNavigation, useFocusEffect } from "@react-navigation/native";
 const SearchScreen = () => {
   const { userInfo } = useContext(AuthContext);
   const [searchTerm, setSearchTerm] = useState("");
@@ -20,7 +21,7 @@ const SearchScreen = () => {
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(0);
-
+  const navigation = useNavigation();
   useEffect(() => {
     const getListUser = async () => {
       try {
@@ -62,6 +63,9 @@ const SearchScreen = () => {
     );
     setFilteredUsers(filtered);
   };
+  const handlePress = (friendId) => {
+    navigation.navigate('FriendProfile', { friendId });
+};
 
   useEffect(() => {
     if (searchTerm === "") {
@@ -100,7 +104,9 @@ const SearchScreen = () => {
       </View>
       {filteredUsers.map((item) => (
         <View key={item.id} style={styles.friendView}>
+          <TouchableOpacity onPress={() => handlePress(item.id)}>
           <Image style={styles.avatar} source={{ uri: item.imageUrl }} />
+          </TouchableOpacity>
           <View style={styles.headerBox}>
             <View
               style={{ flexDirection: "row", justifyContent: "space-between" }}
@@ -111,6 +117,7 @@ const SearchScreen = () => {
                 </Text>
               </View>
             </View>
+           
             <View
               style={{
                 flexDirection: "row",
