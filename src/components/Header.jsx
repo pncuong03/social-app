@@ -1,35 +1,58 @@
 import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
-import React from "react";
+import React, { useCallback, useState, useEffect, useContext } from "react";
 import FacebookLogo from "../assets/images/fblogo.png";
 import VectorIcon from "../utils/VectorIcon";
 import { Colors } from "../utils/Colors";
 import { useNavigation } from "@react-navigation/native";
+import { fetchEventMessage } from "../context/NotificationContext";
+import { AuthContext } from "../context/AuthContext";
 
 const Header = () => {
   const navigation = useNavigation();
+  const { userInfo } = useContext(AuthContext);
+  const [messageCount, setMessageCount] = useState(1);
+  // const fetchMessageCount = async () => {
+  //   try {
+  //     const data = await fetchEventMessage(userInfo.accessToken);
+  //     setMessageCount(data.messageCount);
+  //   } catch (error) {
+  //     console.error("Error fetching message count:", error);
+  //   }
+  // };
+  // useEffect(() => {
+  //   fetchMessageCount();
+  // }, []);
 
-  const handleLogo = () => {
+  const handleLogoPress = useCallback(() => {
     navigation.navigate("Home");
-  };
+    setMessageCount(0);
+  }, [navigation]);
 
-  // const handleLogoPress = useCallback(() => {
-  //   navigation.navigate("Home");
-  //   reloadData();
-  // }, [navigation, reloadData]);
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={handleLogo}>
+      <TouchableOpacity onPress={handleLogoPress}>
         <Image source={FacebookLogo} style={styles.fbLogoStyle} />
       </TouchableOpacity>
       <View style={styles.headerIcons}>
         <View style={styles.searchBg}>
-          <TouchableOpacity onPress={() => navigation.push("MessageScreen")}>
-            <VectorIcon
-              name="messenger"
-              type="Fontisto"
-              size={22}
-              color={Colors.grey}
-            />
+          <TouchableOpacity
+            onPress={() => {
+              navigation.push("MessageScreen");
+            }}
+          >
+            <View style={styles.messageContainer}>
+              <VectorIcon
+                name="messenger"
+                type="Fontisto"
+                size={22}
+                color={Colors.grey}
+              />
+              {messageCount > 0 && (
+                <View style={styles.messageCountContainer}>
+                  <Text style={styles.messageCountText}>{messageCount}</Text>
+                </View>
+              )}
+            </View>
           </TouchableOpacity>
         </View>
       </View>
@@ -43,7 +66,6 @@ const styles = StyleSheet.create({
     height: 25,
     width: 130,
   },
-
   container: {
     backgroundColor: Colors.white,
     padding: 16,
@@ -54,6 +76,24 @@ const styles = StyleSheet.create({
   headerIcons: {
     flexDirection: "row",
     marginTop: 20,
+  },
+  messageContainer: {
+    position: "relative",
+  },
+  messageCountContainer: {
+    position: "absolute",
+    top: -5,
+    right: -8,
+    backgroundColor: "red",
+    borderRadius: 10,
+    minWidth: 20,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  messageCountText: {
+    color: "white",
+    fontSize: 12,
+    fontWeight: "bold",
   },
 });
 

@@ -15,3 +15,18 @@ export const fetchNotifications = async (accessToken) => {
     throw error;
   }
 };
+
+export const fetchEventNoti = async (accessToken) => {
+  try {
+    const response = await axios.get(`${BASE_URL}/event-notification`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};

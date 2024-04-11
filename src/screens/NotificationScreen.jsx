@@ -12,9 +12,12 @@ import { AuthContext } from "../context/AuthContext";
 import { fetchNotifications } from "../context/NotificationContext";
 import { formatNoti } from "../utils/Fomart";
 import TimeComparison from "../utils/Time";
+import { useNavigation } from "@react-navigation/native";
 
 const NotificationScreen = () => {
   const { userInfo } = useContext(AuthContext);
+  const navigation = useNavigation();
+
   const [notification, setNotification] = useState([]);
 
   useEffect(() => {
@@ -40,7 +43,12 @@ const NotificationScreen = () => {
         {notification.map((notify) => (
           <TouchableOpacity
             key={notify.id}
-            // onPress={() => onNotificationPress(notify.postId)}
+            onPress={() => {
+              navigation.push("CommentDetail", {
+                postId: notify.postId,
+                notifyData: notify,
+              });
+            }}
           >
             <View style={[styles.inforNotify]}>
               <Image

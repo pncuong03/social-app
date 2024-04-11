@@ -6,16 +6,32 @@ import {
   TouchableOpacity,
   ScrollView,
 } from "react-native";
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 import { Colors } from "../utils/Colors";
 import { useNavigation } from "@react-navigation/native";
 import VectorIcon from "../utils/VectorIcon";
 import ChatHeader from "../components/ChatHeader";
-import { messageResponse } from "../data/MessageData";
+import { AuthContext } from "../context/AuthContext";
+import TimeComparison from "../utils/Time";
+import { fetchUserChat } from "../context/ChatContext";
 
-const MessageScreen = () => {
+const MessageScreen = ({ route }) => {
   const navigation = useNavigation();
+  const { userInfo } = useContext(AuthContext);
+  const [listChat, setListChat] = useState([]);
+  useEffect(() => {
+    const getListChat = async () => {
+      try {
+        const data = await fetchUserChat(userInfo.accessToken);
+        setListChat(data.content);
+      } catch (error) {
+        console.log("Chat error: ", error);
+      }
+    };
+    getListChat();
+  }, []);
+
   return (
     <ScrollView style={{ flex: 1 }}>
       <View style={style.container}>
@@ -32,38 +48,68 @@ const MessageScreen = () => {
         <View>
           <ChatHeader />
         </View>
-        {
-          messageResponse.map((message) => (
-            <TouchableOpacity key={message.id} onPress={() => navigation.push("ChatPrivate")}>
-              <View style={style.chatView} >
-                <View style={{ flexDirection: "row", alignItems: "center" }}>
-                  <Image
-                    style={{
-                      width: 35,
-                      height: 35,
-                      marginLeft: 10,
-                      marginRight: 10,
-                      borderRadius: 10,
-                    }}
-                    source={message.img}
-                  />
-                  <View>
-                    <Text>{message.name}</Text>
-                    <Text>{message.content}</Text>
-                  </View>
-                </View>
-                <View style={{ marginRight: 10 }}>
-                  <VectorIcon
-                    name="checkbox-marked-circle-outline"
-                    type="MaterialCommunityIcons"
-                    size={20}
-                    color={Colors.black}
-                  />
+        {listChat.map((message) => (
+          <TouchableOpacity
+            key={message.id}
+            onPress={() =>
+              navigation.push("ChatPrivate", {
+                chatId: message.id,
+                fullname: message.name,
+                img: message.imageUrl,
+              })
+            }
+          >
+            <View style={style.chatView}>
+              <View style={{ flexDirection: "row", alignItems: "center" }}>
+                <Image
+                  style={{
+                    width: 35,
+                    height: 35,
+                    marginLeft: 10,
+                    marginRight: 10,
+                    borderRadius: 10,
+                  }}
+                  source={{ uri: message.imageUrl }}
+                />
+                <View>
+                  <Text>{message.name}</Text>
+                  {message.isMe ? (
+                    <Text>Me: {message.newestMessage}</Text>
+                  ) : (
+                    <Text>{message.newestMessage}</Text>
+                  )}
                 </View>
               </View>
-            </TouchableOpacity>
-          ))
-        }
+              <View style={{ marginRight: 10, flexDirection: "row", gap: 2 }}>
+                <Text>
+                  <TimeComparison time={message.newestChatTime} />
+                </Text>
+                {message.messageCount > 0 && (
+                  <View
+                    style={{
+                      marginLeft: 5,
+                      backgroundColor: "red",
+                      borderRadius: 10,
+                      minWidth: 20,
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <Text
+                      style={{
+                        color: "white",
+                        fontSize: 12,
+                        fontWeight: "bold",
+                      }}
+                    >
+                      {message.messageCount}
+                    </Text>
+                  </View>
+                )}
+              </View>
+            </View>
+          </TouchableOpacity>
+        ))}
       </View>
     </ScrollView>
   );

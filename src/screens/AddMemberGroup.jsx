@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -12,39 +12,77 @@ import {
 import VectorIcon from "../utils/VectorIcon";
 import { useNavigation } from "@react-navigation/native";
 import { Colors } from "../utils/Colors";
+import { fetchAdd } from "../context/GroupChatContext";
+import { AuthContext } from "../context/AuthContext";
+import { fetchListFriend } from "../context/FriendContext";
 
-const AddMemberGroup = () => {
+const AddMemberGroup = ({ route }) => {
   const navigation = useNavigation();
-  const [selectedMembers, setSelectedMembers] = useState([]);
+  const { userInfo } = useContext(AuthContext);
   const [searchValue, setSearchValue] = useState("");
-  const [availableMembers, setAvailableMembers] = useState(friendRequests);
+  const [availableMembers, setAvailableMembers] = useState([]);
+  const { chatId1, fullname1, img1 } = route.params;
+  const [initialMembers, setInitialMembers] = useState([]);
 
-  const addMemberToGroup = (memberId) => {
-    if (!selectedMembers.includes(memberId)) {
-      setSelectedMembers([...selectedMembers, memberId]);
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const response = await fetchListFriend(userInfo.accessToken);
+        setAvailableMembers(response.content);
+        setInitialMembers(response.content);
+      } catch (error) {
+        console.error("Error user:", error);
+      }
+    };
 
-      const updatedAvailableMembers = availableMembers.filter(
-        (member) => member.id !== memberId
-      );
-      setAvailableMembers(updatedAvailableMembers);
+    fetchUser();
+  }, []);
 
+  const addMember = async (userId) => {
+    try {
+      await fetchAdd(chatId1, [userId], userInfo.accessToken);
       Alert.alert("Success", "Member added to group successfully!");
+    } catch (error) {
+      Alert.alert("Error", "Failed to add member to group.");
     }
   };
+  // const addMemberToGroup = (memberId) => {
+  //   if (!selectedMembers.includes(memberId)) {
+  //     setSelectedMembers([...selectedMembers, memberId]);
 
+  //     const updatedAvailableMembers = availableMembers.filter(
+  //       (member) => member.id !== memberId
+  //     );
+  //     setAvailableMembers(updatedAvailableMembers);
+
+  //     Alert.alert("Success", "Member added to group successfully!");
+  //   }
+  // };
   const onSearch = (text) => {
     setSearchValue(text);
-    const filteredMembers = friendRequests.filter((member) =>
-      member.name.toLowerCase().includes(text.toLowerCase())
-    );
-    setAvailableMembers(filteredMembers);
+    if (text.trim() === "") {
+      setAvailableMembers(initialMembers);
+    } else {
+      const filteredMembers = availableMembers.filter((member) =>
+        member.fullName.toLowerCase().includes(text.toLowerCase())
+      );
+      setAvailableMembers(filteredMembers);
+    }
   };
 
   return (
     <ScrollView style={styles.container}>
       <View style={styles.headerChat}>
         <View style={styles.headerUser}>
-          <TouchableOpacity onPress={() => navigation.push("ManageMember")}>
+          <TouchableOpacity
+            onPress={() =>
+              navigation.push("ManageMember", {
+                chatId: chatId1,
+                fullname: fullname1,
+                img: img1,
+              })
+            }
+          >
             <VectorIcon
               name="arrowleft"
               type="AntDesign"
@@ -89,13 +127,13 @@ const AddMemberGroup = () => {
                   marginRight: 10,
                   borderRadius: 10,
                 }}
-                source={friend.image}
+                source={{ uri: friend.imageUrl }}
               />
               <Text style={{ fontWeight: 500, fontSize: 20 }}>
-                {friend.name}
+                {friend.fullName}
               </Text>
             </View>
-            <TouchableOpacity onPress={() => addMemberToGroup(friend.id)}>
+            <TouchableOpacity onPress={() => addMember(friend.id)}>
               <VectorIcon
                 name="plus"
                 type="AntDesign"

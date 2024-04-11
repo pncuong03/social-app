@@ -1,17 +1,66 @@
-import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
-import React from "react";
-import img2 from "../assets/images/img2.jpeg";
-import img3 from "../assets/images/img3.jpeg";
+import React, { useContext, useEffect, useState } from "react";
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  TextInput,
+} from "react-native";
 import { Colors } from "../utils/Colors";
 import { useNavigation } from "@react-navigation/native";
 import VectorIcon from "../utils/VectorIcon";
-import GroupChatHeader from "../components/GroupChatHeader";
+import { fetchListFriend } from "../context/FriendContext";
+import { AuthContext } from "../context/AuthContext";
+import { fetchCreate } from "../context/GroupChatContext";
 
 const GroupMessageScreen = () => {
   const navigation = useNavigation();
+  const { userInfo } = useContext(AuthContext);
+  const [listUser, setListUser] = useState([]);
+  const [selectedUsers, setSelectedUsers] = useState([]);
+  const [groupName, setGroupName] = useState("");
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const response = await fetchListFriend(userInfo.accessToken);
+        setListUser(response.content);
+      } catch (error) {
+        console.error("Error user:", error);
+      }
+    };
+
+    fetchUser();
+  }, []);
+
+  const toggleUserSelection = (user) => {
+    const isSelected = selectedUsers.some((u) => u.id === user.id);
+    if (isSelected) {
+      setSelectedUsers(selectedUsers.filter((u) => u.id !== user.id));
+    } else {
+      setSelectedUsers([...selectedUsers, user]);
+    }
+  };
+
+  const addUserToGroup = (user) => {
+    toggleUserSelection(user);
+  };
+
+  const createGroup = async () => {
+    if (groupName.trim() !== "") {
+      try {
+        const userIDs = selectedUsers.map((user) => user.id);
+        console.log(userIDs);
+        await fetchCreate(groupName, userIDs, userInfo.accessToken);
+      } catch (error) {
+        console.error("Error creating group:", error);
+      }
+    }
+  };
+
   return (
-    <View style={style.container}>
-      <View style={{ borderBottomWidth: 1, marginTop: 40 }}>
+    <View style={styles.container}>
+      <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.push("MessageScreen")}>
           <VectorIcon
             name="arrowleft"
@@ -20,109 +69,88 @@ const GroupMessageScreen = () => {
             color={Colors.black}
           />
         </TouchableOpacity>
+        <TouchableOpacity onPress={createGroup}>
+          <Text style={styles.chatsText}>Create Group</Text>
+        </TouchableOpacity>
       </View>
 
-      <GroupChatHeader />
-
-      <View style={style.peopleView}>
-        <View style={{ flexDirection: "row", alignItems: "center" }}>
-          <Image
-            style={{
-              width: 35,
-              height: 35,
-              marginLeft: 10,
-              marginRight: 10,
-              borderRadius: 10,
-            }}
-            source={img2}
-          />
-          <View>
-            <Text style={{ fontWeight: "500" }}>Phạm Thanh Phúc</Text>
-          </View>
-        </View>
-        <View style={{ marginRight: 10 }}>
-          <VectorIcon
-            name="checkbox-marked-circle-outline"
-            type="MaterialCommunityIcons"
-            size={20}
-            color={Colors.primaryColor}
-          />
-        </View>
+      <View style={styles.search}>
+        <Text style={styles.chatsText}>GroupName: </Text>
+        <TouchableOpacity style={styles.searchView}>
+          <TextInput
+            // placeholder="GroupName"
+            value={groupName}
+            onChangeText={(text) => setGroupName(text)}
+          ></TextInput>
+        </TouchableOpacity>
       </View>
-      <View style={style.peopleView}>
-        <View style={{ flexDirection: "row", alignItems: "center" }}>
-          <Image
-            style={{
-              width: 35,
-              height: 35,
-              marginLeft: 10,
-              marginRight: 10,
-              borderRadius: 10,
-            }}
-            source={img3}
-          />
-          <View>
-            <Text style={{ fontWeight: "500" }}>Phạm Ngọc Cường</Text>
+
+      <View>
+        {listUser.map((person, index) => (
+          <View key={index} style={styles.peopleView}>
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <Image
+                style={{
+                  width: 35,
+                  height: 35,
+                  marginLeft: 10,
+                  marginRight: 10,
+                  borderRadius: 10,
+                }}
+                source={{ uri: person.imageUrl }}
+              />
+              <View>
+                <Text style={{ fontWeight: "500" }}>{person.fullName}</Text>
+              </View>
+            </View>
+            <TouchableOpacity
+              style={[
+                styles.addButton,
+                selectedUsers.some((u) => u.id === person.id) && {
+                  backgroundColor: Colors.borderGrey,
+                },
+              ]}
+              onPress={() => addUserToGroup(person)}
+            >
+              <Text style={styles.addButtonText}>+</Text>
+            </TouchableOpacity>
           </View>
-        </View>
-        <View style={{ marginRight: 10 }}>
-          <VectorIcon
-            name="checkbox-marked-circle-outline"
-            type="MaterialCommunityIcons"
-            size={20}
-            color={Colors.primaryColor}
-          />
-        </View>
+        ))}
       </View>
     </View>
   );
 };
-const style = StyleSheet.create({
+
+const styles = StyleSheet.create({
   container: {
-    width: "100%",
-    height: "100%",
+    flex: 1,
   },
   header: {
-    marginTop: 5,
-    padding: 5,
-    display: "flex",
     flexDirection: "row",
-    alignItems: "center",
     justifyContent: "space-between",
-  },
-  checkBox: {
-    marginLeft: "40%",
-  },
-  headerleft: {
-    flexDirection: "row",
-    alignContent: "space-between",
     alignItems: "center",
+    paddingHorizontal: 10,
+    borderBottomWidth: 1,
+    borderColor: Colors.black,
+    marginTop: 40,
   },
-  headerright: {
-    flexDirection: "row",
-    alignContent: "space-between",
-    alignItems: "center",
-    gap: 10,
-  },
-  headerSearch: {
-    backgroundColor: Colors.borderGrey,
-    height: 28,
-    borderRadius: 10,
-    flexDirection: "row",
-    width: "90%",
-    alignContent: "space-between",
-  },
-  headerOk: {
-    height: 28,
-    borderRadius: 10,
-    backgroundColor: Colors.borderGrey,
-    width: 32,
-    alignItems: "center",
-    justifyContent: "center",
+  chatsText: {
+    fontWeight: "400",
+    fontSize: 20,
   },
   search: {
     flexDirection: "row",
-    width: "100%",
+    alignItems: "center",
+    paddingHorizontal: 10,
+    marginTop: 10,
+  },
+  searchView: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: Colors.borderGrey,
+    borderRadius: 15,
+    padding: 5,
+    flex: 1,
   },
   peopleView: {
     alignItems: "center",
@@ -133,39 +161,19 @@ const style = StyleSheet.create({
     marginLeft: 10,
     marginRight: 10,
     borderWidth: 2,
-    borderColor: Colors.primaryColor,
+    borderColor: Colors.borderGrey,
     borderRadius: 10,
     padding: 5,
   },
-
-  unread: {
-    display: "flex",
-    alignItems: "center",
-    width: "21%",
-    marginTop: 10,
-    backgroundColor: Colors.borderGrey,
+  addButton: {
+    backgroundColor: Colors.lightGrey,
     borderRadius: 15,
-    padding: 8,
-    marginLeft: 10,
+    marginRight: 10,
   },
-  searchView: {
-    alignItems: "center",
-    width: "70%",
-    flexDirection: "row",
-    backgroundColor: Colors.borderGrey,
-    borderRadius: 15,
-    marginLeft: 10,
-    marginTop: 10,
-    padding: 4,
-  },
-  chatsText: {
-    fontWeight: "400",
-    fontSize: 26,
-    marginLeft: 10,
-  },
-  imgHeader: {
-    width: 40,
-    height: 40,
+  addButtonText: {
+    color: Colors.black,
+    fontWeight: "bold",
+    fontSize: 20,
   },
 });
 
