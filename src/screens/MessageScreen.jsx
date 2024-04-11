@@ -16,7 +16,7 @@ import { AuthContext } from "../context/AuthContext";
 import TimeComparison from "../utils/Time";
 import { fetchUserChat } from "../context/ChatContext";
 
-const MessageScreen = () => {
+const MessageScreen = ({ route }) => {
   const navigation = useNavigation();
   const { userInfo } = useContext(AuthContext);
   const [listChat, setListChat] = useState([]);
@@ -31,6 +31,7 @@ const MessageScreen = () => {
     };
     getListChat();
   }, []);
+
   return (
     <ScrollView style={{ flex: 1 }}>
       <View style={style.container}>
@@ -58,7 +59,6 @@ const MessageScreen = () => {
               })
             }
           >
-            {console.log(message.id)}
             <View style={style.chatView}>
               <View style={{ flexDirection: "row", alignItems: "center" }}>
                 <Image
@@ -74,7 +74,7 @@ const MessageScreen = () => {
                 <View>
                   <Text>{message.name}</Text>
                   {message.isMe ? (
-                    <Text>You: {message.newestMessage}</Text>
+                    <Text>Me: {message.newestMessage}</Text>
                   ) : (
                     <Text>{message.newestMessage}</Text>
                   )}

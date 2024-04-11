@@ -2,6 +2,7 @@ import React, {
   useCallback,
   useContext,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from "react";
@@ -31,8 +32,9 @@ const ChatPrivateScreen = ({ route }) => {
 
   const [messages, setMessages] = useState([]);
   const [messageText, setMessageText] = useState("");
+  const [toggle, setToggle] = useState(false);
 
-  const getAllMessage = useCallback(async () => {
+  const getAllMessage = async () => {
     try {
       const data = await fetchChatMessage(chatId, userInfo.accessToken);
       setMessages(data.content.reverse());
@@ -40,44 +42,61 @@ const ChatPrivateScreen = ({ route }) => {
     } catch (error) {
       console.log("Message chat: ", error);
     }
-  }, [chatId]);
+  };
 
   useEffect(() => {
     getAllMessage();
-  }, [chatId, getAllMessage]);
+  }, [chatId, toggle]);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      updateNew();
-    }, 1000);
+  // useEffect(() => {
+  //   let intervalId;
 
-    return () => clearInterval(interval);
-  }, []);
+  //   const fetchData = async () => {
+  //     try {
+  //       const data = await fetchChatMessage(chatId, userInfo.accessToken);
+  //       setMessages(data.content.reverse());
+  //       scrollToBottom();
+  //     } catch (error) {
+  //       console.log("Message chat: ", error);
+  //     }
+  //   };
 
-  const updateNew = async () => {
-    try {
-      const updateNew = await fetchEventNoti(userInfo.accessToken);
-      if (updateNew.messages.length > 0) {
-        setMessages((prevMessages) => [
-          updateNew.messages[0]?.message,
-          ...prevMessages,
-        ]);
-        scrollToBottom();
-      }
-    } catch (error) {
-      console.log("Message chat: ", error);
-    }
+  //   if (autoUpdate) {
+  //     intervalId = setInterval(fetchData, 5000); // Fetch messages every 5 seconds
+  //   }
+
+  //   return () => {
+  //     clearInterval(intervalId); // Cleanup interval on component unmount
+  //   };
+  // }, [chatId, userInfo.accessToken, autoUpdate]);
+
+  const onSendMessage = () => {
+    scrollToBottom();
+    setMessageText("");
+    handleToggle();
+    updateAPI();
   };
 
-  const onSendMessage = async () => {
+  const handleToggle = () => {
+    setToggle(!toggle);
+  };
+
+  useEffect(() => {
+    (async () => {
+      const res = await fetchEventNoti(userInfo.accessToken);
+      console.log(res);
+      setMessages([res.messages, ...messages]);
+      // console.log(111111, messages);
+    })();
+  }, [toggle]);
+  const updateAPI = async () => {
     if (messageText.trim() !== "") {
-      try {
-        await fetchSendMessage(userInfo.accessToken, chatId, messageText);
-        scrollToBottom();
-        setMessageText("");
-      } catch (error) {
-        console.error("Error sending message:", error);
-      }
+      await fetchSendMessage(userInfo.accessToken, chatId, messageText);
+      // console.log(1);
+      // // const updateNew = await fetchEventNoti(userInfo.accessToken);
+      // console.log(1111, res);
+
+      // setMessages((prev) => [updateNewmessages, ...prev]);
     }
   };
 
@@ -144,29 +163,50 @@ const ChatPrivateScreen = ({ route }) => {
         {messages.map((message, index) => (
           <View
             key={index}
-            style={{ flexDirection: "row", alignItems: "center" }}
+            style={[
+              styles.messageContainer,
+              message && message.isMe
+                ? styles.messageRight
+                : styles.messageLeft,
+            ]}
           >
-            <Image
-              style={{
-                width: 26,
-                height: 26,
-                marginLeft: 10,
-                marginRight: 10,
-                borderRadius: 20,
-              }}
-              source={{ uri: message?.imageUrl }}
-            />
-            <View style={{ flex: 1 }}>
-              <View style={styles.detail}>
+            {message && !message.isMe && (
+              <Image
+                style={{
+                  width: 26,
+                  height: 26,
+                  marginLeft: 10,
+                  marginRight: 10,
+                  borderRadius: 20,
+                }}
+                source={{ uri: message?.imageUrl }}
+              />
+            )}
+            <View style={styles.detail}>
+              {message && !message.isMe && (
                 <Text style={{ color: Colors.textGrey }}>
                   {message?.fullName}
                 </Text>
-                <Text>{message?.message}</Text>
+              )}
+              {message && <Text>{message?.message}</Text>}
+              {message && (
                 <Text style={{ fontStyle: "italic", fontSize: 12 }}>
                   <TimeComparison time={message?.createdAt} />
                 </Text>
-              </View>
+              )}
             </View>
+            {message && message.isMe && (
+              <Image
+                style={{
+                  width: 26,
+                  height: 26,
+                  marginLeft: 10,
+                  marginRight: 10,
+                  borderRadius: 20,
+                }}
+                source={{ uri: userInfo.img }}
+              />
+            )}
           </View>
         ))}
       </ScrollView>
@@ -235,6 +275,17 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     paddingHorizontal: 15,
     marginRight: 10,
+  },
+  messageContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 10,
+  },
+  messageRight: {
+    justifyContent: "flex-end",
+  },
+  messageLeft: {
+    justifyContent: "flex-start",
   },
 });
 

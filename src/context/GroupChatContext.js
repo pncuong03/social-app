@@ -39,12 +39,12 @@ export const fetchCreate = async (name, userIds, accessToken) => {
   }
 };
 
-export const fetchAdd = async (name, userIds, accessToken) => {
+export const fetchAdd = async (groupChatId, userIds, accessToken) => {
   try {
     const response = await axios.post(
-      `${BASE_URL}/group-chat`,
+      `${BASE_URL}/group-chat/add-new`,
       {
-        name: name,
+        groupChatId: groupChatId,
         userIds: userIds,
       },
       {

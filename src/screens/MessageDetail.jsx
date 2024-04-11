@@ -7,6 +7,7 @@ import { useNavigation } from "@react-navigation/native";
 const MessageDetail = ({ route }) => {
   const navigation = useNavigation();
   const { chatId1, fullname1, img1 } = route.params;
+
   return (
     <View style={styles.container}>
       <TouchableOpacity
@@ -40,7 +41,13 @@ const MessageDetail = ({ route }) => {
         <View style={styles.icon}>
           <TouchableOpacity
             style={{ alignItems: "center" }}
-            onPress={() => navigation.push("ManageMember")}
+            onPress={() =>
+              navigation.push("ManageMember", {
+                chatId: chatId1,
+                fullname: fullname1,
+                img: img1,
+              })
+            }
           >
             <VectorIcon
               name="person-add-alt-1"
