@@ -20,6 +20,7 @@ import { fetchUserInfo } from "../context/ProfileContext";
 import { fetchListFriend } from "../context/FriendContext";
 import UserPost from "../components/UserPost";
 import { getPostofMe, getPostsOfUser } from "../context/PostContext";
+import PrivatePost from "../components/PrivatePost";
 const ProfileScreen = () => {
   const { userInfo } = useContext(AuthContext);
   console.log(userInfo.accessToken);
@@ -119,7 +120,7 @@ const ProfileScreen = () => {
         </View>
       </View>
 
-      <UserPost accessToken={userInfo.accessToken} userId={user.id} />
+      <PrivatePost accessToken={userInfo.accessToken}  />
     </ScrollView>
   );
 };
