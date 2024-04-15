@@ -1,7 +1,7 @@
 import axios from "axios";
 import { BASE_URL } from "../config";
 
-export const fetchNotifications = async (accessToken) => {
+export const fetchNotifications = async (accessToken,formData) => {
   try {
     const response = await axios.get(`${BASE_URL}/notification`, {
       headers: {

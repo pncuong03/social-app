@@ -45,6 +45,7 @@ export const getPostofMe = async (accessToken) => {
     console.error("Error:", error);
   }
 }
+
 export const getPostsOfUser = async (accessToken, userId) => {
   try {
     const response = await axios({
