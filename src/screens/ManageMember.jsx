@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -11,10 +11,26 @@ import {
 import VectorIcon from "../utils/VectorIcon";
 import { useNavigation } from "@react-navigation/native";
 import { Colors } from "../utils/Colors";
+import { fetchUserGroup } from "../context/GroupChatContext";
+import { AuthContext } from "../context/AuthContext";
 
-const ManageMember = () => {
+const ManageMember = ({ route }) => {
+  const { userInfo } = useContext(AuthContext);
   const navigation = useNavigation();
-  const [members, setMembers] = useState(friendRequests);
+  const [members, setMembers] = useState([]);
+  const { chatId, fullname, img } = route.params;
+  useEffect(() => {
+    const getAllGroupChat = async () => {
+      try {
+        const data = await fetchUserGroup(chatId, userInfo.accessToken);
+        // setMembers(data.content);
+        console.log(data);
+      } catch (error) {
+        console.log("getAllGroupChat: ", error);
+      }
+    };
+    getAllGroupChat();
+  }, [chatId]);
 
   const removeMemberFromGroup = (memberId) => {
     const index = members.findIndex((member) => member.id === memberId);
@@ -31,7 +47,15 @@ const ManageMember = () => {
     <ScrollView style={styles.container}>
       <View style={styles.headerChat}>
         <View style={styles.headerUser}>
-          <TouchableOpacity onPress={() => navigation.push("MessageDetail")}>
+          <TouchableOpacity
+            onPress={() =>
+              navigation.push("MessageDetail", {
+                chatId1: chatId,
+                fullname1: fullname,
+                img1: img,
+              })
+            }
+          >
             <VectorIcon
               name="arrowleft"
               type="AntDesign"
@@ -46,7 +70,13 @@ const ManageMember = () => {
         </View>
         <TouchableOpacity
           style={{ marginLeft: 100 }}
-          onPress={() => navigation.push("AddMemberGroup")}
+          onPress={() =>
+            navigation.push("AddMemberGroup", {
+              chatId1: chatId,
+              fullname1: fullname,
+              img1: img,
+            })
+          }
         >
           <Text style={{ fontWeight: 500, fontSize: 15 }}>Add</Text>
         </TouchableOpacity>
@@ -69,7 +99,6 @@ const ManageMember = () => {
                 {member.name}
               </Text>
             </View>
-            {/* Xử lý sự kiện nhấn nút "Minus" */}
             <TouchableOpacity onPress={() => removeMemberFromGroup(member.id)}>
               <VectorIcon
                 name="minus"

@@ -10,11 +10,6 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { MaterialIcons } from "@expo/vector-icons";
 import member from "../assets/images/img1.jpeg";
-import { PostData } from "../data/PostData";
-import PostFooter from "../components/PostFooter";
-import PostHeader from "../components/PostHeader";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import axios from "axios";
 import { AuthContext } from "../context/AuthContext";
 import { fetchUserInfo } from "../context/ProfileContext";
 import { fetchListFriend } from "../context/FriendContext";

@@ -1,9 +1,9 @@
 import axios from "axios";
 import { BASE_URL } from "../config";
-//user/list?page=0&size=20
+
 export const fetchListUser = async (page, accessToken) => {
   try {
-    const response = await axios.get(`${BASE_URL}/user/list?${page}`, {
+    const response = await axios.get(`${BASE_URL}/user/list`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },

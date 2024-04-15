@@ -114,7 +114,7 @@ export const fetchShare = async (postId, accessToken) => {
   try {
     const response = await axios.post(
       `${BASE_URL}/post/share?shareId=${postId}`,
-
+      {},
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
