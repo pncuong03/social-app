@@ -3,12 +3,12 @@ import React, { useContext, useEffect, useState } from "react";
 import { Colors } from "../utils/Colors";
 import PostHeader from "./PostHeader";
 import PostFooter from "./PostFooter";
-import { getPostofMe} from "../context/PostContext";
+import { getPostofMe } from "../context/PostContext";
 import { AuthContext } from "../context/AuthContext";
 import Carousel from "react-native-snap-carousel";
 import Spinner from "react-native-loading-spinner-overlay";
 
-const PrivatePost = ({ accessToken}) => {
+const PrivatePost = ({ accessToken }) => {
     const { userInfo } = useContext(AuthContext);
     const [posts, setPosts] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -40,7 +40,7 @@ const PrivatePost = ({ accessToken}) => {
                 setIsLoading(false);
             }
         };
-            getAllPost();
+        getAllPost();
     }, []);
 
     const ImageSlider = ({ item }) => (
@@ -55,19 +55,21 @@ const PrivatePost = ({ accessToken}) => {
     return (
         <View style={styles.postContainer}>
             <Spinner visible={isLoading} />
-            {posts.map((item) => (
-                <View key={item.id}>
-                    <PostHeader data={item} onClose={() => onClosePost(item.id)} />
-                    <Carousel
-                        data={item.imageUrls}
-                        renderItem={ImageSlider}
-                        sliderWidth={windowWidth}
-                        itemWidth={windowWidth}
-                    />
-
-                    <PostFooter data={item} />
-                </View>
-            ))}
+            {posts.map((item) => {
+                const data = item.sharePost ? item.sharePost : item;
+                return (
+                    <View key={data.id}>
+                        <PostHeader data={data} onClose={() => onClosePost(data.id)} />
+                        <Carousel
+                            data={data.imageUrls}
+                            renderItem={ImageSlider}
+                            sliderWidth={windowWidth}
+                            itemWidth={windowWidth}
+                        />
+                        <PostFooter data={data} />
+                    </View>
+                );
+            })}
         </View>
     );
 };

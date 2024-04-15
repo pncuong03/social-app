@@ -58,19 +58,21 @@ const UserPost = ({ accessToken, userId }) => {
     return (
         <View style={styles.postContainer}>
             <Spinner visible={isLoading} />
-            {posts.map((item) => (
-                <View key={item.id}>
-                    <PostHeader data={item} onClose={() => onClosePost(item.id)} />
-                    <Carousel
-                        data={item.imageUrls}
-                        renderItem={ImageSlider}
-                        sliderWidth={windowWidth}
-                        itemWidth={windowWidth}
-                    />
-
-                    <PostFooter data={item} />
-                </View>
-            ))}
+            {posts.map((item) => {
+                const data = item.sharePost ? item.sharePost : item;
+                return (
+                    <View key={data.id}>
+                        <PostHeader data={data} onClose={() => onClosePost(data.id)} />
+                        <Carousel
+                            data={data.imageUrls}
+                            renderItem={ImageSlider}
+                            sliderWidth={windowWidth}
+                            itemWidth={windowWidth}
+                        />
+                        <PostFooter data={data} />
+                    </View>
+                );
+            })}
         </View>
     );
 };
