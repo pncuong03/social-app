@@ -15,11 +15,30 @@ import ChatHeader from "../components/ChatHeader";
 import { AuthContext } from "../context/AuthContext";
 import TimeComparison from "../utils/Time";
 import { fetchUserChat } from "../context/ChatContext";
+import { fetchUserInfo } from "../context/ProfileContext";
 
-const MessageScreen = ({ route }) => {
+const MessageScreen = () => {
   const navigation = useNavigation();
   const { userInfo } = useContext(AuthContext);
   const [listChat, setListChat] = useState([]);
+  const [image, setImage] = useState(null);
+  const [user, setUser] = useState([]);
+  useEffect(() => {
+    const getUserInfo = async () => {
+      try {
+        const data = await fetchUserInfo(userInfo.accessToken);
+        setImage(data.imageUrl);
+        setUser(data);
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    };
+
+    getUserInfo();
+  }, []);
+  // console.log(user);
+  // // const userId = user.filter((user) => user.id);
+  // // console.log(22222, userId);
   useEffect(() => {
     const getListChat = async () => {
       try {
@@ -46,7 +65,7 @@ const MessageScreen = ({ route }) => {
           </TouchableOpacity>
         </View>
         <View>
-          <ChatHeader />
+          <ChatHeader data={image} />
         </View>
         {listChat.map((message) => (
           <TouchableOpacity
@@ -56,6 +75,7 @@ const MessageScreen = ({ route }) => {
                 chatId: message.id,
                 fullname: message.name,
                 img: message.imageUrl,
+                userId: user.id,
               })
             }
           >

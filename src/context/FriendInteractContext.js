@@ -119,6 +119,10 @@ export const fetchShare = async (postId, accessToken) => {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
+        // data: {
+        //   content: content,
+        //   state: state,
+        // },
       }
     );
 

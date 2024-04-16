@@ -28,12 +28,11 @@ const ChatPrivateScreen = ({ route }) => {
   const navigation = useNavigation();
   const scrollViewRef = useRef();
   const { userInfo } = useContext(AuthContext);
-  const { chatId, fullname, img } = route.params;
+  const { chatId, fullname, img, userId } = route.params;
 
   const [messages, setMessages] = useState([]);
   const [messageText, setMessageText] = useState("");
   const [toggle, setToggle] = useState(false);
-
   const getAllMessage = async () => {
     try {
       const data = await fetchChatMessage(chatId, userInfo.accessToken);
@@ -46,29 +45,11 @@ const ChatPrivateScreen = ({ route }) => {
 
   useEffect(() => {
     getAllMessage();
-  }, [chatId, toggle]);
+  }, [toggle]);
 
-  // useEffect(() => {
-  //   let intervalId;
-
-  //   const fetchData = async () => {
-  //     try {
-  //       const data = await fetchChatMessage(chatId, userInfo.accessToken);
-  //       setMessages(data.content.reverse());
-  //       scrollToBottom();
-  //     } catch (error) {
-  //       console.log("Message chat: ", error);
-  //     }
-  //   };
-
-  //   if (autoUpdate) {
-  //     intervalId = setInterval(fetchData, 5000); // Fetch messages every 5 seconds
-  //   }
-
-  //   return () => {
-  //     clearInterval(intervalId); // Cleanup interval on component unmount
-  //   };
-  // }, [chatId, userInfo.accessToken, autoUpdate]);
+  const handleToggle = () => {
+    setToggle(!toggle);
+  };
 
   const onSendMessage = () => {
     scrollToBottom();
@@ -76,27 +57,36 @@ const ChatPrivateScreen = ({ route }) => {
     handleToggle();
     updateAPI();
   };
-
-  const handleToggle = () => {
-    setToggle(!toggle);
-  };
-
   useEffect(() => {
-    (async () => {
-      const res = await fetchEventNoti(userInfo.accessToken);
-      console.log(res);
-      setMessages([res.messages, ...messages]);
-      // console.log(111111, messages);
-    })();
-  }, [toggle]);
+    const data = async () => {
+      try {
+        const res = await fetchEventNoti(userInfo.accessToken);
+        console.log(res);
+
+        setMessages((prev) => {
+          const test = [
+            ...prev,
+            ...res.messages?.filter((message) => message.chatId === chatId),
+          ];
+          return test;
+        });
+
+        data();
+      } catch (error) {
+        console.error(error);
+        setTimeout(data, 5000);
+      }
+    };
+    data();
+
+    return () => {
+      clearTimeout(data);
+    };
+  }, []);
+
   const updateAPI = async () => {
     if (messageText.trim() !== "") {
       await fetchSendMessage(userInfo.accessToken, chatId, messageText);
-      // console.log(1);
-      // // const updateNew = await fetchEventNoti(userInfo.accessToken);
-      // console.log(1111, res);
-
-      // setMessages((prev) => [updateNewmessages, ...prev]);
     }
   };
 
@@ -124,6 +114,7 @@ const ChatPrivateScreen = ({ route }) => {
                 chatId1: chatId,
                 fullname1: fullname,
                 img1: img,
+                userId1: userId,
               })
             }
             style={{ flexDirection: "row", alignItems: "center" }}
@@ -190,7 +181,12 @@ const ChatPrivateScreen = ({ route }) => {
               )}
               {message && <Text>{message?.message}</Text>}
               {message && (
-                <Text style={{ fontStyle: "italic", fontSize: 12 }}>
+                <Text
+                  style={{
+                    fontStyle: "italic",
+                    fontSize: 12,
+                  }}
+                >
                   <TimeComparison time={message?.createdAt} />
                 </Text>
               )}
@@ -283,6 +279,8 @@ const styles = StyleSheet.create({
   },
   messageRight: {
     justifyContent: "flex-end",
+    marginRight: -30,
+    // paddingRight: -10,
   },
   messageLeft: {
     justifyContent: "flex-start",

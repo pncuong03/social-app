@@ -6,6 +6,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   TextInput,
+  Alert,
 } from "react-native";
 import { Colors } from "../utils/Colors";
 import { useNavigation } from "@react-navigation/native";
@@ -52,6 +53,7 @@ const GroupMessageScreen = () => {
         const userIDs = selectedUsers.map((user) => user.id);
         console.log(userIDs);
         await fetchCreate(groupName, userIDs, userInfo.accessToken);
+        Alert.alert("Success", "Create successful group!");
       } catch (error) {
         console.error("Error creating group:", error);
       }
@@ -76,13 +78,13 @@ const GroupMessageScreen = () => {
 
       <View style={styles.search}>
         <Text style={styles.chatsText}>GroupName: </Text>
-        <TouchableOpacity style={styles.searchView}>
+        <View style={styles.searchView}>
           <TextInput
-            // placeholder="GroupName"
-            value={groupName}
+            placeholder="Name group..."
             onChangeText={(text) => setGroupName(text)}
-          ></TextInput>
-        </TouchableOpacity>
+            value={groupName}
+          />
+        </View>
       </View>
 
       <View>
@@ -147,10 +149,11 @@ const styles = StyleSheet.create({
   searchView: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: Colors.borderGrey,
-    borderRadius: 15,
+    borderRadius: 10,
     padding: 5,
     flex: 1,
+    borderWidth: 1,
+    borderColor: Colors.borderGrey,
   },
   peopleView: {
     alignItems: "center",

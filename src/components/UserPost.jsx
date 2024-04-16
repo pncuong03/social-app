@@ -9,51 +9,55 @@ import Carousel from "react-native-snap-carousel";
 import Spinner from "react-native-loading-spinner-overlay";
 
 const UserPost = ({ accessToken, userId }) => {
-    const { userInfo } = useContext(AuthContext);
-    const [posts, setPosts] = useState([]);
-    const [isLoading, setIsLoading] = useState(false);
-    const windowWidth = Dimensions.get("window").width;
+  const { userInfo } = useContext(AuthContext);
+  const [posts, setPosts] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const windowWidth = Dimensions.get("window").width;
 
-    const onClosePost = (postId) => {
-        const updatedPosts = posts.filter((post) => post.id !== postId);
-        setPosts(updatedPosts);
-    };
-    useEffect(() => {
-        const getAllPost = async () => {
-            setIsLoading(true);
-            try {
-                if (!accessToken || !userId) {
-                    console.error("Invalid accessToken or userId");
-                    return;
-                }
-                const data = await getPostsOfUser(accessToken, userId);
-                if (!data || !data.content) {
-                    console.error("Invalid response from API");
-                    return;
-                }
-                const sortedPosts = data.content.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-                console.log(sortedPosts);
-                setPosts(sortedPosts);
-            } catch (error) {
-                console.error("Error getAllPost:", error);
-            } finally {
-                setIsLoading(false);
-            }
-        };
+  const onClosePost = (postId) => {
+    const updatedPosts = posts.filter((post) => post.id !== postId);
+    setPosts(updatedPosts);
+  };
 
-        if (userId) {
-            getAllPost();
+  console.log("data", posts);
+  useEffect(() => {
+    const getAllPost = async () => {
+      setIsLoading(true);
+      try {
+        if (!accessToken || !userId) {
+          console.error("Invalid accessToken or userId");
+          return;
         }
-    }, [userId]);
+        const data = await getPostsOfUser(accessToken, userId);
+        if (!data || !data.content) {
+          console.error("Invalid response from API");
+          return;
+        }
+        const sortedPosts = data.content.sort(
+          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+        );
+        setPosts(sortedPosts);
+      } catch (error) {
+        console.error("Error getAllPost:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-    const ImageSlider = ({ item }) => (
-        <View style={styles.slide}>
-            <Image
-                source={{ uri: item }}
-                style={[styles.postImg, { width: windowWidth }]}
-            />
-        </View>
-    );
+    if (userId) {
+      getAllPost();
+    }
+  }, [userId]);
+
+  const ImageSlider = ({ item }) => (
+    <View style={styles.slide}>
+      <Image
+        source={{ uri: item }}
+        style={[styles.postImg, { width: windowWidth }]}
+      />
+    </View>
+  );
+
 
     return (
         <View style={styles.postContainer}>
@@ -78,18 +82,18 @@ const UserPost = ({ accessToken, userId }) => {
 };
 
 const styles = StyleSheet.create({
-    postContainer: {
-        backgroundColor: Colors.white,
-        marginTop: 8,
-    },
-    postImg: {
-        height: 500,
-    },
-    slide: {
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-    },
+  postContainer: {
+    backgroundColor: Colors.white,
+    marginTop: 8,
+  },
+  postImg: {
+    height: 500,
+  },
+  slide: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
 });
 
 export default UserPost;

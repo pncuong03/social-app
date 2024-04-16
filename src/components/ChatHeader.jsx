@@ -8,18 +8,17 @@ import {
 } from "react-native";
 import React from "react";
 import { Colors } from "../utils/Colors";
-import Avatar from "../assets/images/avatarChat.png";
 import VectorIcon from "../utils/VectorIcon";
 import { useNavigation } from "@react-navigation/native";
 
-const ChatHeader = () => {
+const ChatHeader = ({ data }) => {
   const navigation = useNavigation();
 
   return (
     <View>
       <View style={style.header}>
         <View style={style.headerleft}>
-          <Image source={Avatar} style={style.imgHeader} />
+          <Image source={{ uri: data }} style={style.imgHeader} />
           <Text style={style.chatsText}>Chats</Text>
         </View>
         <View style={style.headerright}>

@@ -17,14 +17,15 @@ import { AuthContext } from "../context/AuthContext";
 const RegisterScreen = ({ navigation }) => {
   const [username, setUsername] = useState(null);
   const [password, setPassword] = useState(null);
+  const [fullName, setFullName] = useState(null);
 
   const { isLoading, register } = useContext(AuthContext);
 
   const onRegister = () => {
-    if (!username || !password) {
+    if (!username || !password || !fullName) {
       Alert.alert("Thông báo", "Vui lòng nhập đầy đủ tài khoản và mật khẩu");
     } else {
-      register(username, password);
+      register(username, password, fullName);
     }
   };
   return (
@@ -39,12 +40,12 @@ const RegisterScreen = ({ navigation }) => {
       /> */}
       <View style={styles.subContainer}>
         <Image source={Logo} style={styles.logoStyle} />
-        {/* <TextInput
+        <TextInput
           placeholder="Full Name"
-          value={fullname}
-          onChangeText={(value) => setFullname(value)}
+          value={fullName}
+          onChangeText={(value) => setFullName(value)}
           style={styles.inputBox}
-        /> */}
+        />
         <TextInput
           placeholder="Username"
           value={username}

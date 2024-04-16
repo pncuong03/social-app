@@ -60,13 +60,31 @@ export const fetchAdd = async (groupChatId, userIds, accessToken) => {
   }
 };
 
-export const fetchLeave = async (groupId, accessToken) => {
+// export const fetchLeave = async (groupChatId, userId) => {
+//   try {
+//     const response = await axios.delete(`${BASE_URL}/group-chat/leave-group`, {
+//       data: {
+//         groupChatId: groupChatId,
+//         userId: userId,
+//       },
+//     });
+//     return response.data;
+//   } catch (error) {
+//     console.error(error);
+//     throw error;
+//   }
+// };
+
+export const fetchLeave = async (groupChatId, userId) => {
   try {
     const response = await axios.delete(
-      `${BASE_URL}/group-chat?groupId=${groupId}`,
+      `${BASE_URL}/group-chat/leave-group`,
+      {
+        data: { groupChatId, userId },
+      },
       {
         headers: {
-          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "application/json",
         },
       }
     );
@@ -76,14 +94,17 @@ export const fetchLeave = async (groupId, accessToken) => {
     throw error;
   }
 };
-
-export const fetchDelete = async (groupId, accessToken) => {
+export const fetchDelete = async (groupChatId, userId, accessToken) => {
   try {
     const response = await axios.delete(
-      `${BASE_URL}/group-chat?groupId=${groupId}`,
+      `${BASE_URL}/group-chat/delete-member`,
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
+        },
+        data: {
+          groupChatId: groupChatId,
+          userId: userId,
         },
       }
     );

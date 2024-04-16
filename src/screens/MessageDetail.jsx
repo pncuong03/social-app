@@ -3,11 +3,21 @@ import React from "react";
 import VectorIcon from "../utils/VectorIcon";
 import { Colors } from "../utils/Colors";
 import { useNavigation } from "@react-navigation/native";
+import { fetchLeave } from "../context/GroupChatContext";
 
 const MessageDetail = ({ route }) => {
   const navigation = useNavigation();
-  const { chatId1, fullname1, img1 } = route.params;
-
+  const { chatId1, fullname1, img1, userId1 } = route.params;
+  const onLeave = async () => {
+    try {
+      console.log(1111, chatId1, "-----", userId1);
+      const res = await fetchLeave(29, 1);
+      console.log(res);
+      Alert.alert("Success", "Member leaved to group successfully!");
+    } catch (error) {
+      Alert.alert("Fail", "Members have been leaved to the group!");
+    }
+  };
   return (
     <View style={styles.container}>
       <TouchableOpacity
@@ -84,6 +94,9 @@ const MessageDetail = ({ route }) => {
         </TouchableOpacity>
         <TouchableOpacity onPress={() => navigation.push("ManageMember")}>
           <Text style={{ fontSize: 15, fontWeight: 400 }}>View members</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={onLeave}>
+          <Text style={{ fontSize: 15, fontWeight: 400 }}>Leave group</Text>
         </TouchableOpacity>
       </View>
 

@@ -19,7 +19,7 @@ const Post = () => {
     setPosts(updatedPosts);
   };
 
-  const fetchNewPosts = useCallback(async () => {
+  const fetchNewPosts = async () => {
     setIsLoading(true);
     try {
       const data = await fetchPostPublic(userInfo.accessToken);
@@ -32,11 +32,11 @@ const Post = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [userInfo.accessToken]);
+  };
 
   useEffect(() => {
     fetchNewPosts();
-  }, [fetchNewPosts]);
+  }, []);
 
   const ImageSlider = ({ item }) => (
     <View style={styles.slide}>
