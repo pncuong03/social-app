@@ -4,30 +4,13 @@ import FacebookLogo from "../assets/images/fblogo.png";
 import VectorIcon from "../utils/VectorIcon";
 import { Colors } from "../utils/Colors";
 import { useNavigation } from "@react-navigation/native";
-import { fetchEventMessage } from "../context/NotificationContext";
-import { AuthContext } from "../context/AuthContext";
 
-const Header = () => {
+const Header = ({ data }) => {
   const navigation = useNavigation();
-  const { userInfo } = useContext(AuthContext);
-  const [messageCount, setMessageCount] = useState(1);
-  // const fetchMessageCount = async () => {
-  //   try {
-  //     const data = await fetchEventMessage(userInfo.accessToken);
-  //     setMessageCount(data.messageCount);
-  //   } catch (error) {
-  //     console.error("Error fetching message count:", error);
-  //   }
-  // };
-  // useEffect(() => {
-  //   fetchMessageCount();
-  // }, []);
 
   const handleLogoPress = useCallback(() => {
     navigation.navigate("Home");
-    setMessageCount(0);
   }, [navigation]);
-
   return (
     <View style={styles.container}>
       <TouchableOpacity onPress={handleLogoPress}>
@@ -47,9 +30,11 @@ const Header = () => {
                 size={22}
                 color={Colors.grey}
               />
-              {messageCount > 0 && (
+              {data.messageCount > 0 && (
                 <View style={styles.messageCountContainer}>
-                  <Text style={styles.messageCountText}>{messageCount}</Text>
+                  <Text style={styles.messageCountText}>
+                    {data.messageCount}
+                  </Text>
                 </View>
               )}
             </View>

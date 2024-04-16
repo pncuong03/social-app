@@ -23,15 +23,14 @@ const ManageMember = ({ route }) => {
     const getAllGroupChat = async () => {
       try {
         const data = await fetchUserGroup(chatId, userInfo.accessToken);
-        // setMembers(data.content);
-        console.log(data);
+        setMembers(data);
       } catch (error) {
         console.log("getAllGroupChat: ", error);
       }
     };
     getAllGroupChat();
   }, [chatId]);
-
+  // console.log(members);
   const removeMemberFromGroup = (memberId) => {
     const index = members.findIndex((member) => member.id === memberId);
     if (index !== -1) {
@@ -93,10 +92,10 @@ const ManageMember = ({ route }) => {
                   marginRight: 10,
                   borderRadius: 10,
                 }}
-                source={member.image}
+                source={{ uri: member?.imageUrl }}
               />
               <Text style={{ fontWeight: 500, fontSize: 20 }}>
-                {member.name}
+                {member?.fullName}
               </Text>
             </View>
             <TouchableOpacity onPress={() => removeMemberFromGroup(member.id)}>

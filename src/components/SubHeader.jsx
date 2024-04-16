@@ -5,6 +5,7 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
+  LogBox,
 } from "react-native";
 import React, { useState, useEffect, useContext } from "react";
 import Profile from "../assets/images/img1.jpeg";
@@ -15,26 +16,12 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { AuthContext } from "../context/AuthContext";
 import { fetchUserInfo } from "../context/ProfileContext";
 
-const SubHeader = () => {
+const SubHeader = ({ data }) => {
   const navigation = useNavigation();
-  const { userInfo } = useContext(AuthContext);
-  const [image, setImage] = useState(null);
-  useEffect(() => {
-    const getUserInfo = async () => {
-      try {
-        const data = await fetchUserInfo(userInfo.accessToken);
-        setImage(data.imageUrl);
-      } catch (error) {
-        console.error("Error:", error);
-      }
-    };
-
-    getUserInfo();
-  }, []);
   return (
     <View style={styles.container}>
       <TouchableOpacity onPress={() => navigation.push("ProfileScreen")}>
-        <Image source={{ uri: image }} style={styles.profileStyle} />
+        <Image source={{ uri: data }} style={styles.profileStyle} />
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.inputBox}

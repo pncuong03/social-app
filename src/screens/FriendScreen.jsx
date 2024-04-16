@@ -7,9 +7,9 @@ import {
   TouchableOpacity,
   ScrollView,
   TextInput,
+  Alert,
 } from "react-native";
 import { Colors } from "../utils/Colors";
-import VectorIcon from "../utils/VectorIcon";
 import { AuthContext } from "../context/AuthContext";
 import {
   fetchAcceptFriend,
@@ -21,7 +21,6 @@ const FriendScreen = () => {
   const { userInfo } = useContext(AuthContext);
   const [requests, setRequests] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [isSearch, setIsSearch] = useState(false);
   const [filteredRequests, setFilteredRequests] = useState([]);
 
   useEffect(() => {
@@ -39,22 +38,6 @@ const FriendScreen = () => {
     };
     fetchData();
   }, []);
-
-  const toggleSearch = () => {
-    setIsSearch(!isSearch);
-    if (!isSearch) {
-      setSearchTerm("");
-      setFilteredRequests(requests);
-    }
-  };
-
-  const onSearch = (text) => {
-    setSearchTerm(text);
-    const filtered = requests.filter((request) =>
-      request.fullName.toLowerCase().includes(text.toLowerCase())
-    );
-    setFilteredRequests(filtered);
-  };
 
   const onConfirm = async (id) => {
     try {
@@ -77,21 +60,6 @@ const FriendScreen = () => {
       console.error("Error confirming friend:", error);
     }
   };
-  // console.log(11111111, onDelete(ids));
-  // const toggleSearch = () => {
-  //   setIsSearch(!isSearch);
-  // };
-
-  // const onSearch = (text) => {
-  //   setSearchTerm(text);
-  //   const filtered = requests.filter((request) =>
-  //     request.fullName.toLowerCase().includes(text.toLowerCase())
-  //   );
-  //   setFilteredRequests(filtered);
-  // };
-
-  // const ids = requests.map((request) => request.id);
-  // console.log(ids);
   return (
     <ScrollView style={styles.container}>
       <View style={styles.subNav}>
@@ -104,14 +72,14 @@ const FriendScreen = () => {
             color={Colors.black}
           />
         </TouchableOpacity> */}
-        {isSearch && (
+        {/* {isSearch && (
           <TextInput
             style={{ fontSize: 17 }}
             placeholder="Search..."
             onChangeText={onSearch}
             value={searchTerm}
           />
-        )}
+        )} */}
       </View>
       <View style={styles.headerFriend}>
         <Text
@@ -129,7 +97,7 @@ const FriendScreen = () => {
       </View>
       {filteredRequests.map((request) => (
         <View key={request.id} style={styles.friendView}>
-          <Image style={styles.avatar} source={{uri:request.image}} />
+          <Image style={styles.avatar} source={{ uri: request.image }} />
           <View style={styles.headerBox}>
             <View
               style={{ flexDirection: "row", justifyContent: "space-between" }}

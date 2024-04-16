@@ -12,7 +12,7 @@ import {
 import VectorIcon from "../utils/VectorIcon";
 import { useNavigation } from "@react-navigation/native";
 import { Colors } from "../utils/Colors";
-import { fetchAdd } from "../context/GroupChatContext";
+import { fetchAdd, fetchDelete } from "../context/GroupChatContext";
 import { AuthContext } from "../context/AuthContext";
 import { fetchListFriend } from "../context/FriendContext";
 
@@ -38,12 +38,21 @@ const AddMemberGroup = ({ route }) => {
     fetchUser();
   }, []);
 
+  const deleteMember = async (userId) => {
+    try {
+      await fetchDelete(chatId1, userId, userInfo.accessToken);
+      Alert.alert("Success", "Member deleted from group successfully!");
+    } catch (error) {
+      Alert.alert("Fail", "Members have been deleted from the group!");
+    }
+  };
+
   const addMember = async (userId) => {
     try {
       await fetchAdd(chatId1, [userId], userInfo.accessToken);
       Alert.alert("Success", "Member added to group successfully!");
     } catch (error) {
-      Alert.alert("Error", "Failed to add member to group.");
+      Alert.alert("Fail", "Members have been added to the group!");
     }
   };
   // const addMemberToGroup = (memberId) => {
@@ -58,6 +67,7 @@ const AddMemberGroup = ({ route }) => {
   //     Alert.alert("Success", "Member added to group successfully!");
   //   }
   // };
+
   const onSearch = (text) => {
     setSearchValue(text);
     if (text.trim() === "") {
@@ -136,6 +146,14 @@ const AddMemberGroup = ({ route }) => {
             <TouchableOpacity onPress={() => addMember(friend.id)}>
               <VectorIcon
                 name="plus"
+                type="AntDesign"
+                size={24}
+                color={Colors.primaryColor}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => deleteMember(friend.id)}>
+              <VectorIcon
+                name="minus"
                 type="AntDesign"
                 size={24}
                 color={Colors.primaryColor}

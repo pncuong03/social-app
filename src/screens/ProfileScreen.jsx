@@ -17,14 +17,14 @@ import UserPost from "../components/UserPost";
 import { getPostofMe, getPostsOfUser } from "../context/PostContext";
 const ProfileScreen = () => {
   const { userInfo } = useContext(AuthContext);
-  console.log(userInfo.accessToken);
   const navigation = useNavigation();
   const [user, setUser] = useState({
     id: null,
     fullName: "",
     imageUrl: "",
     description: "",
-    backgroundImage:"https://plainbackground.com/download.php?imagename=39569c.png",
+    backgroundImage:
+      "https://plainbackground.com/download.php?imagename=39569c.png",
   });
   const [posts, setPosts] = useState([]);
   const [friends, setFriends] = useState([]);
@@ -33,7 +33,6 @@ const ProfileScreen = () => {
     const fetchFriends = async () => {
       try {
         const friendsData = await fetchListFriend(userInfo.accessToken);
-        console.log(friendsData.content);
         setFriends(friendsData.content);
       } catch (error) {
         console.error("Error:", error);
@@ -54,7 +53,6 @@ const ProfileScreen = () => {
           imageUrl: userData.imageUrl,
           description: userData.description,
           backgroundImage: userData.backgroundUrl,
-          
         });
         const postData = await getPostofMe(userInfo.accessToken);
         setPosts(postData.content);
@@ -67,11 +65,13 @@ const ProfileScreen = () => {
 
     fetchData();
   }, []);
-  console.log(user);
   return (
     <ScrollView style={styles.container}>
       <View>
-        <Image source={{uri:user.backgroundImage}} style={styles.backgroundImage} />
+        <Image
+          source={{ uri: user.backgroundImage }}
+          style={styles.backgroundImage}
+        />
         <TouchableOpacity
           onPress={() => navigation.push("MainScreen")}
           style={styles.backButton}
@@ -84,13 +84,14 @@ const ProfileScreen = () => {
       <View style={styles.profileInfoContainer}>
         <Image source={{ uri: user.imageUrl }} style={styles.profileImage} />
         <Text style={styles.profileName}>{user.fullName}</Text>
-        {user.description && user.description.split("\\n").map((item, key) => {
-          return (
-            <Text key={key} style={styles.profileDescription}>
-              {item}
-            </Text>
-          );
-        })}
+        {user.description &&
+          user.description.split("\\n").map((item, key) => {
+            return (
+              <Text key={key} style={styles.profileDescription}>
+                {item}
+              </Text>
+            );
+          })}
         <TouchableOpacity
           onPress={() => navigation.push("EditProfile")}
           style={styles.editProfileButton}
@@ -122,7 +123,7 @@ const ProfileScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F0F2F5", 
+    backgroundColor: "#F0F2F5",
   },
   backgroundImage: {
     height: 180,
@@ -131,7 +132,7 @@ const styles = StyleSheet.create({
   backButton: {
     zIndex: 99,
     position: "absolute",
-    left: 10, 
+    left: 10,
     top: 10,
   },
   profileText: {
@@ -142,22 +143,22 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     textAlign: "center",
-    color: "#4267B2", 
+    color: "#4267B2",
   },
   profileInfoContainer: {
     flex: 1,
     alignItems: "center",
-    backgroundColor: "white", 
+    backgroundColor: "white",
     margin: 10,
     padding: 10,
-    borderRadius: 10, 
+    borderRadius: 10,
   },
   profileImage: {
     height: 170,
     width: 170,
-    borderRadius: 85, 
+    borderRadius: 85,
     borderWidth: 2,
-    borderColor: "#4267B2", 
+    borderColor: "#4267B2",
     overflow: "hidden",
     marginTop: -90,
   },
@@ -174,7 +175,7 @@ const styles = StyleSheet.create({
     marginVertical: 4,
   },
   editProfileButton: {
-    backgroundColor: "#4267B2", 
+    backgroundColor: "#4267B2",
     height: 40,
     borderRadius: 6,
     alignItems: "center",
@@ -199,7 +200,7 @@ const styles = StyleSheet.create({
   },
   profileStatsLabel: {
     fontSize: 16,
-    color: "#4267B2", 
+    color: "#4267B2",
   },
   profileStatsValue: {
     fontSize: 20,
@@ -215,7 +216,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     borderWidth: 1,
     borderColor: "#ccc",
-    borderRadius: 10, 
+    borderRadius: 10,
   },
   postImg: {
     width: "100%",

@@ -52,7 +52,7 @@ const PostFooter = ({ data }) => {
     try {
       await fetchShare(postId, userInfo.accessToken);
       setIsShared(false);
-      setShareCount((prevCount) => prevCount - 1);
+      setShareCount((prevCount) => prevCount + 1);
     } catch (error) {
       console.error("Error like post:", error);
     }

@@ -30,7 +30,7 @@ const CommentDetail = ({ route }) => {
   const windowWidth = Dimensions.get("window").width;
   const [commentText, setCommentText] = useState("");
   const [listComment, setListComment] = useState([]);
-  const [commentCount, setCommentCount] = useState([]);
+  // const [commentCount, setCommentCount] = useState([]);
 
   useEffect(() => {
     const getPostDetail = async (postId) => {
@@ -122,7 +122,7 @@ const CommentDetail = ({ route }) => {
         <View>
           {listComment.map((data, index) => (
             <View
-              key={index.id}
+              key={index}
               style={{
                 flexDirection: "row",
                 alignItems: "center",

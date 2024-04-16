@@ -9,16 +9,16 @@ import {
   Button,
   Platform,
   KeyboardAvoidingView,
-  Dimensions
+  Dimensions,
 } from "react-native";
 import React, { useState, useEffect, useContext } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import * as ImagePicker from "expo-image-picker";
-import * as FileSystem from 'expo-file-system';
-import axios from 'axios';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as FileSystem from "expo-file-system";
+import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AuthContext } from "../context/AuthContext";
 import { fetchUserInfo } from "../context/ProfileContext";
 import { upDateUserInfo } from "../context/ProfileContext";
@@ -26,7 +26,9 @@ export default function EditProfile() {
   const { userInfo } = useContext(AuthContext);
   const navigation = useNavigation();
   const [selectedImage, setSelectedImage] = useState(null);
-  const [backgroundImage, setBackgroundImage] = useState("https://plainbackground.com/download.php?imagename=39569c.png");
+  const [backgroundImage, setBackgroundImage] = useState(
+    "https://plainbackground.com/download.php?imagename=39569c.png"
+  );
   const [fullName, setFullName] = useState("");
   const [description, setDescription] = useState("");
   const [email, setEmail] = useState("");
@@ -36,7 +38,6 @@ export default function EditProfile() {
     const getUserInfo = async () => {
       try {
         const data = await fetchUserInfo(userInfo.accessToken);
-        // console.log(data);
         setSelectedImage(data.imageUrl);
       } catch (error) {
         console.error("Error:", error);
@@ -54,22 +55,18 @@ export default function EditProfile() {
       quality: 1,
     });
 
-
-
     if (!result.canceled) {
       setSelectedImage(result.assets[0].uri);
     }
   };
   const handleImageSelection1 = async () => {
-    const { width, height } = Dimensions.get('window');
+    const { width, height } = Dimensions.get("window");
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
       aspect: [60, 80],
       quality: 1,
     });
-
-
 
     if (!result.canceled) {
       setBackgroundImage(result.assets[0].uri);
@@ -83,34 +80,36 @@ export default function EditProfile() {
       description: description,
     };
 
-
-
-
     let formData = new FormData();
-    formData.append('new_user_info', JSON.stringify(changeInfoUserRequest));
-
+    formData.append("new_user_info", JSON.stringify(changeInfoUserRequest));
 
     // Append the blob object as a file to the form data
-    let file = { uri: selectedImage, type: `image/${selectedImage.split('.').pop()}`, name: `image.${selectedImage.split('.').pop()}` };
-    let file1 = { uri: backgroundImage, type: `image/${backgroundImage.split('.').pop()}`, name: `image.${backgroundImage.split('.').pop()}` };
-    formData.append('image', file);
-    formData.append('image_background', file1);
-
+    let file = {
+      uri: selectedImage,
+      type: `image/${selectedImage.split(".").pop()}`,
+      name: `image.${selectedImage.split(".").pop()}`,
+    };
+    let file1 = {
+      uri: backgroundImage,
+      type: `image/${backgroundImage.split(".").pop()}`,
+      name: `image.${backgroundImage.split(".").pop()}`,
+    };
+    formData.append("image", file);
+    formData.append("image_background", file1);
 
     try {
       const response = await upDateUserInfo(userInfo.accessToken, formData);
       if (response.status === 200) {
-        Alert.alert('Success', 'Profile updated successfully');
+        Alert.alert("Success", "Profile updated successfully");
       } else {
-        Alert.alert('Error', 'Failed to update profile');
+        Alert.alert("Error", "Failed to update profile");
       }
     } catch (error) {
-      Alert.alert('Error', error.message);
+      Alert.alert("Error", error.message);
     }
   };
 
   return (
-
     <SafeAreaView
       style={{
         flex: 1,
@@ -122,19 +121,19 @@ export default function EditProfile() {
           width: "100%",
         }}
       >
-      <TouchableOpacity onPress={handleImageSelection1}>
-        <Image
-           source={
-            typeof backgroundImage === "string"
-              ? { uri: backgroundImage }
-              : backgroundImage
-          }
-          style={{
-            height: 228,
-            width: "100%",
-          }}
-        />
-         </TouchableOpacity>
+        <TouchableOpacity onPress={handleImageSelection1}>
+          <Image
+            source={
+              typeof backgroundImage === "string"
+                ? { uri: backgroundImage }
+                : backgroundImage
+            }
+            style={{
+              height: 228,
+              width: "100%",
+            }}
+          />
+        </TouchableOpacity>
 
         <TouchableOpacity
           onPress={() => navigation.push("ProfileScreen")}
