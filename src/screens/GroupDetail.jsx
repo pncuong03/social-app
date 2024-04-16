@@ -1,20 +1,59 @@
-import React from 'react';
+import React, { useState, useEffect, useContext, useRef } from "react";
 import {
     View,
     Text,
     Image,
     TouchableOpacity,
     ScrollView,
+    StyleSheet
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { MaterialIcons } from "@expo/vector-icons";
+import { Colors } from "../utils/Colors";
 import GroupData from '../data/GroupData';
-import { useNavigation } from "@react-navigation/native";
-import Post from "../components/Post";
+import { useNavigation, useFocusEffect } from "@react-navigation/native";
+import { getGroupLists } from "../context/GroupContext";
+import backGroundImg from "../assets/images/facebook-group-default-cover-photo.jpg";
+import { fetchUserInfo } from "../context/ProfileContext";
+import { AuthContext } from "../context/AuthContext";
+
 export default function GroupDetail({ route }) {
     const navigation = useNavigation();
+    const { userInfo } = useContext(AuthContext);
     const { groupId } = route.params;
-    const group = GroupData.find((g) => g.id === groupId);
+    console.log(groupId);
+    const [groupData, setGroupData] = useState([]);
+    const [image, setImage] = useState(null);
+    useEffect(() => {
+        const getGroup = async () => {
+            try {
+                const data = await getGroupLists();
+                console.log(data.content);
+                setGroupData(data.content);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+        const getUserInfo = async () => {
+            try {
+                const data = await fetchUserInfo(userInfo.accessToken);
+                setImage(data.imageUrl);
+            } catch (error) {
+                console.error("Error:", error);
+            }
+        };
+
+        getUserInfo();
+        getGroup();
+    }, []);
+
+    console.log(groupData);
+    const group = groupData.find((g) => g.idGroup === groupId);
+    console.log(group);
+
+    if (!group) {
+        return null;
+    }
     const handlePress = (groupId) => {
         navigation.navigate('NewPostInGroup', { groupId });
     };
@@ -25,78 +64,52 @@ export default function GroupDetail({ route }) {
         <SafeAreaView
             style={{
                 flex: 1,
-                backgroundColor: "white",
+                backgroundColor: "#f0f2f5",
             }}
         >
             <View>
-                <Image
-                    source={{
-                        uri: "https://plainbackground.com/download.php?imagename=39569c.png",
-                    }}
-                    style={{
-                        height: 180,
-                        width: "100%",
-                    }}
-                />
                 <TouchableOpacity
                     onPress={() => navigation.goBack()}
                     style={{
                         zIndex: 99,
                         position: "absolute",
-                        left: 0,
+                        left: 20,
                         top: 10,
                     }}
                 >
-                    <MaterialIcons name="keyboard-arrow-left" size={35} color={"black"} />
+                    <MaterialIcons name="keyboard-arrow-left" size={35} color={"white"} />
                 </TouchableOpacity>
-                <Text
-                    style={{
-                        fontSize: 30,
-                        fontWeight: "500",
-                        position: "absolute",
-                        top: 10,
-                        left: 0,
-                        right: 0,
-                        textAlign: "center",
-                    }}
-                >
-                    Group
-                </Text>
-            </View>
-
-            <View style={{ flex: 1, alignItems: "center" }}>
                 <Image
-                    source={group.image}
-                    resizeMode="contain"
+                    source={backGroundImg}
                     style={{
-                        height: 170,
-                        width: 170,
-                        borderRadius: 20,
-                        borderWidth: 2,
-                        borderColor: "#242760",
-                        overflow: "hidden",
-                        marginTop: -90,
+                        height: 150,
+                        width: "100%",
                     }}
                 />
+            </View>
+
+            <View style={{ flex: 1, alignItems: "center", paddingTop: 20 }}>
                 <Text
                     style={{
-                        fontSize: 18,
-                        lineHeight: 22,
+                        fontSize: 24,
+                        lineHeight: 28,
                         color: "black",
-                        marginVertical: 8,
+                        fontWeight: "bold",
+                        marginBottom: 10,
                     }}
                 >
                     {group.name}
                 </Text>
                 <TouchableOpacity
-                    onPress={() => handlePress(group.id)}
+                    onPress={() => handlePress(group.idGroup)}
                     style={{
-                        backgroundColor: "black",
+                        backgroundColor: "#1877f2",
                         height: 40,
                         borderRadius: 6,
                         alignItems: "center",
                         justifyContent: "center",
                         width: 250,
+                        marginBottom: 20,
                     }}
                 >
                     <Text
@@ -105,16 +118,19 @@ export default function GroupDetail({ route }) {
                             fontSize: 16,
                         }}
                     >
-                        Create new Post
+                        Edit Group
                     </Text>
                 </TouchableOpacity>
                 <View
                     style={{
-                        paddingVertical: 8,
                         flexDirection: "row",
                         display: "flex",
                         justifyContent: "space-around",
                         width: "100%",
+                        marginBottom: 20,
+                        borderBottomWidth: 1, 
+                        borderBottomColor: '#000', 
+                        paddingBottom: 20, 
                     }}
                 >
                     <View
@@ -128,6 +144,7 @@ export default function GroupDetail({ route }) {
                             style={{
                                 fontSize: 16,
                                 color: "#242760",
+                                fontWeight: "bold",
                             }}
                         >
                             Posts
@@ -136,12 +153,13 @@ export default function GroupDetail({ route }) {
                             style={{
                                 fontSize: 20,
                                 color: "#242760",
+                                fontWeight: "bold",
                             }}
                         >
                             0
                         </Text>
                     </View>
-                    <TouchableOpacity onPress={() => checkMember(group.id)}
+                    <TouchableOpacity onPress={() => checkMember(group.idGroup)}
                         style={{
                             flexDirection: "column",
                             alignItems: "center",
@@ -152,24 +170,77 @@ export default function GroupDetail({ route }) {
                             style={{
                                 fontSize: 16,
                                 color: "#242760",
+                                fontWeight: "bold",
                             }}
                         >
-                            Member
+                            Members
                         </Text>
                         <Text
                             style={{
                                 fontSize: 20,
                                 color: "#242760",
+                                fontWeight: "bold",
                             }}
                         >
-                            {group.members.length}
+                            {group.memberCount}
                         </Text>
                     </TouchableOpacity>
                 </View>
-                <ScrollView style={{ width: "100%" }}>
-                    <Post />
-                </ScrollView>
+                <View style={styles.container}>
+                    <TouchableOpacity onPress={() => navigation.push("ProfileScreen")}>
+                        <Image source={{ uri: image }} style={styles.profileStyle} />
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={styles.inputBox}
+                        onPress={() => navigation.push("NewPost")}
+                    >
+                        <View>
+                            <Text style={styles.inputStyle}>Write something here...</Text>
+                            <Text style={styles.inputStyle}>Seven...</Text>
+                        </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={{ marginLeft: 40 }}
+                        onPress={() => navigation.push("NewPost")}
+                    >
+                        <MaterialIcons name="perm-media" size={24} color="black" />
+                    </TouchableOpacity>
+                </View>
             </View>
         </SafeAreaView>
     );
 }
+const styles = StyleSheet.create({
+    container: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
+    },
+    searchBg: {
+        // backgroundColor: Colors.lightgrey,
+        height: 35,
+        width: 35,
+        borderRadius: 50,
+        justifyContent: "center",
+        alignItems: "center",
+        marginLeft: 10,
+    },
+    profileStyle: {
+        height: 40,
+        width: 40,
+        marginRight:40,
+        borderRadius: 50,
+    },
+    inputBox: {
+        borderWidth: 1,
+        borderColor: Colors.borderGrey,
+        borderRadius: 30,
+        paddingHorizontal: 20,
+        width: "70%",
+        paddingVertical: 3,
+    },
+    inputStyle: {
+        fontSize: 16,
+        color: Colors.grey,
+    },
+});

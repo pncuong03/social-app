@@ -1,25 +1,42 @@
-import React from 'react';
-import { View, Text, Image, TouchableOpacity, Pressable } from 'react-native';
-import GroupData from '../data/GroupData';
+import React, { useState, useEffect } from 'react';
+import { View, Text, Image, TouchableOpacity } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import { useNavigation } from '@react-navigation/native';
+import { MaterialIcons } from "@expo/vector-icons";
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { getGroupLists } from '../context/GroupContext';
 
 export default function GroupListsScreen() {
     const navigation = useNavigation();
+    const [groupData, setGroupData] = useState([]);
+    useFocusEffect(
+        React.useCallback(() => {
+            const getGroup = async () => {
+                try {
+                    const data = await getGroupLists();
+                    console.log(data.content);
+                    setGroupData(data.content);
+                } catch (error) {
+                    console.error(error);
+                }
+            };
+
+            getGroup();
+        }, [])
+    );
     const handlePress = (groupId) => {
         navigation.navigate('GroupDetail', { groupId });
     };
     return (
         <ScrollView>
-            {GroupData.map((group) => (
+            {groupData.map((group) => (
                 <TouchableOpacity
-                    onPress={() => handlePress(group.id)}
-                    key={group.id}
+                    onPress={() => handlePress(group.idGroup)}
+                    key={group.idGroup}
                     style={{ flexDirection: 'row', padding: 10, alignItems: 'center' }}>
-                    <Image source={group.image} style={{ width: 50, height: 50, borderRadius: 50 }} />
+                    <MaterialIcons name={'group'} style={{ color: 'blue', fontSize: 24 }} />
                     <View style={{ display: 'flex', flexDirection: 'column' }}>
                         <Text style={{ fontSize: 20, fontWeight: 'bold', marginLeft: 10 }}>{group.name}</Text>
-                        <Text style={{ fontSize: 20, fontWeight: 'bold', marginLeft: 10 }}>Member:{group.members.length}</Text>
+                        <Text style={{ fontSize: 20, fontWeight: 'bold', marginLeft: 10 }}>Member:{group.memberCount}</Text>
                     </View>
                 </TouchableOpacity>
             ))}
