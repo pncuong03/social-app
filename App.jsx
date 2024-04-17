@@ -28,6 +28,7 @@ import CommentDetail from "./src/components/CommentDetail";
 import { Colors } from "./src/utils/Colors";
 import FriendList from "./src/screens/FriendList";
 import FriendProfile from "./src/screens/FriendProfile";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Stack = createStackNavigator();
 
