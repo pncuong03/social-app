@@ -1,20 +1,8 @@
-import {
-  View,
-  TextInput,
-  Image,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  LogBox,
-} from "react-native";
-import React, { useState, useEffect, useContext } from "react";
-import Profile from "../assets/images/img1.jpeg";
+import { View, Image, StyleSheet, Text, TouchableOpacity } from "react-native";
+import React from "react";
 import { Colors } from "../utils/Colors";
 import { useNavigation } from "@react-navigation/native";
-import VectorIcon from "../utils/VectorIcon";
 import { MaterialIcons } from "@expo/vector-icons";
-import { AuthContext } from "../context/AuthContext";
-import { fetchUserInfo } from "../context/ProfileContext";
 
 const SubHeader = ({ data }) => {
   const navigation = useNavigation();
@@ -38,14 +26,6 @@ const SubHeader = ({ data }) => {
       >
         <MaterialIcons name="perm-media" size={24} color="black" />
       </TouchableOpacity>
-      {/* <View style={styles.searchBg}>
-        <VectorIcon
-          name="search"
-          type="FontAwesome5"
-          size={19}
-          color={Colors.grey}
-        />
-      </View> */}
     </View>
   );
 };

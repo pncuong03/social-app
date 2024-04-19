@@ -36,9 +36,7 @@ const MessageScreen = () => {
 
     getUserInfo();
   }, []);
-  // console.log(user);
-  // // const userId = user.filter((user) => user.id);
-  // // console.log(22222, userId);
+
   useEffect(() => {
     const getListChat = async () => {
       try {

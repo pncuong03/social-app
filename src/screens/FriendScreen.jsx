@@ -20,7 +20,6 @@ import {
 const FriendScreen = () => {
   const { userInfo } = useContext(AuthContext);
   const [requests, setRequests] = useState([]);
-  const [searchTerm, setSearchTerm] = useState("");
   const [filteredRequests, setFilteredRequests] = useState([]);
 
   useEffect(() => {
@@ -64,22 +63,6 @@ const FriendScreen = () => {
     <ScrollView style={styles.container}>
       <View style={styles.subNav}>
         <Text style={{ fontWeight: "bold", fontSize: 30 }}>Friends</Text>
-        {/* <TouchableOpacity onPress={toggleSearch}>
-          <VectorIcon
-            name="search1"
-            type="AntDesign"
-            size={24}
-            color={Colors.black}
-          />
-        </TouchableOpacity> */}
-        {/* {isSearch && (
-          <TextInput
-            style={{ fontSize: 17 }}
-            placeholder="Search..."
-            onChangeText={onSearch}
-            value={searchTerm}
-          />
-        )} */}
       </View>
       <View style={styles.headerFriend}>
         <Text

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import Header from "../components/Header";
 import TopTabbar from "../navigation/TopTabbar";
-import { fetchEventNoti } from "../context/NotificationContext";
+import { fetchEvent } from "../context/NotificationContext";
 import { AuthContext } from "../context/AuthContext";
 
 const MainScreen = () => {
@@ -11,20 +11,16 @@ const MainScreen = () => {
   useEffect(() => {
     const data = async () => {
       try {
-        const res = await fetchEventNoti(userInfo.accessToken);
+        const res = await fetchEvent(userInfo.accessToken);
         setEvent(res);
         data();
       } catch (error) {
         console.error(error);
-        setTimeout(data, 5000);
       }
     };
     data();
-
-    return () => {
-      clearTimeout(data);
-    };
   }, []);
+
   return (
     <>
       <Header data={event} />

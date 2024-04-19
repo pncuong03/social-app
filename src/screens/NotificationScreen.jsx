@@ -34,10 +34,13 @@ const NotificationScreen = () => {
     setIsLoading(true);
     try {
       const data = await fetchNotifications(page, size, userInfo.accessToken);
+      const sorted = data.content.sort(
+        (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+      );
       if (data.content.length === 0) {
         setIsLoading(false);
       } else {
-        setNotification([...notification, ...data.content]);
+        setNotification([...notification, ...sorted]);
         setPage(page + 1);
       }
     } catch (error) {

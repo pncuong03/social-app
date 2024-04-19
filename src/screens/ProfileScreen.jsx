@@ -116,7 +116,7 @@ const ProfileScreen = () => {
         </View>
       </View>
 
-      <PrivatePost accessToken={userInfo.accessToken}  />
+      <PrivatePost />
     </ScrollView>
   );
 };

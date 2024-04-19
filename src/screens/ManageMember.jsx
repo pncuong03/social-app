@@ -11,7 +11,7 @@ import {
 import VectorIcon from "../utils/VectorIcon";
 import { useNavigation } from "@react-navigation/native";
 import { Colors } from "../utils/Colors";
-import { fetchUserGroup } from "../context/GroupChatContext";
+import { fetchDelete, fetchUserGroup } from "../context/GroupChatContext";
 import { AuthContext } from "../context/AuthContext";
 
 const ManageMember = ({ route }) => {
@@ -30,18 +30,18 @@ const ManageMember = ({ route }) => {
     };
     getAllGroupChat();
   }, [chatId]);
-  // console.log(members);
-  const removeMemberFromGroup = (memberId) => {
-    const index = members.findIndex((member) => member.id === memberId);
-    if (index !== -1) {
-      const updatedMembers = [...members];
-      updatedMembers.splice(index, 1);
-      setMembers(updatedMembers);
 
-      Alert.alert("Remove Member", "Member removed from group successfully!");
+  const deleteMember = async (userId) => {
+    try {
+      await fetchDelete(chatId, userId, userInfo.accessToken);
+      setMembers((prevMembers) =>
+        prevMembers.filter((member) => member.id !== userId)
+      );
+      Alert.alert("Success", "Member deleted from group successfully!");
+    } catch (error) {
+      Alert.alert("Fail", "Members have been deleted from the group!");
     }
   };
-
   return (
     <ScrollView style={styles.container}>
       <View style={styles.headerChat}>
@@ -98,14 +98,23 @@ const ManageMember = ({ route }) => {
                 {member?.fullName}
               </Text>
             </View>
-            <TouchableOpacity onPress={() => removeMemberFromGroup(member.id)}>
+            {member.role === "MEMBER" ? (
+              <TouchableOpacity onPress={() => deleteMember(member.id)}>
+                <VectorIcon
+                  name="user-minus"
+                  type="FontAwesome5"
+                  size={22}
+                  color={Colors.headerIconGrey}
+                />
+              </TouchableOpacity>
+            ) : (
               <VectorIcon
-                name="minus"
-                type="AntDesign"
-                size={24}
-                color={Colors.primaryColor}
+                name="admin-panel-settings"
+                type="MaterialIcons"
+                size={30}
+                color={Colors.headerIconGrey}
               />
-            </TouchableOpacity>
+            )}
           </View>
         ))}
       </View>
@@ -119,7 +128,7 @@ const styles = StyleSheet.create({
   },
   headerChat: {
     flexDirection: "row",
-    marginTop: 25,
+    marginTop: 30,
     alignItems: "center",
     justifyContent: "space-between",
     padding: 10,
@@ -135,7 +144,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     padding: 10,
-    marginTop: 10,
+    margin: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.borderGrey,
   },
   info1: {
     flexDirection: "row",

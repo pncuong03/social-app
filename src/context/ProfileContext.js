@@ -1,8 +1,8 @@
-import axios from "axios";
 import { BASE_URL } from "../config";
+import { instance } from "../utils/axios";
 export const fetchUserInfo = async (accessToken) => {
   try {
-    const response = await axios({
+    const response = await instance({
       method: "get",
       url: `${BASE_URL}/user`,
       headers: {
@@ -17,7 +17,7 @@ export const fetchUserInfo = async (accessToken) => {
 };
 export const upDateUserInfo = async (accessToken, formData) => {
   try {
-    const response = await axios({
+    const response = await instance({
       method: "post",
       url: `${BASE_URL}/user/change-user-information`,
       headers: {
@@ -26,7 +26,6 @@ export const upDateUserInfo = async (accessToken, formData) => {
       },
       data: formData,
     });
-    console.log(response.data); // Log the response data
     return response;
   } catch (error) {
     console.error("Error:", error);

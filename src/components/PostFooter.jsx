@@ -1,5 +1,15 @@
 import React, { useContext, useEffect, useState } from "react";
-import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  Modal,
+  TextInput,
+  Switch,
+  Picker,
+} from "react-native";
 import Like from "../assets/images/like.jpeg";
 import { AuthContext } from "../context/AuthContext";
 import {
@@ -10,25 +20,37 @@ import {
 import { Colors } from "../utils/Colors";
 import VectorIcon from "../utils/VectorIcon";
 import { useNavigation } from "@react-navigation/native";
+import LikeModal from "./LikeModel";
+import {
+  Menu,
+  MenuOption,
+  MenuOptions,
+  MenuProvider,
+  MenuTrigger,
+} from "react-native-popup-menu";
 
-const PostFooter = ({ data }) => {
+const PostFooter = ({ data, user }) => {
   const navigation = useNavigation();
-
   const { userInfo } = useContext(AuthContext);
-
   const [isLiked, setIsLiked] = useState(false);
   const [isShared, setIsShared] = useState(false);
-
   const [commentCount, setCommentCount] = useState(data.commentCount);
   const [likeCount, setLikeCount] = useState(data.likeCount);
   const [shareCount, setShareCount] = useState(data.shareCount);
+
+  const [isLikeModalVisible, setIsLikeModalVisible] = useState(false);
+  const [shareModalVisible, setShareModalVisible] = useState(false);
+  const [caption, setCaption] = useState("");
+  const [privacyOption, setPrivacyOption] = useState("PUBLIC");
 
   useEffect(() => {
     if (data.hasLike) {
       setIsLiked(true);
     }
+    if (data.hasShare) {
+      setIsShared(true);
+    }
   }, []);
-
   const onLike = async (postId) => {
     try {
       await fetchLike(postId, userInfo.accessToken);
@@ -38,6 +60,7 @@ const PostFooter = ({ data }) => {
       console.error("Error like post:", error);
     }
   };
+
   const onUnLike = async (postId) => {
     try {
       await fetchUnLike(postId, userInfo.accessToken);
@@ -48,28 +71,55 @@ const PostFooter = ({ data }) => {
     }
   };
 
-  const onShare = async (postId) => {
+  const onShare = async () => {
     try {
-      await fetchShare(postId, userInfo.accessToken);
-      setIsShared(false);
-      setShareCount((prevCount) => prevCount + 1);
+      setShareModalVisible(true);
     } catch (error) {
-      console.error("Error like post:", error);
+      console.error("Error share post:", error);
     }
+  };
+
+  const handleShare = async () => {
+    try {
+      await fetchShare(data.id, caption, privacyOption, userInfo.accessToken);
+      setIsShared(true);
+      setShareCount((prevCount) => prevCount + 1);
+      setShareModalVisible(false);
+    } catch (error) {
+      console.error("Error share post:", error);
+    }
+  };
+
+  const onLikePress = () => {
+    setIsLikeModalVisible(true);
+  };
+
+  const onCloseLikeModal = () => {
+    setIsLikeModalVisible(false);
+  };
+
+  const onCloseShareModal = () => {
+    setShareModalVisible(false);
+  };
+
+  const handlePrivacyOption = (value) => {
+    setPrivacyOption(value === "PUBLIC" ? "PUBLIC" : "PRIVATE");
   };
 
   return (
     <View style={styles.postFooterContainer}>
       <View style={styles.footerReactionSec}>
         <View style={styles.row}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={onLikePress}>
             <Image source={Like} style={styles.reactionIcon} />
           </TouchableOpacity>
           <Text style={styles.reactionCount}>{likeCount}</Text>
         </View>
         <View style={{ flexDirection: "row", gap: 10 }}>
           <Text style={styles.reactionCount}>{commentCount} comment</Text>
-          <Text style={styles.reactionCount}>{shareCount} share</Text>
+          <TouchableOpacity onPress={onShare}>
+            <Text style={styles.reactionCount}>{shareCount} share</Text>
+          </TouchableOpacity>
         </View>
       </View>
 
@@ -105,7 +155,7 @@ const PostFooter = ({ data }) => {
             <Text style={styles.reactionCount}>Comment</Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => onShare(data.id)}>
+        <TouchableOpacity onPress={onShare}>
           <View style={styles.row}>
             <VectorIcon
               name={isShared ? "arrow-redo-sharp" : "arrow-redo-outline"}
@@ -117,9 +167,108 @@ const PostFooter = ({ data }) => {
           </View>
         </TouchableOpacity>
       </View>
+
+      <LikeModal
+        visible={isLikeModalVisible}
+        onClose={onCloseLikeModal}
+        postId={data.id}
+      />
+
+      <Modal
+        visible={shareModalVisible}
+        animationType="slide"
+        transparent={true}
+        onRequestClose={onCloseShareModal}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+              }}
+            >
+              <View style={styles.row}>
+                <Image
+                  source={{ uri: user?.imageUrl }}
+                  style={{
+                    width: 40,
+                    height: 40,
+                    borderRadius: 20,
+                    marginRight: 10,
+                  }}
+                />
+                <Text style={styles.modalText}>{user?.fullName}</Text>
+              </View>
+              <TouchableOpacity onPress={onCloseShareModal}>
+                <VectorIcon
+                  name="close"
+                  type="Ionicons"
+                  size={25}
+                  color={Colors.grey}
+                />
+              </TouchableOpacity>
+            </View>
+            <View style={styles.rows}>
+              <MenuProvider>
+                <Menu onSelect={handlePrivacyOption}>
+                  <MenuTrigger
+                    style={{
+                      flexDirection: "row",
+                      gap: 8,
+                      alignItems: "center",
+                      justifyContent: "center",
+                      marginLeft: 50,
+                      borderWidth: 1,
+                      borderRadius: 5,
+                      height: 30,
+                      width: 100,
+                      backgroundColor: Colors.lightgrey,
+                    }}
+                  >
+                    <VectorIcon
+                      name="user-friends"
+                      type="FontAwesome5"
+                      size={20}
+                    />
+                    <Text>{privacyOption}</Text>
+                  </MenuTrigger>
+                  <MenuOptions
+                    style={{
+                      borderWidth: 1,
+                      borderRadius: 5,
+                      height: 50,
+                      elevation: 0,
+                    }}
+                  >
+                    <MenuOption value={"PUBLIC"}>
+                      <Text>PUBLIC</Text>
+                    </MenuOption>
+                    <MenuOption value={"PRIVATE"}>
+                      <Text>PRIVATE</Text>
+                    </MenuOption>
+                  </MenuOptions>
+                </Menu>
+              </MenuProvider>
+            </View>
+            <TextInput
+              style={styles.captionInput}
+              onChangeText={(text) => setCaption(text)}
+              value={caption}
+              placeholder="Write something about this content..."
+            />
+            <View style={{ flexDirection: "row", justifyContent: "flex-end" }}>
+              <TouchableOpacity onPress={handleShare}>
+                <Text style={styles.modalButton}>Share</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
+
 const styles = StyleSheet.create({
   reactionIcon: {
     height: 20,
@@ -128,6 +277,11 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: "row",
     alignItems: "center",
+  },
+  rows: {
+    flexDirection: "row",
+    alignItems: "center",
+    height: 50,
   },
   postFotterContainer: {
     padding: 16,
@@ -149,6 +303,29 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     flexDirection: "row",
     justifyContent: "space-around",
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  modalContent: {
+    backgroundColor: "white",
+    padding: 20,
+    borderRadius: 10,
+    width: "80%",
+  },
+  modalText: {
+    fontSize: 18,
+  },
+  captionInput: {
+    height: 40,
+    marginBottom: 10,
+    fontSize: 17,
+  },
+  modalButton: {
+    fontSize: 20,
   },
 });
 

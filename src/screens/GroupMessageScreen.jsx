@@ -51,7 +51,6 @@ const GroupMessageScreen = () => {
     if (groupName.trim() !== "") {
       try {
         const userIDs = selectedUsers.map((user) => user.id);
-        console.log(userIDs);
         await fetchCreate(groupName, userIDs, userInfo.accessToken);
         Alert.alert("Success", "Create successful group!");
       } catch (error) {

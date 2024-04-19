@@ -8,7 +8,7 @@ import { AuthContext } from "../context/AuthContext";
 import Spinner from "react-native-loading-spinner-overlay";
 import Carousel from "react-native-snap-carousel";
 
-const Post = () => {
+const Post = ({ user }) => {
   const { userInfo } = useContext(AuthContext);
   const [posts, setPosts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -52,21 +52,58 @@ const Post = () => {
       <Spinner visible={isLoading} />
       {posts.map((item) => (
         <View key={item.id}>
-          <PostHeader data={item} onClose={() => onClosePost(item.id)} />
-          <Carousel
-            data={item.imageUrls}
-            renderItem={ImageSlider}
-            sliderWidth={windowWidth}
-            itemWidth={windowWidth}
-          />
+          {item.sharePost ? (
+            <View>
+              <PostHeader
+                data={item}
+                onClose={() => onClosePost(item.id)}
+                showCloseButton={true}
+              />
+              <View
+                style={{
+                  borderWidth: 1,
+                  borderColor: "gray",
+                  borderRadius: 8,
+                  overflow: "hidden",
+                  marginRight: 10,
+                  marginLeft: 10,
+                }}
+              >
+                <PostHeader data={item.sharePost} showCloseButton={false} />
 
-          <PostFooter data={item} />
+                <Carousel
+                  data={item.sharePost.imageUrls}
+                  renderItem={ImageSlider}
+                  sliderWidth={windowWidth}
+                  itemWidth={windowWidth}
+                />
+              </View>
+
+              <PostFooter data={item} />
+            </View>
+          ) : (
+            <View>
+              <PostHeader
+                data={item}
+                onClose={() => onClosePost(item.id)}
+                showCloseButton={true}
+              />
+
+              <Carousel
+                data={item.imageUrls}
+                renderItem={ImageSlider}
+                sliderWidth={windowWidth}
+                itemWidth={windowWidth}
+              />
+
+              <PostFooter data={item} user={user} />
+            </View>
+          )}
         </View>
       ))}
     </View>
   );
 };
-
 const styles = StyleSheet.create({
   postContainer: {
     backgroundColor: Colors.white,
