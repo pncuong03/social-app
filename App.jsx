@@ -29,6 +29,7 @@ import { Colors } from "./src/utils/Colors";
 import FriendList from "./src/screens/FriendList";
 import FriendProfile from "./src/screens/FriendProfile";
 import AddMember from "./src/screens/AddMember";
+import NewPostInGroup from "./src/screens/NewPostInGroup";
 
 const Stack = createStackNavigator();
 
@@ -75,7 +76,7 @@ const AppContent = () => {
             <Stack.Screen name="Group for you" component={GroupListsScreen} />
             <Stack.Screen name="New Group" component={NewGroup} />
             <Stack.Screen name="GroupDetail" component={GroupDetail} />
-            {/* <Stack.Screen name="NewPostInGroup" component={NewPostInGroup} /> */}
+            <Stack.Screen name="NewPostInGroup" component={NewPostInGroup} />
             <Stack.Screen
               name="GroupMemberListScreen"
               component={GroupMemberListScreen}

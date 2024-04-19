@@ -27,23 +27,39 @@ export default function GroupListsScreen() {
     navigation.navigate("GroupDetail", { groupId });
   };
   return (
-    <ScrollView>
+    <ScrollView style={{ backgroundColor: "#f0f2f5" }}>
       {groupData.map((group) => (
         <TouchableOpacity
           onPress={() => handlePress(group.idGroup)}
           key={group.idGroup}
-          style={{ flexDirection: "row", padding: 10, alignItems: "center" }}
+          style={{
+            flexDirection: "row",
+            padding: 20,
+            alignItems: "center",
+            backgroundColor: "#fff",
+            marginBottom: 10,
+            borderRadius: 5,
+            borderWidth: 1,
+            borderColor: "#ddd",
+          }}
         >
           <MaterialIcons
             name={"group"}
-            style={{ color: "blue", fontSize: 24 }}
+            style={{ color: "blue", fontSize: 30 }}
           />
-          <View style={{ display: "flex", flexDirection: "column" }}>
-            <Text style={{ fontSize: 20, fontWeight: "bold", marginLeft: 10 }}>
+          <View
+            style={{ display: "flex", flexDirection: "column", marginLeft: 10 }}
+          >
+            <Text style={{ fontSize: 24, fontWeight: "bold" }}>
               {group.name}
             </Text>
-            <Text style={{ fontSize: 20, fontWeight: "bold", marginLeft: 10 }}>
-              Member:{group.memberCount}
+            {group.tagList && group.tagList.length > 0 && (
+              <Text style={{ fontSize: 20, color: "#65676b" }}>
+                - {group.tagList[0]}
+              </Text>
+            )}
+            <Text style={{ fontSize: 20, color: "#65676b" }}>
+              Members: {group.memberCount}
             </Text>
           </View>
         </TouchableOpacity>

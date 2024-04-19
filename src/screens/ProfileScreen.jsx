@@ -18,6 +18,7 @@ import { getPostofMe, getPostsOfUser } from "../context/PostContext";
 import PrivatePost from "../components/PrivatePost";
 const ProfileScreen = () => {
   const { userInfo } = useContext(AuthContext);
+  console.log(userInfo);
   const navigation = useNavigation();
   const [user, setUser] = useState({
     id: null,

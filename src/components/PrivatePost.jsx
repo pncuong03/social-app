@@ -18,15 +18,27 @@ const PrivatePost = () => {
     const updatedPosts = posts.filter((post) => post.id !== postId);
     setPosts(updatedPosts);
   };
+
   useEffect(() => {
     const getAllPost = async () => {
       setIsLoading(true);
       try {
-        const data = await getPostofMe(userInfo.accessToken);
+        if (!accessToken) {
+          console.error("Invalid accessToken or userId");
+          return;
+        }
+        const data = await getPostofMe(accessToken);
+        if (!data || !data.content) {
+          console.error("Invalid response from API");
+          return;
+        }
         const sortedPosts = data.content.sort(
           (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
         );
-        setPosts(sortedPosts);
+        const filteredPosts = sortedPosts.filter(
+          (post) => post.type !== "GROUP"
+        );
+        setPosts(filteredPosts);
       } catch (error) {
         console.error("Error getAllPost:", error);
       } finally {
