@@ -5,7 +5,7 @@ import VectorIcon from "../utils/VectorIcon";
 import { useNavigation } from "@react-navigation/native";
 import TimeComparison from "../utils/Time"; // Import TimeComparison component
 
-const PostHeader = ({ data, onClose }) => {
+const PostHeader = ({ data, onClose, showCloseButton }) => {
   const navigation = useNavigation();
 
   const handleClose = () => {
@@ -13,8 +13,8 @@ const PostHeader = ({ data, onClose }) => {
   };
 
   const handlePress = (friendId) => {
-    navigation.navigate('FriendProfile', { friendId });
-};
+    navigation.navigate("FriendProfile", { friendId });
+  };
   return (
     <View style={styles.postHeaderContainer}>
       <View key={data.id}>
@@ -32,24 +32,37 @@ const PostHeader = ({ data, onClose }) => {
                   <TimeComparison time={data.createdAt} />
                 </Text>
                 <Text style={styles.dot}>•</Text>
-                <VectorIcon
-                  name="user-friends"
-                  type="FontAwesome5"
-                  size={13}
-                  color={Colors.headerIconGrey}
-                  style={styles.userIcon}
-                />
+                {data.state === "PUBLIC" ? (
+                  <VectorIcon
+                    name="user-friends"
+                    type="FontAwesome5"
+                    size={13}
+                    color={Colors.headerIconGrey}
+                    style={styles.userIcon}
+                  />
+                ) : (
+                  <VectorIcon
+                    name="user-alt"
+                    type="FontAwesome5"
+                    size={13}
+                    color={Colors.headerIconGrey}
+                    style={styles.userIcon}
+                  />
+                )}
               </View>
             </View>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.row} onPress={handleClose}>
-            <VectorIcon
-              name="close"
-              type="Ionicons"
-              size={25}
-              color={Colors.headerIconGrey}
-            />
-          </TouchableOpacity>
+
+          {showCloseButton && (
+            <TouchableOpacity style={styles.row} onPress={handleClose}>
+              <VectorIcon
+                name="close"
+                type="Ionicons"
+                size={25}
+                color={Colors.headerIconGrey}
+              />
+            </TouchableOpacity>
+          )}
         </View>
         <Text style={styles.caption}>{data.content}</Text>
       </View>

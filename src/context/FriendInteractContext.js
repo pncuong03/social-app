@@ -1,9 +1,9 @@
-import axios from "axios";
 import { BASE_URL } from "../config";
+import { instance } from "../utils/axios";
 
 export const fetchDetailPost = async (postId, accessToken) => {
   try {
-    const response = await axios.get(
+    const response = await instance.get(
       `${BASE_URL}/user/post/interaction?postId=${postId}`,
       {
         headers: {
@@ -20,7 +20,7 @@ export const fetchDetailPost = async (postId, accessToken) => {
 
 export const fetchLike = async (postId, accessToken) => {
   try {
-    const response = await axios.post(
+    const response = await instance.post(
       `${BASE_URL}/user/post/interaction/like?postId=${postId}`,
       {},
       {
@@ -39,7 +39,7 @@ export const fetchLike = async (postId, accessToken) => {
 
 export const fetchListLike = async (id, accessToken) => {
   try {
-    const response = await axios.get(
+    const response = await instance.get(
       `${BASE_URL}/user/post/interaction/like/list?postId=${id}`,
       {},
       {
@@ -58,7 +58,7 @@ export const fetchListLike = async (id, accessToken) => {
 
 export const fetchUnLike = async (id, accessToken) => {
   try {
-    const response = await axios.delete(
+    const response = await instance.delete(
       `${BASE_URL}/user/post/interaction/remove-like?postId=${id}`,
 
       {
@@ -77,7 +77,7 @@ export const fetchUnLike = async (id, accessToken) => {
 
 export const fetchComment = async (postId, comment, accessToken) => {
   try {
-    const response = await axios.post(
+    const response = await instance.post(
       `${BASE_URL}/user/post/interaction/comment?postId=${postId}&comment=${comment}`,
       {},
       {
@@ -93,10 +93,10 @@ export const fetchComment = async (postId, comment, accessToken) => {
   }
 };
 
-export const fetchUnComment = async (id, accessToken) => {
+export const fetchDeleteComment = async (commentId, accessToken) => {
   try {
-    const response = await axios.delete(
-      `${BASE_URL}/user/post/interaction/comment/delete?commentId=${id}`,
+    const response = await instance.delete(
+      `${BASE_URL}/user/post/interaction/comment/delete?commentId=${commentId}`,
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -110,19 +110,18 @@ export const fetchUnComment = async (id, accessToken) => {
   }
 };
 
-export const fetchShare = async (postId, accessToken) => {
+export const fetchShare = async (postId, content, state, accessToken) => {
   try {
-    const response = await axios.post(
+    const response = await instance.post(
       `${BASE_URL}/post/share?shareId=${postId}`,
-      {},
+      {
+        content,
+        state,
+      },
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
-        // data: {
-        //   content: content,
-        //   state: state,
-        // },
       }
     );
 

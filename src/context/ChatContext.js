@@ -1,9 +1,9 @@
-import axios from "axios";
 import { BASE_URL } from "../config";
+import { instance } from "../utils/axios";
 
 export const fetchUserChat = async (accessToken) => {
   try {
-    const response = await axios.get(`${BASE_URL}/chat`, {
+    const response = await instance.get(`${BASE_URL}/chat`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
@@ -17,7 +17,7 @@ export const fetchUserChat = async (accessToken) => {
 
 export const fetchChatMessage = async (chatId, accessToken) => {
   try {
-    const response = await axios.get(
+    const response = await instance.get(
       `${BASE_URL}/chat/messages?chatId=${chatId}`,
       {
         headers: {
@@ -34,7 +34,7 @@ export const fetchChatMessage = async (chatId, accessToken) => {
 
 export const fetchSendMessage = async (accessToken, chatId, message) => {
   try {
-    const response = await axios.post(
+    const response = await instance.post(
       `${BASE_URL}/message`,
       {
         chatId: chatId,

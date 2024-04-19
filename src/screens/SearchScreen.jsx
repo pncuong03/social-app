@@ -21,12 +21,11 @@ const SearchScreen = () => {
 
   const { userInfo } = useContext(AuthContext);
   const [searchTerm, setSearchTerm] = useState("");
-  const [listUser, setListUser] = useState([]);
+  const [listUser, setListUser] = useState([] || null);
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [page, setPage] = useState(0);
   const [size, setSize] = useState(10);
-
   useEffect(() => {
     getListUser();
   }, []);
@@ -43,7 +42,6 @@ const SearchScreen = () => {
       setIsLoading(false);
     }
   };
-
   const fetchMoreUsers = async () => {
     if (isLoading) return;
 
@@ -148,6 +146,7 @@ const SearchScreen = () => {
           <TouchableOpacity onPress={() => handlePress(item.id)}>
             <Image style={styles.avatar} source={{ uri: item.imageUrl }} />
           </TouchableOpacity>
+
           <View style={styles.headerBox}>
             <View
               style={{ flexDirection: "row", justifyContent: "space-between" }}
@@ -168,26 +167,51 @@ const SearchScreen = () => {
               <TouchableOpacity
                 style={styles.button}
                 onPress={() => {
-                  if (!item.isFriend) {
+                  if (
+                    !item.isFriend &&
+                    !item.hadSendFriendRequest &&
+                    !item.hadReceiverFriendRequest
+                  ) {
                     onAdd(item.id);
+                  } else if (
+                    !item.isFriend &&
+                    !item.hadSendFriendRequest &&
+                    item.hadReceiverFriendRequest
+                  ) {
                   }
                 }}
-                disabled={item.isFriend}
+                disabled={
+                  item.isFriend ||
+                  item.hadSendFriendRequest ||
+                  item.hadReceiverFriendRequest
+                }
               >
                 <Text style={styles.buttonText}>
-                  {item.isFriend ? "Friend" : "Add Friend"}
+                  {item.isFriend
+                    ? "Friend"
+                    : item.hadSendFriendRequest
+                    ? "Request sent"
+                    : item.hadReceiverFriendRequest
+                    ? "Accept request"
+                    : "Add Friend"}
                 </Text>
               </TouchableOpacity>
-              <TouchableOpacity
-                style={[styles.button, { backgroundColor: "gray" }]}
-                onPress={() => {
-                  if (item.isFriend) {
-                    onDelete(item.id);
-                  }
-                }}
-              >
-                <Text style={styles.buttonText}>Remove</Text>
-              </TouchableOpacity>
+              {item.isFriend ? (
+                <TouchableOpacity
+                  style={[styles.button, { backgroundColor: "gray" }]}
+                  onPress={() => {
+                    if (
+                      item.isFriend &&
+                      !item.hadSendFriendRequest &&
+                      !item.hadReceiverFriendRequest
+                    ) {
+                      onDelete(item.id);
+                    }
+                  }}
+                >
+                  <Text style={styles.buttonText}>Delete</Text>
+                </TouchableOpacity>
+              ) : null}
             </View>
           </View>
         </View>
@@ -224,10 +248,11 @@ const styles = StyleSheet.create({
     backgroundColor: "#384CFF",
     padding: 5,
     borderRadius: 5,
-    width: 110,
-    height: 30,
+    width: 120,
+    height: 35,
     display: "flex",
     alignItems: "center",
+    justifyContent: "center",
   },
   buttonText: {
     color: "white",

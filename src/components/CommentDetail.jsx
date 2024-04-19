@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -11,6 +12,7 @@ import {
 import { AuthContext } from "../context/AuthContext";
 import {
   fetchComment,
+  fetchDeleteComment,
   fetchDetailPost,
 } from "../context/FriendInteractContext";
 import PostHeader from "./PostHeader";
@@ -19,26 +21,27 @@ import PostFooter from "./PostFooter";
 import { Colors } from "../utils/Colors";
 import VectorIcon from "../utils/VectorIcon";
 import { useNavigation } from "@react-navigation/native";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import TimeComparison from "../utils/Time";
+import NotificationModal from "./NotiModel";
 
 const CommentDetail = ({ route }) => {
   const navigation = useNavigation();
-
   const { userInfo } = useContext(AuthContext);
   const { postId, data1 } = route.params;
   const windowWidth = Dimensions.get("window").width;
   const [commentText, setCommentText] = useState("");
   const [listComment, setListComment] = useState([]);
-  // const [commentCount, setCommentCount] = useState([]);
+  const [notificationVisible, setNotificationVisible] = useState(false);
+  const [deleteVisible, setDeleteVisible] = useState(false);
 
   useEffect(() => {
     const getPostDetail = async (postId) => {
       try {
         const data = await fetchDetailPost(postId, userInfo.accessToken);
-        const sortedComments = data.comments.sort((a, b) => {
-          return new Date(b.createdAt) - new Date(a.createdAt);
-        });
+        const sortedComments = data.comments.sort(
+          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+        );
         setListComment(sortedComments);
       } catch (error) {
         console.log("getPostDetail error: ", error);
@@ -51,33 +54,45 @@ const CommentDetail = ({ route }) => {
     if (commentText.trim() !== "") {
       try {
         await fetchComment(postId, commentText, userInfo.accessToken);
-
         const updatedPost = await fetchDetailPost(postId, userInfo.accessToken);
-
         const newComments = updatedPost.comments;
-
-        const filteredNewComments = newComments.filter((newComment) => {
-          return !listComment.find((existingComment) => {
-            return existingComment.id === newComment.id;
-          });
-        });
-
+        const filteredNewComments = newComments.filter(
+          (newComment) =>
+            !listComment.find(
+              (existingComment) => existingComment.id === newComment.id
+            )
+        );
         const updatedComments = [...filteredNewComments, ...listComment];
-
         setListComment(updatedComments);
-
         setCommentText("");
       } catch (error) {
         console.error("Error commenting:", error);
       }
     }
   };
+
+  const onDeleteComment = async (commentId) => {
+    try {
+      await fetchDeleteComment(commentId, userInfo.accessToken);
+      const updatedComments = listComment.filter(
+        (comment) => comment.id !== commentId
+      );
+      setListComment(updatedComments);
+      setDeleteVisible(true);
+    } catch (error) {
+      console.log("Delete comment : ", error);
+      setDeleteVisible(false);
+    } finally {
+      setNotificationVisible(true);
+    }
+  };
+
   return (
     <ScrollView style={styles.postContainer}>
       <View>
         <TouchableOpacity
           onPress={() => navigation.push("MainScreen")}
-          style={{ marginLeft: 5, marginTop: 10 }}
+          style={{ marginLeft: 5, marginTop: 30 }}
         >
           <VectorIcon
             name="left"
@@ -142,26 +157,21 @@ const CommentDetail = ({ route }) => {
                   style={styles.userProfile}
                 />
                 <View
-                  style={{
-                    flexDirection: "column",
-                    justifyContent: "center",
-                  }}
+                  style={{ flexDirection: "column", justifyContent: "center" }}
                 >
                   <View style={styles.commentContent}>
                     <Text style={styles.username}>{data.fullName}</Text>
                     <Text style={styles.commentText}>{data.comment}</Text>
                   </View>
-                  <Text
-                    style={{
-                      color: Colors.borderGrey,
-                      marginLeft: 5,
-                    }}
-                  >
+                  <Text style={{ color: Colors.borderGrey, marginLeft: 5 }}>
                     <TimeComparison time={data.createdAt} />
                   </Text>
                 </View>
               </View>
-              <TouchableOpacity style={{ marginRight: 15 }}>
+              <TouchableOpacity
+                style={{ marginRight: 15 }}
+                onPress={() => onDeleteComment(data.id)}
+              >
                 <VectorIcon
                   name="close"
                   type="AntDesign"
@@ -173,6 +183,16 @@ const CommentDetail = ({ route }) => {
           ))}
         </View>
       </View>
+      <NotificationModal
+        isVisible={notificationVisible}
+        message={
+          deleteVisible
+            ? "Comment deleted successfully"
+            : "Failed to delete comment"
+        }
+        type={deleteVisible ? "success" : "error"}
+        onClose={() => setNotificationVisible(false)}
+      />
     </ScrollView>
   );
 };

@@ -1,13 +1,13 @@
-import axios from "axios";
 import { BASE_URL } from "../config";
+import { instance } from "../utils/axios";
 
-export const fetchFriendInfo = async (accessToken,checkId) => {
+export const fetchFriendInfo = async (accessToken, checkId) => {
   try {
-    const response = await axios({
+    const response = await instance({
       method: "get",
       url: `${BASE_URL}/friend/friend-information`,
       params: {
-        checkId: checkId
+        checkId: checkId,
       },
       headers: {
         "Content-Type": "application/json",
@@ -22,7 +22,7 @@ export const fetchFriendInfo = async (accessToken,checkId) => {
 
 export const fetchFriendRequests = async (accessToken) => {
   try {
-    const response = await axios.get(`${BASE_URL}/friend/request/list`, {
+    const response = await instance.get(`${BASE_URL}/friend/request/list`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
@@ -37,7 +37,7 @@ export const fetchFriendRequests = async (accessToken) => {
 
 export const fetchListFriend = async (accessToken) => {
   try {
-    const response = await axios.get(`${BASE_URL}/friend/list`, {
+    const response = await instance.get(`${BASE_URL}/friend/list`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
@@ -52,7 +52,7 @@ export const fetchListFriend = async (accessToken) => {
 
 export const fetchAcceptFriend = async (id, accessToken) => {
   try {
-    const response = await axios.post(
+    const response = await instance.post(
       `${BASE_URL}/friend/accept?id=${id}`,
       {},
       {
@@ -70,7 +70,7 @@ export const fetchAcceptFriend = async (id, accessToken) => {
 
 export const fetchRejectFriend = async (id, accessToken) => {
   try {
-    const response = await axios.delete(
+    const response = await instance.delete(
       `${BASE_URL}/friend/reject?senderId=${id}`,
       {
         headers: {
@@ -87,7 +87,7 @@ export const fetchRejectFriend = async (id, accessToken) => {
 
 export const fetchAddFriend = async (id, accessToken) => {
   try {
-    const response = await axios.post(
+    const response = await instance.post(
       `${BASE_URL}/friend/add?id=${id}`,
       {},
       {
@@ -102,9 +102,10 @@ export const fetchAddFriend = async (id, accessToken) => {
     throw error;
   }
 };
-export const fetchUnfriend = async (friendId, accessToken) => { 
+export const fetchUnfriend = async (friendId, accessToken) => {
   try {
-    const response = await axios.delete(`${BASE_URL}/friend/delete?friendId=${friendId}`,
+    const response = await instance.delete(
+      `${BASE_URL}/friend/delete?friendId=${friendId}`,
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -117,9 +118,10 @@ export const fetchUnfriend = async (friendId, accessToken) => {
     throw error;
   }
 };
-export const fetchCancelfriend = async (friendId, accessToken) => { 
+export const fetchCancelfriend = async (friendId, accessToken) => {
   try {
-    const response = await axios.delete(`${BASE_URL}/friend/delete-request/user?receiverId=${friendId}`,
+    const response = await instance.delete(
+      `${BASE_URL}/friend/delete-request/user?receiverId=${friendId}`,
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,

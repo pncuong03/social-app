@@ -1,9 +1,9 @@
-import axios from "axios";
 import { BASE_URL } from "../config";
+import { instance } from "../utils/axios";
 
 export const fetchPostPublic = async (accessToken) => {
   try {
-    const response = await axios.get(`${BASE_URL}/post/list/friends`, {
+    const response = await instance.get(`${BASE_URL}/post/list/friends`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
@@ -16,7 +16,7 @@ export const fetchPostPublic = async (accessToken) => {
 };
 export const userPost = async (accessToken, formData) => {
   try {
-    const response = await axios({
+    const response = await instance({
       method: "post",
       url: `${BASE_URL}/post/post`,
       headers: {
@@ -32,7 +32,7 @@ export const userPost = async (accessToken, formData) => {
 };
 export const getPostofMe = async (accessToken) => {
   try {
-    const response = await axios({
+    const response = await instance({
       method: "get",
       url: `${BASE_URL}/post/list/me`,
       headers: {
@@ -48,7 +48,7 @@ export const getPostofMe = async (accessToken) => {
 
 export const getPostsOfUser = async (accessToken, userId) => {
   try {
-    const response = await axios({
+    const response = await instance({
       method: "get",
       url: `${BASE_URL}/post/list/post-user`,
       params: {
@@ -66,7 +66,7 @@ export const getPostsOfUser = async (accessToken, userId) => {
 };
 export const getPostsOfGroup = async (accessToken, groupId) => {
   try {
-    const response = await axios({
+    const response = await instance({
       method: "get",
       url: `${BASE_URL}/post-group/get-post`,
       params: {

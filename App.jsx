@@ -28,7 +28,7 @@ import CommentDetail from "./src/components/CommentDetail";
 import { Colors } from "./src/utils/Colors";
 import FriendList from "./src/screens/FriendList";
 import FriendProfile from "./src/screens/FriendProfile";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import AddMember from "./src/screens/AddMember";
 import NewPostInGroup from "./src/screens/NewPostInGroup";
 
 const Stack = createStackNavigator();
@@ -85,6 +85,7 @@ const AppContent = () => {
             <Stack.Screen name="ManageMember" component={ManageMember} />
             <Stack.Screen name="AddMemberGroup" component={AddMemberGroup} />
             <Stack.Screen name="CommentDetail" component={CommentDetail} />
+            <Stack.Screen name="AddMember" component={AddMember} />
           </>
         ) : (
           <>

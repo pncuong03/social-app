@@ -84,7 +84,6 @@ export default function NewPost() {
     formData.append("images", file);
     try {
       const response = await userPost(userInfo.accessToken, formData);
-      console.log(response.status);
       if (response.status === 200) {
         Alert.alert("Success", "Post Success");
       } else {

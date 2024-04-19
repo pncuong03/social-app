@@ -1,9 +1,9 @@
-import axios from "axios";
 import { BASE_URL } from "../config";
+import { instance } from "../utils/axios";
 
 export const fetchUserGroup = async (groupId, accessToken) => {
   try {
-    const response = await axios.get(
+    const response = await instance.get(
       `${BASE_URL}/group-chat?groupId=${groupId}`,
       {
         headers: {
@@ -20,7 +20,7 @@ export const fetchUserGroup = async (groupId, accessToken) => {
 
 export const fetchCreate = async (name, userIds, accessToken) => {
   try {
-    const response = await axios.post(
+    const response = await instance.post(
       `${BASE_URL}/group-chat`,
       {
         name: name,
@@ -41,7 +41,7 @@ export const fetchCreate = async (name, userIds, accessToken) => {
 
 export const fetchAdd = async (groupChatId, userIds, accessToken) => {
   try {
-    const response = await axios.post(
+    const response = await instance.post(
       `${BASE_URL}/group-chat/add-new`,
       {
         groupChatId: groupChatId,
@@ -60,31 +60,13 @@ export const fetchAdd = async (groupChatId, userIds, accessToken) => {
   }
 };
 
-// export const fetchLeave = async (groupChatId, userId) => {
-//   try {
-//     const response = await axios.delete(`${BASE_URL}/group-chat/leave-group`, {
-//       data: {
-//         groupChatId: groupChatId,
-//         userId: userId,
-//       },
-//     });
-//     return response.data;
-//   } catch (error) {
-//     console.error(error);
-//     throw error;
-//   }
-// };
-
-export const fetchLeave = async (groupChatId, userId) => {
+export const fetchLeave = async (chatId, accessToken) => {
   try {
-    const response = await axios.delete(
-      `${BASE_URL}/group-chat/leave-group`,
-      {
-        data: { groupChatId, userId },
-      },
+    const response = await instance.delete(
+      `${BASE_URL}/group-chat/leave-group?chatId=${chatId}`,
       {
         headers: {
-          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
         },
       }
     );
@@ -96,7 +78,7 @@ export const fetchLeave = async (groupChatId, userId) => {
 };
 export const fetchDelete = async (groupChatId, userId, accessToken) => {
   try {
-    const response = await axios.delete(
+    const response = await instance.delete(
       `${BASE_URL}/group-chat/delete-member`,
       {
         headers: {

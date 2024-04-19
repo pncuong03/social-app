@@ -33,6 +33,7 @@ const ChatPrivateScreen = ({ route }) => {
   const [messages, setMessages] = useState([]);
   const [messageText, setMessageText] = useState("");
   const [toggle, setToggle] = useState(false);
+
   const getAllMessage = async () => {
     try {
       const data = await fetchChatMessage(chatId, userInfo.accessToken);
@@ -57,19 +58,16 @@ const ChatPrivateScreen = ({ route }) => {
     handleToggle();
     updateAPI();
   };
+
   useEffect(() => {
     const data = async () => {
       try {
-        const res = await fetchEventNoti(userInfo.accessToken);
-        console.log(res);
+        const res = await fetchEventNoti(chatId, userInfo.accessToken);
 
-        setMessages((prev) => {
-          const test = [
-            ...prev,
-            ...res.messages?.filter((message) => message.chatId === chatId),
-          ];
-          return test;
-        });
+        setMessages((prev) => [
+          ...prev,
+          ...res.messages?.filter((message) => message.chatId === chatId),
+        ]);
 
         data();
       } catch (error) {
@@ -151,12 +149,12 @@ const ChatPrivateScreen = ({ route }) => {
         contentContainerStyle={styles.chatContentContainer}
         onContentSizeChange={scrollToBottom}
       >
-        {messages.map((message, index) => (
+        {messages?.map((message, index) => (
           <View
             key={index}
             style={[
               styles.messageContainer,
-              message && message.isMe
+              message && message?.isMe
                 ? styles.messageRight
                 : styles.messageLeft,
             ]}
@@ -174,7 +172,7 @@ const ChatPrivateScreen = ({ route }) => {
               />
             )}
             <View style={styles.detail}>
-              {message && !message.isMe && (
+              {message && !message?.isMe && (
                 <Text style={{ color: Colors.textGrey }}>
                   {message?.fullName}
                 </Text>
@@ -191,7 +189,7 @@ const ChatPrivateScreen = ({ route }) => {
                 </Text>
               )}
             </View>
-            {message && message.isMe && (
+            {message && message?.isMe && (
               <Image
                 style={{
                   width: 26,
@@ -235,7 +233,7 @@ const styles = StyleSheet.create({
   },
   headerChat: {
     flexDirection: "row",
-    marginTop: 25,
+    marginTop: 30,
     alignItems: "center",
     justifyContent: "space-between",
     padding: 10,

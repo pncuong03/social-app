@@ -15,13 +15,14 @@ import { Colors } from "../utils/Colors";
 import { fetchAdd } from "../context/GroupChatContext";
 import { AuthContext } from "../context/AuthContext";
 import { fetchListFriend } from "../context/FriendContext";
+import { fetchAddMemberGroup } from "../context/GroupContext";
 
-const AddMemberGroup = ({ route }) => {
+const AddMember = ({ route }) => {
   const navigation = useNavigation();
   const { userInfo } = useContext(AuthContext);
   const [searchValue, setSearchValue] = useState("");
   const [availableMembers, setAvailableMembers] = useState([]);
-  const { chatId1, fullname1, img1 } = route.params;
+  const { groupId } = route.params;
   const [initialMembers, setInitialMembers] = useState([]);
 
   useEffect(() => {
@@ -40,7 +41,7 @@ const AddMemberGroup = ({ route }) => {
 
   const addMember = async (userId) => {
     try {
-      await fetchAdd(chatId1, [userId], userInfo.accessToken);
+      await fetchAddMemberGroup(groupId, [userId], userInfo.accessToken);
       Alert.alert("Success", "Member added to group successfully!");
     } catch (error) {
       Alert.alert("Fail", "Members have been added to the group!");
@@ -65,10 +66,8 @@ const AddMemberGroup = ({ route }) => {
         <View style={styles.headerUser}>
           <TouchableOpacity
             onPress={() =>
-              navigation.push("ManageMember", {
-                chatId: chatId1,
-                fullname: fullname1,
-                img: img1,
+              navigation.push("GroupMemberListScreen", {
+                groupId,
               })
             }
           >
@@ -114,7 +113,7 @@ const AddMemberGroup = ({ route }) => {
                   height: 50,
                   marginLeft: 10,
                   marginRight: 10,
-                  borderRadius: 10,
+                  borderRadius: 25,
                 }}
                 source={{ uri: friend.imageUrl }}
               />
@@ -179,4 +178,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AddMemberGroup;
+export default AddMember;

@@ -1,18 +1,18 @@
 import { View, Text, TouchableOpacity, Image, StyleSheet } from "react-native";
-import React from "react";
+import React, { useContext } from "react";
 import VectorIcon from "../utils/VectorIcon";
 import { Colors } from "../utils/Colors";
 import { useNavigation } from "@react-navigation/native";
 import { fetchLeave } from "../context/GroupChatContext";
+import { AuthContext } from "../context/AuthContext";
 
 const MessageDetail = ({ route }) => {
   const navigation = useNavigation();
-  const { chatId1, fullname1, img1, userId1 } = route.params;
+  const { userInfo } = useContext(AuthContext);
+  const { chatId1, fullname1, img1 } = route.params;
   const onLeave = async () => {
     try {
-      console.log(1111, chatId1, "-----", userId1);
-      const res = await fetchLeave(29, 1);
-      console.log(res);
+      await fetchLeave(chatId1, userInfo.accessToken);
       Alert.alert("Success", "Member leaved to group successfully!");
     } catch (error) {
       Alert.alert("Fail", "Members have been leaved to the group!");
@@ -21,7 +21,7 @@ const MessageDetail = ({ route }) => {
   return (
     <View style={styles.container}>
       <TouchableOpacity
-        style={{ marginLeft: 10 }}
+        style={{ marginLeft: 10, marginTop: 20 }}
         onPress={() =>
           navigation.push("ChatPrivate", {
             chatId: chatId1,
@@ -65,7 +65,7 @@ const MessageDetail = ({ route }) => {
               size={24}
               color={Colors.primaryColor}
             />
-            <Text style={{ fontSize: 15, fontWeight: 400 }}>Add</Text>
+            <Text style={{ fontSize: 15, fontWeight: 400 }}>Members</Text>
           </TouchableOpacity>
           <TouchableOpacity style={{ alignItems: "center" }}>
             <VectorIcon

@@ -34,6 +34,7 @@ export default function EditProfile() {
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [password, setPassword] = useState("");
+
   useEffect(() => {
     const getUserInfo = async () => {
       try {
