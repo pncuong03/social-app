@@ -32,7 +32,7 @@ export default function GroupListsScreen() {
                 <TouchableOpacity
                     onPress={() => handlePress(group.idGroup)}
                     key={group.idGroup}
-                    style={{ flexDirection: 'row', padding: 20, alignItems: 'center', backgroundColor: '#fff', marginBottom: 10, borderRadius: 5 }}>
+                    style={{ flexDirection: 'row', padding: 20, alignItems: 'center', backgroundColor: '#fff', marginBottom: 10, borderRadius: 5, borderWidth: 1, borderColor: '#ddd' }}>
                     <MaterialIcons name={'group'} style={{ color: 'blue', fontSize: 30 }} />
                     <View style={{ display: 'flex', flexDirection: 'column', marginLeft: 10 }}>
                         <Text style={{ fontSize: 24, fontWeight: 'bold' }}>{group.name}</Text>

@@ -32,8 +32,9 @@ const PrivatePost = ({ accessToken }) => {
                     return;
                 }
                 const sortedPosts = data.content.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-                console.log(sortedPosts);
-                setPosts(sortedPosts);
+                const filteredPosts = sortedPosts.filter(post => post.type !== 'GROUP');
+                console.log(filteredPosts);
+                setPosts(filteredPosts);
             } catch (error) {
                 console.error("Error getAllPost:", error);
             } finally {
