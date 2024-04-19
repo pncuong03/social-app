@@ -13,19 +13,6 @@ export default function GroupScreen() {
 
     return (
         <View style={{ flex: 1 }}>
-            {/* <View style={{ marginBottom: 50 }}>
-                <TouchableOpacity
-                    onPress={() => navigation.goBack()}
-                    style={{
-                        zIndex: 99,
-                        position: "absolute",
-                        left: 10,
-                        top: 10,
-                    }}
-                >
-                    <MaterialIcons name="arrow-back" size={35} color={"black"} />
-                </TouchableOpacity>
-            </View> */}
             <Tab.Navigator
                 screenOptions={({ route }) => ({
                     tabBarIcon: ({ focused, color, size }) => {

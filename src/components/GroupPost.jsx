@@ -3,13 +3,12 @@ import React, { useContext, useEffect, useState } from "react";
 import { Colors } from "../utils/Colors";
 import PostHeader from "./PostHeader";
 import PostFooter from "./PostFooter";
-import { getPostofMe, getPostsOfUser } from "../context/PostContext";
+import { getPostofMe, getPostsOfGroup, getPostsOfUser } from "../context/PostContext";
 import { AuthContext } from "../context/AuthContext";
 import Carousel from "react-native-snap-carousel";
 import Spinner from "react-native-loading-spinner-overlay";
 
-const UserPost = ({ accessToken, userId }) => {
-  const { userInfo } = useContext(AuthContext);
+const GroupPost = ({ accessToken, groupId }) => {
   const [posts, setPosts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const windowWidth = Dimensions.get("window").width;
@@ -19,16 +18,15 @@ const UserPost = ({ accessToken, userId }) => {
     setPosts(updatedPosts);
   };
 
-  console.log("data", posts);
   useEffect(() => {
     const getAllPost = async () => {
       setIsLoading(true);
       try {
-        if (!accessToken || !userId) {
+        if (!accessToken || !groupId) {
           console.error("Invalid accessToken or userId");
           return;
         }
-        const data = await getPostsOfUser(accessToken, userId);
+        const data = await getPostsOfGroup(accessToken, groupId);
         if (!data || !data.content) {
           console.error("Invalid response from API");
           return;
@@ -36,7 +34,7 @@ const UserPost = ({ accessToken, userId }) => {
         const sortedPosts = data.content.sort(
           (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
         );
-        const filteredPosts = sortedPosts.filter(post => post.type !== 'GROUP');
+        const filteredPosts = sortedPosts.filter(post => post.type !== 'TYPE');
         setPosts(filteredPosts);
       } catch (error) {
         console.error("Error getAllPost:", error);
@@ -45,10 +43,10 @@ const UserPost = ({ accessToken, userId }) => {
       }
     };
 
-    if (userId) {
+    if (groupId) {
       getAllPost();
     }
-  }, [userId]);
+  }, [groupId]);
 
   const ImageSlider = ({ item }) => (
     <View style={styles.slide}>
@@ -86,6 +84,8 @@ const styles = StyleSheet.create({
   postContainer: {
     backgroundColor: Colors.white,
     marginTop: 8,
+    borderRadius: 10, 
+    overflow: 'hidden', 
   },
   postImg: {
     height: 500,
@@ -97,4 +97,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default UserPost;
+export default GroupPost;

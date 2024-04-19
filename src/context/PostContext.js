@@ -64,3 +64,21 @@ export const getPostsOfUser = async (accessToken, userId) => {
     console.error("Error:", error);
   }
 };
+export const getPostsOfGroup = async (accessToken, groupId) => {
+  try {
+    const response = await axios({
+      method: "get",
+      url: `${BASE_URL}/post-group/get-post`,
+      params: {
+        groupId: groupId,
+      },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error:", error);
+  }
+};
