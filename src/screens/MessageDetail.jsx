@@ -1,5 +1,5 @@
 import { View, Text, TouchableOpacity, Image, StyleSheet } from "react-native";
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import VectorIcon from "../utils/VectorIcon";
 import { Colors } from "../utils/Colors";
 import { useNavigation } from "@react-navigation/native";
@@ -10,13 +10,11 @@ const MessageDetail = ({ route }) => {
   const navigation = useNavigation();
   const { userInfo } = useContext(AuthContext);
   const { chatId1, fullname1, img1 } = route.params;
+
   const onLeave = async () => {
     try {
       await fetchLeave(chatId1, userInfo.accessToken);
-      Alert.alert("Success", "Member leaved to group successfully!");
-    } catch (error) {
-      Alert.alert("Fail", "Members have been leaved to the group!");
-    }
+    } catch (error) {}
   };
   return (
     <View style={styles.container}>
@@ -95,7 +93,12 @@ const MessageDetail = ({ route }) => {
         <TouchableOpacity onPress={() => navigation.push("ManageMember")}>
           <Text style={{ fontSize: 15, fontWeight: 400 }}>View members</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={onLeave}>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.push("MessageScreen");
+            onLeave();
+          }}
+        >
           <Text style={{ fontSize: 15, fontWeight: 400 }}>Leave group</Text>
         </TouchableOpacity>
       </View>

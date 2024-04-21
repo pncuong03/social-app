@@ -8,7 +8,7 @@ import { AuthContext } from "../context/AuthContext";
 import Spinner from "react-native-loading-spinner-overlay";
 import Carousel from "react-native-snap-carousel";
 
-const Post = ({ user }) => {
+const Post = () => {
   const { userInfo } = useContext(AuthContext);
   const [posts, setPosts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -18,7 +18,6 @@ const Post = ({ user }) => {
     const updatedPosts = posts.filter((post) => post.id !== postId);
     setPosts(updatedPosts);
   };
-
   const fetchNewPosts = async () => {
     setIsLoading(true);
     try {
@@ -95,8 +94,7 @@ const Post = ({ user }) => {
                 sliderWidth={windowWidth}
                 itemWidth={windowWidth}
               />
-
-              <PostFooter data={item} user={user} />
+              <PostFooter data={item} />
             </View>
           )}
         </View>

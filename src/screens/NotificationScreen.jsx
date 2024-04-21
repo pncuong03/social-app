@@ -7,6 +7,7 @@ import {
   ScrollView,
   TouchableOpacity,
   ActivityIndicator,
+  LogBox,
 } from "react-native";
 import { Colors } from "../utils/Colors";
 import { AuthContext } from "../context/AuthContext";
@@ -23,7 +24,6 @@ const NotificationScreen = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [page, setPage] = useState(0);
   const [size, setSize] = useState(10);
-
   useEffect(() => {
     fetchData();
   }, [page]);
@@ -57,7 +57,7 @@ const NotificationScreen = () => {
         onPress={() => {
           navigation.push("CommentDetail", {
             postId: notify.postId,
-            notifyData: notify,
+            // imageUrl: notify.interact.imageUrl,
           });
         }}
       >

@@ -15,6 +15,7 @@ import { Colors } from "../utils/Colors";
 import { fetchAdd } from "../context/GroupChatContext";
 import { AuthContext } from "../context/AuthContext";
 import { fetchListFriend } from "../context/FriendContext";
+import NotificationModal from "../components/NotiModel";
 
 const AddMemberGroup = ({ route }) => {
   const navigation = useNavigation();
@@ -23,6 +24,8 @@ const AddMemberGroup = ({ route }) => {
   const [availableMembers, setAvailableMembers] = useState([]);
   const { chatId1, fullname1, img1 } = route.params;
   const [initialMembers, setInitialMembers] = useState([]);
+  const [notificationVisible, setNotificationVisible] = useState(false);
+  const [addVisible, setAddVisible] = useState(false);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -41,9 +44,11 @@ const AddMemberGroup = ({ route }) => {
   const addMember = async (userId) => {
     try {
       await fetchAdd(chatId1, [userId], userInfo.accessToken);
-      Alert.alert("Success", "Member added to group successfully!");
+      setAddVisible(true);
     } catch (error) {
-      Alert.alert("Fail", "Members have been added to the group!");
+      setAddVisible(false);
+    } finally {
+      setNotificationVisible(true);
     }
   };
 
@@ -133,6 +138,14 @@ const AddMemberGroup = ({ route }) => {
           </View>
         ))}
       </View>
+      <NotificationModal
+        isVisible={notificationVisible}
+        message={
+          addVisible ? "Member added successfully" : "Failed to add member"
+        }
+        type={addVisible ? "success" : "error"}
+        onClose={() => setNotificationVisible(false)}
+      />
     </ScrollView>
   );
 };

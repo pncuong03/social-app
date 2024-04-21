@@ -1,5 +1,3 @@
-import moment from "moment";
-
 export const formatNoti = (notify) => {
   switch (notify) {
     case "ACCEPT_FRIEND_REQUEST":
@@ -15,11 +13,4 @@ export const formatNoti = (notify) => {
     default:
       return notify.interactType;
   }
-};
-
-export const formatTime = (dateTime) => {
-  return moment(dateTime).format("MMMM Do YYYY, h:mm:ss a");
-};
-export const formatTimes = (dateTime) => {
-  return moment(dateTime).format("MMMM Do YYYY, h:mm:ss a");
 };

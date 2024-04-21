@@ -7,7 +7,6 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from "react-native";
-import GroupData from "../data/GroupData";
 import {
   fetchDeleteMemberGroup,
   fetchLeaveGroup,
@@ -17,6 +16,7 @@ import { AuthContext } from "../context/AuthContext";
 import VectorIcon from "../utils/VectorIcon";
 import { Colors } from "../utils/Colors";
 import { useNavigation } from "@react-navigation/native";
+import NotificationModal from "../components/NotiModel";
 
 export default function GroupMemberListScreen({ route }) {
   const { userInfo } = useContext(AuthContext);
@@ -24,6 +24,9 @@ export default function GroupMemberListScreen({ route }) {
   const navigation = useNavigation();
 
   const [memberGroup, setMemberGroup] = useState([]);
+  const [notificationVisible, setNotificationVisible] = useState(false);
+  const [deleteVisible, setDeleteVisible] = useState(false);
+
   useEffect(() => {
     try {
       const getMember = async () => {
@@ -39,17 +42,24 @@ export default function GroupMemberListScreen({ route }) {
   const onDelete = async (userId) => {
     try {
       await fetchDeleteMemberGroup(groupId, userId, userInfo.accessToken);
+      setMemberGroup((prevMembers) =>
+        prevMembers.filter((member) => member.id !== userId)
+      );
+      setDeleteVisible(true);
     } catch (error) {
-      console.log(error);
+      setDeleteVisible(false);
+    } finally {
+      setNotificationVisible(true);
     }
   };
 
   const onLeave = async () => {
     try {
       await fetchLeaveGroup(groupId, userInfo.accessToken);
+
     } catch (error) {
-      console.log(error);
-    }
+
+    } 
   };
 
   return (
@@ -120,9 +130,22 @@ export default function GroupMemberListScreen({ route }) {
             </TouchableOpacity>
           </View>
         ))}
-      <TouchableOpacity style={styles.leaveGroupButton} onPress={onLeave}>
+      <TouchableOpacity style={styles.leaveGroupButton} onPress={() => {
+            navigation.push("Group for you");
+            onLeave();
+          }}>
         <Text style={styles.leaveGroupText}>Leave group</Text>
       </TouchableOpacity>
+      <NotificationModal
+        isVisible={notificationVisible}
+        message={
+          deleteVisible
+            ? "Member deleted successfully"
+            : "Failed to delete member"
+        }
+        type={deleteVisible ? "success" : "error"}
+        onClose={() => setNotificationVisible(false)}
+      />
     </ScrollView>
   );
 }

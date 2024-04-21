@@ -113,6 +113,7 @@ const style = StyleSheet.create({
   imgHeader: {
     width: 50,
     height: 50,
+    borderRadius: 30,
   },
 });
 

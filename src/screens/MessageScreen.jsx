@@ -36,7 +36,6 @@ const MessageScreen = () => {
 
     getUserInfo();
   }, []);
-
   useEffect(() => {
     const getListChat = async () => {
       try {
@@ -81,25 +80,37 @@ const MessageScreen = () => {
               <View style={{ flexDirection: "row", alignItems: "center" }}>
                 <Image
                   style={{
-                    width: 35,
-                    height: 35,
-                    marginLeft: 10,
+                    width: 45,
+                    height: 45,
                     marginRight: 10,
-                    borderRadius: 10,
+                    borderRadius: 30,
                   }}
                   source={{ uri: message.imageUrl }}
                 />
                 <View>
-                  <Text>{message.name}</Text>
+                  <Text style={{ fontSize: 15, fontWeight: "600" }}>
+                    {message.name}
+                  </Text>
                   {message.isMe ? (
-                    <Text>Me: {message.newestMessage}</Text>
+                    <Text style={{ color: "#B0B3B8", fontWeight: "200" }}>
+                      You: {message.newestMessage}
+                    </Text>
                   ) : (
-                    <Text>{message.newestMessage}</Text>
+                    <Text style={{ color: "#B0B3B8", fontWeight: "200" }}>
+                      {message.newestMessage}
+                    </Text>
                   )}
                 </View>
               </View>
-              <View style={{ marginRight: 10, flexDirection: "row", gap: 2 }}>
-                <Text>
+              <View
+                style={{
+                  marginRight: 10,
+                  flexDirection: "row",
+                  gap: 2,
+                  fontSize: 15,
+                }}
+              >
+                <Text style={{ color: "#B0B3B8", fontWeight: "200" }}>
                   <TimeComparison time={message.newestChatTime} />
                 </Text>
                 {message.messageCount > 0 && (
@@ -170,7 +181,6 @@ const style = StyleSheet.create({
     marginTop: 10,
     marginLeft: 10,
     marginRight: 10,
-    borderWidth: 2,
     borderColor: Colors.borderGrey,
     borderRadius: 10,
     padding: 5,
