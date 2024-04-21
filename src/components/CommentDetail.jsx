@@ -87,6 +87,15 @@ const CommentDetail = ({ route }) => {
     }
   };
 
+  const ImageSlider = ({ item }) => (
+    <View style={styles.slide}>
+      <Image
+        source={{ uri: item }}
+        style={[styles.postImg, { width: windowWidth }]}
+      />
+    </View>
+  );
+
   return (
     <ScrollView style={styles.postContainer}>
       <View>
@@ -102,10 +111,10 @@ const CommentDetail = ({ route }) => {
           />
         </TouchableOpacity>
 
-        <PostHeader data={data1} />
+        {/* <PostHeader data={data1} />
 
         <Carousel
-          data={data1.imageUrls || []}
+          data={data1.imageUrls || null}
           renderItem={({ item }) => (
             <Image
               source={{ uri: item }}
@@ -115,8 +124,47 @@ const CommentDetail = ({ route }) => {
           sliderWidth={windowWidth}
           itemWidth={windowWidth}
         />
-        <PostFooter data={data1} />
+        <PostFooter data={data1} /> */}
+        <View key={data1.id}>
+          {data1.sharePost ? (
+            <View>
+              <PostHeader data={data1} showCloseButton={true} />
+              <View
+                style={{
+                  borderWidth: 1,
+                  borderColor: "gray",
+                  borderRadius: 8,
+                  overflow: "hidden",
+                  marginRight: 10,
+                  marginLeft: 10,
+                }}
+              >
+                <PostHeader data={data1.sharePost} showCloseButton={false} />
 
+                <Carousel
+                  data={data1.sharePost.imageUrls}
+                  renderItem={ImageSlider}
+                  sliderWidth={windowWidth}
+                  itemWidth={windowWidth}
+                />
+              </View>
+
+              <PostFooter data={data1} />
+            </View>
+          ) : (
+            <View>
+              <PostHeader data={data1} showCloseButton={true} />
+
+              <Carousel
+                data={data1.imageUrls}
+                renderItem={ImageSlider}
+                sliderWidth={windowWidth}
+                itemWidth={windowWidth}
+              />
+              <PostFooter data={data1} />
+            </View>
+          )}
+        </View>
         <View style={styles.commentInputContainer}>
           <TextInput
             placeholder="Write a comment..."

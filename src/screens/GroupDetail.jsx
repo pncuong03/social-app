@@ -7,10 +7,8 @@ import {
   ScrollView,
   StyleSheet,
 } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Colors } from "../utils/Colors";
-import GroupData from "../data/GroupData";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import { getGroupInfo, getGroupLists } from "../context/GroupContext";
 import backGroundImg from "../assets/images/facebook-group-default-cover-photo.jpg";
@@ -64,7 +62,6 @@ export default function GroupDetail({ route }) {
     getGroup();
   }, []);
 
-  console.log(groupInfo);
   const handlePress = (groupId) => {
     navigation.navigate("NewPostInGroup", { groupId });
   };
@@ -80,7 +77,7 @@ export default function GroupDetail({ route }) {
     >
       <View>
         <TouchableOpacity
-          onPress={() => navigation.goBack()}
+          onPress={() => navigation.push("Group for you", { groupId })}
           style={{
             zIndex: 99,
             position: "absolute",

@@ -173,16 +173,23 @@ const ChatPrivateScreen = ({ route }) => {
             )}
             <View style={styles.detail}>
               {message && !message?.isMe && (
-                <Text style={{ color: Colors.textGrey }}>
+                <Text
+                  style={{ color: "#B0B3B8", fontSize: 13, fontWeight: "200" }}
+                >
                   {message?.fullName}
                 </Text>
               )}
-              {message && <Text>{message?.message}</Text>}
+              {message && (
+                <Text style={{ fontSize: 15, fontWeight: "600" }}>
+                  {message?.message}
+                </Text>
+              )}
               {message && (
                 <Text
                   style={{
-                    fontStyle: "italic",
-                    fontSize: 12,
+                    color: "#B0B3B8",
+                    fontSize: 13,
+                    fontWeight: "200",
                   }}
                 >
                   <TimeComparison time={message?.createdAt} />

@@ -73,18 +73,15 @@ export const fetchLeaveGroup = async (groupId, accessToken) => {
 
 export const fetchDeleteMemberGroup = async (groupId, userId, accessToken) => {
   try {
-    const response = await instance.delete(
-      `${BASE_URL}/group-chat/delete-member`,
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-        data: {
-          groupId: groupId,
-          userId: userId,
-        },
-      }
-    );
+    const response = await instance.delete(`${BASE_URL}/group/delete-member`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+      data: {
+        groupId: groupId,
+        userId: userId,
+      },
+    });
     return response.data;
   } catch (error) {
     console.error(error);

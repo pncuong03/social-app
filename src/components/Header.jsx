@@ -8,12 +8,13 @@ import { useNavigation } from "@react-navigation/native";
 const Header = ({ data }) => {
   const navigation = useNavigation();
 
-  const handleLogoPress = useCallback(() => {
-    navigation.navigate("Home");
-  }, [navigation]);
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={handleLogoPress}>
+      <TouchableOpacity
+        onPress={() => {
+          navigation.push("MainScreen");
+        }}
+      >
         <Image source={FacebookLogo} style={styles.fbLogoStyle} />
       </TouchableOpacity>
       <View style={styles.headerIcons}>

@@ -91,7 +91,7 @@ export default function NewGroup() {
   console.log(friends);
 
   return (
-    <View style={{ flex: 1, backgroundColor: "#f0f2f5" }}>
+    <ScrollView style={{ flex: 1, backgroundColor: "#f0f2f5" }}>
       <View style={{ paddingHorizontal: 22, paddingTop: 50 }}>
         <Text style={{ fontSize: 28, fontWeight: "bold" }}>
           Create New Group
@@ -195,6 +195,6 @@ export default function NewGroup() {
           </TouchableOpacity>
         </View>
       </View>
-    </View>
+    </ScrollView>
   );
 }

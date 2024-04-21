@@ -14,6 +14,7 @@ import VectorIcon from "../utils/VectorIcon";
 import { fetchListFriend } from "../context/FriendContext";
 import { AuthContext } from "../context/AuthContext";
 import { fetchCreate } from "../context/GroupChatContext";
+import NotificationModal from "../components/NotiModel";
 
 const GroupMessageScreen = () => {
   const navigation = useNavigation();
@@ -21,6 +22,9 @@ const GroupMessageScreen = () => {
   const [listUser, setListUser] = useState([]);
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [groupName, setGroupName] = useState("");
+  const [notificationVisible, setNotificationVisible] = useState(false);
+  const [createVisible, setCreateVisible] = useState(false);
+
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -52,9 +56,13 @@ const GroupMessageScreen = () => {
       try {
         const userIDs = selectedUsers.map((user) => user.id);
         await fetchCreate(groupName, userIDs, userInfo.accessToken);
-        Alert.alert("Success", "Create successful group!");
+        setGroupName("");
+        setCreateVisible(true);
+        setSelectedUsers([]);
       } catch (error) {
-        console.error("Error creating group:", error);
+        setCreateVisible(false);
+      } finally {
+        setNotificationVisible(true);
       }
     }
   };
@@ -118,6 +126,14 @@ const GroupMessageScreen = () => {
           </View>
         ))}
       </View>
+      <NotificationModal
+        isVisible={notificationVisible}
+        message={
+          createVisible ? "Create a successful group" : "Create a failure group"
+        }
+        type={createVisible ? "success" : "error"}
+        onClose={() => setNotificationVisible(false)}
+      />
     </View>
   );
 };

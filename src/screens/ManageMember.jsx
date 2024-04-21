@@ -13,12 +13,17 @@ import { useNavigation } from "@react-navigation/native";
 import { Colors } from "../utils/Colors";
 import { fetchDelete, fetchUserGroup } from "../context/GroupChatContext";
 import { AuthContext } from "../context/AuthContext";
+import NotificationModal from "../components/NotiModel";
 
 const ManageMember = ({ route }) => {
   const { userInfo } = useContext(AuthContext);
+  const { chatId, fullname, img } = route.params;
+
   const navigation = useNavigation();
   const [members, setMembers] = useState([]);
-  const { chatId, fullname, img } = route.params;
+  const [notificationVisible, setNotificationVisible] = useState(false);
+  const [deleteVisible, setDeleteVisible] = useState(false);
+
   useEffect(() => {
     const getAllGroupChat = async () => {
       try {
@@ -37,9 +42,11 @@ const ManageMember = ({ route }) => {
       setMembers((prevMembers) =>
         prevMembers.filter((member) => member.id !== userId)
       );
-      Alert.alert("Success", "Member deleted from group successfully!");
+      setDeleteVisible(true);
     } catch (error) {
-      Alert.alert("Fail", "Members have been deleted from the group!");
+      setDeleteVisible(false);
+    } finally {
+      setNotificationVisible(true);
     }
   };
   return (
@@ -118,6 +125,16 @@ const ManageMember = ({ route }) => {
           </View>
         ))}
       </View>
+      <NotificationModal
+        isVisible={notificationVisible}
+        message={
+          deleteVisible
+            ? "Member deleted successfully"
+            : "Failed to delete member"
+        }
+        type={deleteVisible ? "success" : "error"}
+        onClose={() => setNotificationVisible(false)}
+      />
     </ScrollView>
   );
 };

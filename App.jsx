@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { StatusBar } from "react-native";
+import { LogBox, StatusBar } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
 import { AuthContext, AuthProvider } from "./src/context/AuthContext";
@@ -34,6 +34,7 @@ import NewPostInGroup from "./src/screens/NewPostInGroup";
 const Stack = createStackNavigator();
 
 const App = () => {
+  LogBox.ignoreAllLogs();
   return (
     <AuthProvider>
       <AppContent />
