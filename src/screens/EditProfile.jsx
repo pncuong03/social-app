@@ -12,7 +12,7 @@ import {
   Dimensions,
 } from "react-native";
 import React, { useState, useEffect, useContext } from "react";
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import * as ImagePicker from "expo-image-picker";
@@ -25,28 +25,33 @@ import { upDateUserInfo } from "../context/ProfileContext";
 export default function EditProfile() {
   const { userInfo } = useContext(AuthContext);
   const navigation = useNavigation();
+  
   const [selectedImage, setSelectedImage] = useState(null);
   const [backgroundImage, setBackgroundImage] = useState(
     "https://plainbackground.com/download.php?imagename=39569c.png"
   );
-  const [fullName, setFullName] = useState("");
-  const [description, setDescription] = useState("");
+  const [fullName, setFullName] = useState(userInfo.fullName || "");
+  const [description, setDescription] = useState(userInfo.description || "");
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [password, setPassword] = useState("");
 
-  useEffect(() => {
+  useFocusEffect(
+    React.useCallback(() => {
     const getUserInfo = async () => {
       try {
         const data = await fetchUserInfo(userInfo.accessToken);
         setSelectedImage(data.imageUrl);
+        setFullName(data.fullName);
+        setDescription(data.description);
       } catch (error) {
         console.error("Error:", error);
       }
     };
 
     getUserInfo();
-  }, []);
+  }, [])
+);
 
   const handleImageSelection = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -75,10 +80,10 @@ export default function EditProfile() {
   };
   const handleUpdate = async () => {
     let changeInfoUserRequest = {
-      fullName: fullName,
+      fullName: fullName || userInfo.fullName,
       birthdayString: "2011-08-12T20:17:46.384Z",
       gender: "Male",
-      description: description,
+      description: description || userInfo.description,
     };
 
     let formData = new FormData();
@@ -114,7 +119,8 @@ export default function EditProfile() {
     <SafeAreaView
       style={{
         flex: 1,
-        backgroundColor: "#fff",
+        backgroundColor: "#f0f0f0",
+        padding: 10,
       }}
     >
       <View
@@ -132,28 +138,29 @@ export default function EditProfile() {
             style={{
               height: 228,
               width: "100%",
+              borderRadius: 10,
             }}
           />
         </TouchableOpacity>
-
+  
         <TouchableOpacity
           onPress={() => navigation.push("ProfileScreen")}
           style={{
             zIndex: 99,
             position: "absolute",
-            left: 0,
-            top: 10,
+            left: 10,
+            top: 20,
           }}
         >
           <MaterialIcons name="keyboard-arrow-left" size={35} color={"black"} />
         </TouchableOpacity>
-
+  
         <Text
           style={{
             fontSize: 30,
             fontWeight: "500",
             position: "absolute",
-            top: 10,
+            top: 20,
             left: 0,
             right: 0,
             textAlign: "center",
@@ -162,13 +169,13 @@ export default function EditProfile() {
           Edit Profile
         </Text>
       </View>
-      {/* <ScrollView > */}
-
+  
       <View
         style={{
           alignItems: "center",
           marginHorizontal: 22,
           paddingHorizontal: 22,
+          marginTop: 10,
         }}
       >
         <TouchableOpacity onPress={handleImageSelection}>
@@ -176,7 +183,7 @@ export default function EditProfile() {
             style={{
               height: 170,
               width: 170,
-              borderRadius: 20,
+              borderRadius: 85,
               borderWidth: 2,
               borderColor: "#242760",
               overflow: "hidden",
@@ -202,7 +209,7 @@ export default function EditProfile() {
                 zIndex: 9999,
               }}
             >
-              <MaterialIcons name="photo-camera" size={32} color={"#242760"} />
+              <MaterialIcons name="photo-camera" size={20} color={"#242760"} />
             </View>
           </View>
         </TouchableOpacity>
@@ -219,7 +226,7 @@ export default function EditProfile() {
               marginBottom: 6,
             }}
           >
-            <Text style={{ fontSize: 16 }}>FullName</Text>
+            <Text style={{ fontSize: 16, color: '#333' }}>FullName</Text>
             <View
               style={{
                 height: 44,
@@ -251,7 +258,7 @@ export default function EditProfile() {
               marginBottom: 6,
             }}
           >
-            <Text style={{ fontSize: 16 }}>Decription</Text>
+            <Text style={{ fontSize: 16, color: '#333' }}>Description</Text>
             <View
               style={{
                 height: 44,
@@ -279,7 +286,7 @@ export default function EditProfile() {
         <TouchableOpacity
           onPress={handleUpdate}
           style={{
-            backgroundColor: "black",
+            backgroundColor: "#242760",
             height: 44,
             borderRadius: 6,
             alignItems: "center",
@@ -297,7 +304,6 @@ export default function EditProfile() {
           </Text>
         </TouchableOpacity>
       </View>
-      {/* </ScrollView> */}
     </SafeAreaView>
   );
 }
