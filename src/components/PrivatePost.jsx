@@ -23,11 +23,7 @@ const PrivatePost = () => {
     const getAllPost = async () => {
       setIsLoading(true);
       try {
-        if (!accessToken) {
-          console.error("Invalid accessToken or userId");
-          return;
-        }
-        const data = await getPostofMe(accessToken);
+        const data = await getPostofMe(userInfo.accessToken);
         if (!data || !data.content) {
           console.error("Invalid response from API");
           return;
@@ -39,6 +35,7 @@ const PrivatePost = () => {
           (post) => post.type !== "GROUP"
         );
         setPosts(filteredPosts);
+        console.log("Posts:", filteredPosts);
       } catch (error) {
         console.error("Error getAllPost:", error);
       } finally {
