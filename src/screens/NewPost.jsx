@@ -32,7 +32,7 @@ export default function NewPost() {
   const navigation = useNavigation();
   const [privacyOption, setPrivacyOption] = useState("PUBLIC");
   const [postContent, setPostContent] = useState("");
-  const [selectedImage, setSelectedImage] = useState("");
+  const [selectedImages, setSelectedImages] = useState([]);
   const [image, setImage] = useState(null);
   const [name, setName] = useState(null);
   useEffect(() => {
@@ -63,7 +63,7 @@ export default function NewPost() {
     });
 
     if (!result.canceled) {
-      setSelectedImage(result.assets[0].uri);
+      setSelectedImages([...selectedImages, result.assets[0].uri]);
     }
   };
 
@@ -76,12 +76,14 @@ export default function NewPost() {
         state: privacyOption,
       })
     );
-    let file = {
-      uri: selectedImage,
-      type: `image/${selectedImage.split(".").pop()}`,
-      name: `image.${selectedImage.split(".").pop()}`,
-    };
-    formData.append("images", file);
+    selectedImages.forEach((imageUri, index) => {
+      let file = {
+        uri: imageUri,
+        type: `image/${imageUri.split(".").pop()}`,
+        name: `image${index}.${imageUri.split(".").pop()}`,
+      };
+      formData.append("images", file);
+    });
     try {
       const response = await userPost(userInfo.accessToken, formData);
       if (response.status === 200) {
@@ -217,13 +219,14 @@ export default function NewPost() {
           value={postContent}
           placeholder="What's on your mind?"
         />
-        <View>
-          {selectedImage && (
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          {selectedImages.map((imageUri, index) => (
             <Image
-              source={{ uri: selectedImage }}
-              style={{ width: "100%", height: 600, marginVertical: 20 }}
+              key={index}
+              source={{ uri: imageUri }}
+              style={{ width: selectedImages.length === 2 ? '49%' : '30%', height: 200, margin: '0.5%' }}
             />
-          )}
+          ))}
         </View>
         <Pressable
           style={{
