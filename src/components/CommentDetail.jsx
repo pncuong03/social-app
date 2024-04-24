@@ -48,7 +48,7 @@ const CommentDetail = ({ route }) => {
       }
     };
     getPostDetail(postId);
-  }, [postId]);
+  }, []);
 
   const onComment = async () => {
     if (commentText.trim() !== "") {
@@ -111,22 +111,8 @@ const CommentDetail = ({ route }) => {
           />
         </TouchableOpacity>
 
-        {/* <PostHeader data={data1} />
-
-        <Carousel
-          data={data1.imageUrls || null}
-          renderItem={({ item }) => (
-            <Image
-              source={{ uri: item }}
-              style={[styles.postImg, { width: windowWidth }]}
-            />
-          )}
-          sliderWidth={windowWidth}
-          itemWidth={windowWidth}
-        />
-        <PostFooter data={data1} /> */}
         <View key={data1.id}>
-          {data1.sharePost ? (
+          {data1?.sharePost ? (
             <View>
               <PostHeader data={data1} showCloseButton={true} />
               <View

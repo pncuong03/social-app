@@ -50,6 +50,24 @@ export const fetchListFriend = async (accessToken) => {
   }
 };
 
+export const fetchSearchListFriend = async (name, accessToken) => {
+  try {
+    const response = await instance.get(
+      `${BASE_URL}/friend/list-search?search=${name}`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching friend requests:", error);
+    throw error;
+  }
+};
+
 export const fetchAcceptFriend = async (id, accessToken) => {
   try {
     const response = await instance.post(

@@ -35,7 +35,6 @@ const PrivatePost = () => {
           (post) => post.type !== "GROUP"
         );
         setPosts(filteredPosts);
-        console.log("Posts:", filteredPosts);
       } catch (error) {
         console.error("Error getAllPost:", error);
       } finally {

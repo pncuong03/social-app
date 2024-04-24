@@ -19,6 +19,7 @@ const SearchGroupMessageScreen = () => {
   const navigation = useNavigation();
   const [nameGroup, setNameGroup] = useState("");
   const [listGroup, setListGroup] = useState([]);
+
   const getGroup = async (name) => {
     try {
       const data = await fetchGroup(name, userInfo.accessToken);

@@ -166,12 +166,13 @@ const PostFooter = ({ data, user }) => {
           </View>
         </TouchableOpacity>
       </View>
-
-      <LikeModal
-        visible={isLikeModalVisible}
-        onClose={onCloseLikeModal}
-        postId={data.id}
-      />
+      {isLikeModalVisible && (
+        <LikeModal
+          visible={isLikeModalVisible}
+          onClose={onCloseLikeModal}
+          postId={data.id}
+        />
+      )}
 
       <Modal
         visible={shareModalVisible}

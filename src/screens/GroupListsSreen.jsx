@@ -31,7 +31,6 @@ export default function GroupListsScreen() {
       getGroup();
     }, [])
   );
-  console.log(11, groupData);
   const handlePress = (groupId) => {
     navigation.navigate("GroupDetail", { groupId });
   };

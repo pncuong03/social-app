@@ -12,9 +12,11 @@ import {
 import VectorIcon from "../utils/VectorIcon";
 import { useNavigation } from "@react-navigation/native";
 import { Colors } from "../utils/Colors";
-import { fetchAdd } from "../context/GroupChatContext";
 import { AuthContext } from "../context/AuthContext";
-import { fetchListFriend } from "../context/FriendContext";
+import {
+  fetchListFriend,
+  fetchSearchListFriend,
+} from "../context/FriendContext";
 import { fetchAddMemberGroup } from "../context/GroupContext";
 import NotificationModal from "../components/NotiModel";
 import { removeVietnameseTones } from "../utils/string";
@@ -22,26 +24,27 @@ import { removeVietnameseTones } from "../utils/string";
 const AddMember = ({ route }) => {
   const navigation = useNavigation();
   const { userInfo } = useContext(AuthContext);
-  const [searchValue, setSearchValue] = useState("");
+  // const [searchValue, setSearchValue] = useState("");
   const [availableMembers, setAvailableMembers] = useState([]);
   const { groupId } = route.params;
-  const [initialMembers, setInitialMembers] = useState([]);
+  // const [initialMembers, setInitialMembers] = useState([]);
   const [notificationVisible, setNotificationVisible] = useState(false);
   const [addVisible, setAddVisible] = useState(false);
+  const [name, setName] = useState("");
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const response = await fetchListFriend(userInfo.accessToken);
-        setAvailableMembers(response.content);
-        setInitialMembers(response.content);
-      } catch (error) {
-        console.error("Error user:", error);
-      }
-    };
+  const fetchSearchFriend = async (name) => {
+    try {
+      const response = await fetchSearchListFriend(name, userInfo.accessToken);
+      setAvailableMembers(response.content);
+      // setInitialMembers(response.content);
+    } catch (error) {
+      console.error("Error user:", error);
+    }
+  };
 
-    fetchUser();
-  }, []);
+  const handleSearch = () => {
+    fetchSearchFriend(name);
+  };
 
   const addMember = async (userId) => {
     try {
@@ -54,21 +57,21 @@ const AddMember = ({ route }) => {
     }
   };
 
-  const onSearch = (text) => {
-    setSearchValue(text);
-    if (text.trim() === "") {
-      setAvailableMembers(initialMembers);
-    } else {
-      const searchKeywords = removeVietnameseTones(text.toLowerCase()).split(
-        " "
-      );
-      const filteredMembers = availableMembers.filter((member) => {
-        const fullName = removeVietnameseTones(member.fullName.toLowerCase());
-        return searchKeywords.every((keyword) => fullName.includes(keyword));
-      });
-      setAvailableMembers(filteredMembers);
-    }
-  };
+  // const onSearch = (text) => {
+  //   setSearchValue(text);
+  //   if (text.trim() === "") {
+  //     setAvailableMembers(initialMembers);
+  //   } else {
+  //     const searchKeywords = removeVietnameseTones(text.toLowerCase()).split(
+  //       " "
+  //     );
+  //     const filteredMembers = availableMembers.filter((member) => {
+  //       const fullName = removeVietnameseTones(member.fullName.toLowerCase());
+  //       return searchKeywords.every((keyword) => fullName.includes(keyword));
+  //     });
+  //     setAvailableMembers(filteredMembers);
+  //   }
+  // };
 
   return (
     <ScrollView style={styles.container}>
@@ -95,18 +98,23 @@ const AddMember = ({ route }) => {
         </View>
       </View>
       <View style={styles.search}>
-        <VectorIcon
-          name="search1"
-          type="AntDesign"
-          size={24}
-          color={Colors.black}
-        />
-        <TextInput
-          style={{ marginLeft: 5 }}
-          placeholder="Search"
-          value={searchValue}
-          onChangeText={onSearch}
-        />
+        <TouchableOpacity style={styles.searchView}>
+          <VectorIcon
+            name="search1"
+            type="AntDesign"
+            size={24}
+            color={Colors.black}
+          />
+          <TextInput
+            value={name}
+            onChangeText={setName}
+            placeholder="Enter name"
+            style={{ flex: 1, marginLeft: 5 }}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.unread} onPress={handleSearch}>
+          <Text>Search</Text>
+        </TouchableOpacity>
       </View>
       <Text
         style={{ margin: 20, color: "gray", fontWeight: 500, fontSize: 15 }}
@@ -185,14 +193,38 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
   },
+  // search: {
+  //   alignItems: "center",
+  //   width: "100%",
+  //   flexDirection: "row",
+  //   backgroundColor: Colors.borderGrey,
+  //   borderRadius: 15,
+  //   padding: 5,
+  //   marginTop: 10,
+  // },
   search: {
-    alignItems: "center",
+    flexDirection: "row",
     width: "100%",
+    marginTop: 10,
+  },
+  searchView: {
+    alignItems: "center",
     flexDirection: "row",
     backgroundColor: Colors.borderGrey,
     borderRadius: 15,
+    marginLeft: 10,
+    flex: 1,
     padding: 5,
-    marginTop: 10,
+  },
+  unread: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: Colors.borderGrey,
+    borderRadius: 15,
+    padding: 8,
+    marginLeft: 10,
+    marginRight: 10,
   },
 });
 

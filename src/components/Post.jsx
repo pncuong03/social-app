@@ -36,7 +36,6 @@ const Post = ({ users }) => {
   useEffect(() => {
     fetchNewPosts();
   }, []);
-  // console.log(1111,posts);
   const ImageSlider = ({ item }) => (
     <View style={styles.slide}>
       <Image
