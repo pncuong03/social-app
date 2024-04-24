@@ -93,6 +93,7 @@ export default function NewPostInGroup({route}) {
       console.log(response.status);
       if (response.status === 200) {
         Alert.alert("Success", "Post Success");
+        navigation.navigate("GroupDetail", { groupId });
       } else {
         Alert.alert("Error", "Failed to success");
       }

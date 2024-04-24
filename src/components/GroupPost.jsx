@@ -7,6 +7,7 @@ import { getPostofMe, getPostsOfGroup, getPostsOfUser } from "../context/PostCon
 import { AuthContext } from "../context/AuthContext";
 import Carousel from "react-native-snap-carousel";
 import Spinner from "react-native-loading-spinner-overlay";
+import { useFocusEffect } from "@react-navigation/native";
 
 const GroupPost = ({ accessToken, groupId }) => {
   const [posts, setPosts] = useState([]);
@@ -18,7 +19,8 @@ const GroupPost = ({ accessToken, groupId }) => {
     setPosts(updatedPosts);
   };
 
-  useEffect(() => {
+  useFocusEffect(
+    React.useCallback(() => {
     const getAllPost = async () => {
       setIsLoading(true);
       try {
@@ -36,6 +38,7 @@ const GroupPost = ({ accessToken, groupId }) => {
         );
         const filteredPosts = sortedPosts.filter(post => post.type !== 'TYPE');
         setPosts(filteredPosts);
+        console.log("Posts:", filteredPosts);
       } catch (error) {
         console.error("Error getAllPost:", error);
       } finally {
@@ -43,10 +46,11 @@ const GroupPost = ({ accessToken, groupId }) => {
       }
     };
 
-    if (groupId) {
+    
       getAllPost();
-    }
-  }, [groupId]);
+  
+  }, [groupId])
+);
 
   const ImageSlider = ({ item }) => (
     <View style={styles.slide}>

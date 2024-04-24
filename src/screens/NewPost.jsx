@@ -20,6 +20,8 @@ import {
 } from "react-native-popup-menu";
 import * as ImagePicker from "expo-image-picker";
 import * as FileSystem from "expo-file-system";
+import { Dimensions } from 'react-native';
+
 import { Colors } from "../utils/Colors";
 import avatar from "../assets/images/img1.jpeg";
 import axios from "axios";
@@ -88,6 +90,7 @@ export default function NewPost() {
       const response = await userPost(userInfo.accessToken, formData);
       if (response.status === 200) {
         Alert.alert("Success", "Post Success");
+        navigation.push("ProfileScreen")
       } else {
         Alert.alert("Error", "Failed to success");
       }
@@ -224,7 +227,11 @@ export default function NewPost() {
             <Image
               key={index}
               source={{ uri: imageUri }}
-              style={{ width: selectedImages.length === 2 ? '49%' : '30%', height: 200, margin: '0.5%' }}
+              style={{
+                width: selectedImages.length === 1 ? Dimensions.get('window').width : (selectedImages.length === 2 ? '49%' : '30%'),
+                height: 400,
+                margin: '0.5%'
+              }}
             />
           ))}
         </View>

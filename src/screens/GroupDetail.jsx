@@ -10,40 +10,66 @@ import {
 import { MaterialIcons } from "@expo/vector-icons";
 import { Colors } from "../utils/Colors";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
-import { getGroupInfo, getGroupLists } from "../context/GroupContext";
+import { getGroupInfo, getGroupLists, getMemberGroup } from "../context/GroupContext";
 import backGroundImg from "../assets/images/facebook-group-default-cover-photo.jpg";
 import { fetchUserInfo } from "../context/ProfileContext";
 import { AuthContext } from "../context/AuthContext";
 import GroupPost from "../components/GroupPost";
+import { getPostsOfGroup } from "../context/PostContext";
 
 export default function GroupDetail({ route }) {
   const navigation = useNavigation();
   const { userInfo } = useContext(AuthContext);
   const { groupId } = route.params;
   const [groupInfo, setGroupInfo] = useState([]);
-  console.log(groupId);
+  const [posts, setPosts] = useState([]);
   const [groupData, setGroupData] = useState([]);
+  const [userId, setUserId] = useState(null);
   const [image, setImage] = useState(null);
+  const [memberGroup, setMemberGroup] = useState([]);
   useFocusEffect(
     React.useCallback(() => {
       const fetchGroupInfo = async () => {
         try {
           const groupInfo = await getGroupInfo(groupId);
-          console.log(groupInfo);
           setGroupInfo(groupInfo);
           setLoading(false);
         } catch (error) {
           console.error("Error:", error);
         }
       };
+      const getMember = async () => {
+        try {
+          const data = await getMemberGroup(groupId, userInfo.accessToken);
+          setMemberGroup(data.content);
+        } catch (error) {
+          console.log("getMemberGroup : ", error);
+        }
+      };
+      const getAllPost = async () => {
+        try {
+          const data = await getPostsOfGroup(userInfo.accessToken, groupId);
+          const sortedPosts = data.content.sort(
+            (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+          );
+          const filteredPosts = sortedPosts.filter(post => post.type !== 'TYPE');
+          setPosts(filteredPosts);
+          console.log("Posts:", filteredPosts);
+        } catch (error) {
+          console.error("Error getAllPost:", error);
+        } finally {
+          setIsLoading(false);
+        }
+      };
+      getAllPost();
       fetchGroupInfo();
+      getMember();
     }, [groupId])
   );
   useEffect(() => {
     const getGroup = async () => {
       try {
         const data = await getGroupLists();
-        console.log(data.content);
         setGroupData(data.content);
       } catch (error) {
         console.error(error);
@@ -52,12 +78,13 @@ export default function GroupDetail({ route }) {
     const getUserInfo = async () => {
       try {
         const data = await fetchUserInfo(userInfo.accessToken);
+        console.log(data);
+        setUserId(data.id);
         setImage(data.imageUrl);
       } catch (error) {
         console.error("Error:", error);
       }
     };
-
     getUserInfo();
     getGroup();
   }, []);
@@ -68,6 +95,9 @@ export default function GroupDetail({ route }) {
   const checkMember = (groupId) => {
     navigation.navigate("GroupMemberListScreen", { groupId });
   };
+  const member = memberGroup.find(member => member.id === userId);
+  // console.log(posts.length);
+  // console.log(member.role);
   return (
     <ScrollView
       style={{
@@ -125,7 +155,7 @@ export default function GroupDetail({ route }) {
               fontSize: 16,
             }}
           >
-            Edit Group
+            {member ? member.role : 'Stranger'}
           </Text>
         </TouchableOpacity>
         <View
@@ -163,7 +193,7 @@ export default function GroupDetail({ route }) {
                 fontWeight: "bold",
               }}
             >
-              0
+              {posts.length}
             </Text>
           </View>
           <TouchableOpacity
