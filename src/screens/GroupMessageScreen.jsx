@@ -24,12 +24,15 @@ const GroupMessageScreen = () => {
   const [groupName, setGroupName] = useState("");
   const [notificationVisible, setNotificationVisible] = useState(false);
   const [createVisible, setCreateVisible] = useState(false);
+  const [searchValue, setSearchValue] = useState("");
+  const [initialMembers, setInitialMembers] = useState([]);
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
         const response = await fetchListFriend(userInfo.accessToken);
         setListUser(response.content);
+        setInitialMembers(response.content);
       } catch (error) {
         console.error("Error user:", error);
       }
@@ -67,6 +70,18 @@ const GroupMessageScreen = () => {
     }
   };
 
+  const onSearch = (text) => {
+    setSearchValue(text);
+    if (text.trim() === "") {
+      setListUser(initialMembers);
+    } else {
+      const filteredMembers = listUser.filter((member) =>
+        member.fullName.toLowerCase().includes(text.toLowerCase())
+      );
+      setListUser(filteredMembers);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -78,7 +93,12 @@ const GroupMessageScreen = () => {
             color={Colors.black}
           />
         </TouchableOpacity>
-        <TouchableOpacity onPress={createGroup}>
+        <TouchableOpacity
+          onPress={() => {
+            createGroup();
+            navigation.push("MessageScreen");
+          }}
+        >
           <Text style={styles.chatsText}>Create Group</Text>
         </TouchableOpacity>
       </View>
@@ -93,7 +113,20 @@ const GroupMessageScreen = () => {
           />
         </View>
       </View>
-
+      <View style={styles.searchs}>
+        <VectorIcon
+          name="search1"
+          type="AntDesign"
+          size={24}
+          color={Colors.black}
+        />
+        <TextInput
+          style={{ marginLeft: 5 }}
+          placeholder="Search"
+          value={searchValue}
+          onChangeText={onSearch}
+        />
+      </View>
       <View>
         {listUser.map((person, index) => (
           <View key={index} style={styles.peopleView}>
@@ -141,6 +174,7 @@ const GroupMessageScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    margin: 5,
   },
   header: {
     flexDirection: "row",
@@ -176,8 +210,8 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     height: 50,
     marginTop: 10,
-    marginLeft: 10,
-    marginRight: 10,
+    marginLeft: 5,
+    marginRight: 5,
     borderWidth: 2,
     borderColor: Colors.borderGrey,
     borderRadius: 10,
@@ -186,12 +220,22 @@ const styles = StyleSheet.create({
   addButton: {
     backgroundColor: Colors.lightGrey,
     borderRadius: 15,
-    marginRight: 10,
+    marginRight: 5,
   },
   addButtonText: {
     color: Colors.black,
     fontWeight: "bold",
     fontSize: 20,
+  },
+  searchs: {
+    alignItems: "center",
+    flexDirection: "row",
+    marginTop: 10,
+    marginLeft: 5,
+    marginRight: 5,
+    backgroundColor: Colors.borderGrey,
+    borderRadius: 10,
+    padding: 5,
   },
 });
 

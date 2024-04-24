@@ -16,17 +16,17 @@ const LikeModal = ({ visible, onClose, postId }) => {
   const { userInfo } = useContext(AuthContext);
   const [listLike, setListLike] = useState([]);
 
-  // useEffect(() => {
-  //   const getListLike = async () => {
-  //     try {
-  //       const data = await fetchListLike(postId, userInfo.accessToken);
-  //       setListLike(data.content);
-  //     } catch (error) {
-  //       console.error("Error fetching list of likes:", error);
-  //     }
-  //   };
-  //   getListLike();
-  // }, [postId]);
+  useEffect(() => {
+    const getListLike = async () => {
+      try {
+        const data = await fetchListLike(postId, userInfo.accessToken);
+        setListLike(data.content);
+      } catch (error) {
+        console.error("Error fetching list of likes:", error);
+      }
+    };
+    getListLike();
+  }, []);
   return (
     <Modal
       animationType="slide"

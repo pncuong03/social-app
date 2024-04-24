@@ -26,7 +26,6 @@ export default function GroupMemberListScreen({ route }) {
   const [memberGroup, setMemberGroup] = useState([]);
   const [notificationVisible, setNotificationVisible] = useState(false);
   const [deleteVisible, setDeleteVisible] = useState(false);
-
   useEffect(() => {
     try {
       const getMember = async () => {
@@ -56,10 +55,7 @@ export default function GroupMemberListScreen({ route }) {
   const onLeave = async () => {
     try {
       await fetchLeaveGroup(groupId, userInfo.accessToken);
-
-    } catch (error) {
-
-    } 
+    } catch (error) {}
   };
 
   return (
@@ -130,10 +126,13 @@ export default function GroupMemberListScreen({ route }) {
             </TouchableOpacity>
           </View>
         ))}
-      <TouchableOpacity style={styles.leaveGroupButton} onPress={() => {
-            navigation.push("Group for you");
-            onLeave();
-          }}>
+      <TouchableOpacity
+        style={styles.leaveGroupButton}
+        onPress={() => {
+          navigation.push("Group for you");
+          onLeave();
+        }}
+      >
         <Text style={styles.leaveGroupText}>Leave group</Text>
       </TouchableOpacity>
       <NotificationModal

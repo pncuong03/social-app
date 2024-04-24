@@ -17,6 +17,7 @@ import { AuthContext } from "../context/AuthContext";
 import { fetchListFriend } from "../context/FriendContext";
 import { fetchAddMemberGroup } from "../context/GroupContext";
 import NotificationModal from "../components/NotiModel";
+import { removeVietnameseTones } from "../utils/string";
 
 const AddMember = ({ route }) => {
   const navigation = useNavigation();
@@ -58,9 +59,13 @@ const AddMember = ({ route }) => {
     if (text.trim() === "") {
       setAvailableMembers(initialMembers);
     } else {
-      const filteredMembers = availableMembers.filter((member) =>
-        member.fullName.toLowerCase().includes(text.toLowerCase())
+      const searchKeywords = removeVietnameseTones(text.toLowerCase()).split(
+        " "
       );
+      const filteredMembers = availableMembers.filter((member) => {
+        const fullName = removeVietnameseTones(member.fullName.toLowerCase());
+        return searchKeywords.every((keyword) => fullName.includes(keyword));
+      });
       setAvailableMembers(filteredMembers);
     }
   };

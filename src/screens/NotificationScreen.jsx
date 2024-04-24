@@ -57,7 +57,7 @@ const NotificationScreen = () => {
         onPress={() => {
           navigation.push("CommentDetail", {
             postId: notify.postId,
-            // imageUrl: notify.interact.imageUrl,
+            data1: notify.post,
           });
         }}
       >

@@ -118,7 +118,7 @@ const styles = StyleSheet.create({
     marginTop: 8,
   },
   postImg: {
-    height: 500,
+    height: 300,
   },
   slide: {
     flex: 1,

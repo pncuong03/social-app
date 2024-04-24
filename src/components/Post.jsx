@@ -8,7 +8,7 @@ import { AuthContext } from "../context/AuthContext";
 import Spinner from "react-native-loading-spinner-overlay";
 import Carousel from "react-native-snap-carousel";
 
-const Post = () => {
+const Post = ({ users }) => {
   const { userInfo } = useContext(AuthContext);
   const [posts, setPosts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -36,7 +36,7 @@ const Post = () => {
   useEffect(() => {
     fetchNewPosts();
   }, []);
-
+  // console.log(1111,posts);
   const ImageSlider = ({ item }) => (
     <View style={styles.slide}>
       <Image
@@ -78,7 +78,7 @@ const Post = () => {
                 />
               </View>
 
-              <PostFooter data={item} />
+              <PostFooter data={item} user={users} />
             </View>
           ) : (
             <View>
@@ -94,7 +94,7 @@ const Post = () => {
                 sliderWidth={windowWidth}
                 itemWidth={windowWidth}
               />
-              <PostFooter data={item} />
+              <PostFooter data={item} user={users} />
             </View>
           )}
         </View>

@@ -8,6 +8,7 @@ const MainScreen = () => {
   const { userInfo } = useContext(AuthContext);
   const [event, setEvent] = useState([]);
 
+  //Khi mà đăng nhập vào thì sẽ call api event 1 lần, và call lần tiếp theo để đợi event mới
   useEffect(() => {
     const data = async () => {
       try {

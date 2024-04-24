@@ -72,6 +72,9 @@ const SearchScreen = () => {
   const onDelete = async (id) => {
     try {
       await fetchUnfriend(id, userInfo.accessToken);
+      const updatedRequests = listUser.filter((request) => request.id !== id);
+      setListUser(updatedRequests);
+      setFilteredUsers(updatedRequests);
     } catch (error) {
       console.log("Remove friend: ", error);
     }

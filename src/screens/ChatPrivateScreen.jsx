@@ -33,6 +33,9 @@ const ChatPrivateScreen = ({ route }) => {
   const [messages, setMessages] = useState([]);
   const [messageText, setMessageText] = useState("");
   const [toggle, setToggle] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [page, setPage] = useState(0);
+  const [size, setSize] = useState(10);
 
   const getAllMessage = async () => {
     try {

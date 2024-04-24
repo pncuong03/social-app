@@ -42,7 +42,6 @@ const PostFooter = ({ data, user }) => {
   const [shareModalVisible, setShareModalVisible] = useState(false);
   const [caption, setCaption] = useState("");
   const [privacyOption, setPrivacyOption] = useState("PUBLIC");
-
   useEffect(() => {
     if (data.hasLike) {
       setIsLiked(true);
@@ -235,10 +234,11 @@ const PostFooter = ({ data, user }) => {
                   </MenuTrigger>
                   <MenuOptions
                     style={{
+                      flexDirection: "column",
+                      gap: -8,
                       borderWidth: 1,
                       borderRadius: 5,
                       height: 50,
-                      elevation: 0,
                     }}
                   >
                     <MenuOption value={"PUBLIC"}>
@@ -322,7 +322,7 @@ const styles = StyleSheet.create({
   captionInput: {
     height: 40,
     marginBottom: 10,
-    fontSize: 17,
+    fontSize: 15,
   },
   modalButton: {
     fontSize: 20,

@@ -1,17 +1,39 @@
-import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
-import React from "react";
-import Avatar from "../assets/images/avatarChat.png";
-import img1 from "../assets/images/img1.jpeg";
-import img2 from "../assets/images/img2.jpeg";
-import img3 from "../assets/images/img3.jpeg";
-import { Colors } from "../utils/Colors";
+import React, { useState, useContext } from "react";
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  TextInput,
+} from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { fetchGroup } from "../context/GroupChatContext";
+import { AuthContext } from "../context/AuthContext";
 import VectorIcon from "../utils/VectorIcon";
-import { TextInput } from "react-native-gesture-handler";
+import { Colors } from "../utils/Colors";
+import { ScrollView } from "react-native-gesture-handler";
+
 const SearchGroupMessageScreen = () => {
+  const { userInfo } = useContext(AuthContext);
   const navigation = useNavigation();
+  const [nameGroup, setNameGroup] = useState("");
+  const [listGroup, setListGroup] = useState([]);
+  const getGroup = async (name) => {
+    try {
+      const data = await fetchGroup(name, userInfo.accessToken);
+      setListGroup(data.content);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleSearch = () => {
+    getGroup(nameGroup);
+  };
+
   return (
-    <View style={style.container}>
+    <View style={styles.container}>
       <View style={{ borderBottomWidth: 1, marginTop: 40 }}>
         <TouchableOpacity onPress={() => navigation.push("MessageScreen")}>
           <VectorIcon
@@ -22,102 +44,85 @@ const SearchGroupMessageScreen = () => {
           />
         </TouchableOpacity>
       </View>
-      <View style={style.search}>
-        <TouchableOpacity style={style.searchView}>
+      <View style={styles.search}>
+        <TouchableOpacity style={styles.searchView}>
           <VectorIcon
             name="search1"
             type="AntDesign"
             size={24}
             color={Colors.black}
           />
-          <TextInput>Group </TextInput>
+          <TextInput
+            value={nameGroup}
+            onChangeText={setNameGroup}
+            placeholder="Enter group name"
+            style={{ flex: 1 }}
+          />
         </TouchableOpacity>
-        <View style={style.unread}>
-          <Text>Seach</Text>
-        </View>
+        <TouchableOpacity style={styles.unread} onPress={handleSearch}>
+          <Text>Search</Text>
+        </TouchableOpacity>
       </View>
-      <View style={style.peopleView}>
-        <View style={{ flexDirection: "row", alignItems: "center" }}>
-          <Image
-            style={{
-              width: 35,
-              height: 35,
-              marginLeft: 10,
-              marginRight: 10,
-              borderRadius: 10,
-            }}
-            source={img2}
-          />
-          <View>
-            <Text style={{ fontWeight: "500" }}>GroupFunnyA</Text>
-          </View>
-        </View>
-      </View>
-      <View style={style.peopleView}>
-        <View style={{ flexDirection: "row", alignItems: "center" }}>
-          <Image
-            style={{
-              width: 35,
-              height: 35,
-              marginLeft: 10,
-              marginRight: 10,
-              borderRadius: 10,
-            }}
-            source={img3}
-          />
-          <View>
-            <Text style={{ fontWeight: "500" }}>GroupFunnyB</Text>
-          </View>
-        </View>
-      </View>
+      <ScrollView>
+        {listGroup.map((group) => (
+          <TouchableOpacity
+            key={group.id}
+            style={styles.peopleView}
+            onPress={() =>
+              navigation.push("ChatPrivate", {
+                chatId: group.id,
+                fullname: group.name,
+              })
+            }
+          >
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <Image
+                style={{
+                  width: 35,
+                  height: 35,
+                  marginLeft: 10,
+                  marginRight: 10,
+                  borderRadius: 10,
+                }}
+                source={{ uri: group.imageUrl }}
+              />
+              <View>
+                <Text style={{ fontWeight: "500" }}>{group.name}</Text>
+              </View>
+            </View>
+          </TouchableOpacity>
+        ))}
+      </ScrollView>
     </View>
   );
 };
-const style = StyleSheet.create({
+
+const styles = StyleSheet.create({
   container: {
-    width: "100%",
-    height: "100%",
-  },
-  header: {
-    marginTop: 10,
-    padding: 5,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-  },
-  checkBox: {
-    marginLeft: "40%",
-  },
-  headerleft: {
-    flexDirection: "row",
-    alignContent: "space-between",
-    alignItems: "center",
-  },
-  headerright: {
-    flexDirection: "row",
-    alignContent: "space-between",
-    alignItems: "center",
-    gap: 10,
-  },
-  headerSearch: {
-    backgroundColor: Colors.borderGrey,
-    height: 28,
-    borderRadius: 10,
-    flexDirection: "row",
-    width: "90%",
-    alignContent: "space-between",
-  },
-  headerOk: {
-    height: 28,
-    borderRadius: 10,
-    backgroundColor: Colors.borderGrey,
-    width: 32,
-    alignItems: "center",
-    justifyContent: "center",
+    flex: 1,
   },
   search: {
     flexDirection: "row",
     width: "100%",
+    marginTop: 10,
+  },
+  searchView: {
+    alignItems: "center",
+    flexDirection: "row",
+    backgroundColor: Colors.borderGrey,
+    borderRadius: 15,
+    marginLeft: 10,
+    flex: 1,
+    padding: 5,
+  },
+  unread: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: Colors.borderGrey,
+    borderRadius: 15,
+    padding: 8,
+    marginLeft: 10,
   },
   peopleView: {
     alignItems: "center",
@@ -129,35 +134,6 @@ const style = StyleSheet.create({
     borderColor: Colors.primaryColor,
     borderRadius: 10,
     padding: 5,
-  },
-  unread: {
-    display: "flex",
-    alignItems: "center",
-    width: "23%",
-    marginTop: 10,
-    backgroundColor: Colors.borderGrey,
-    borderRadius: 15,
-    padding: 8,
-    marginLeft: 10,
-  },
-  searchView: {
-    alignItems: "center",
-    width: "70%",
-    flexDirection: "row",
-    backgroundColor: Colors.borderGrey,
-    borderRadius: 15,
-    marginLeft: 10,
-    marginTop: 10,
-    padding: 5,
-  },
-  chatsText: {
-    fontWeight: "400",
-    fontSize: 26,
-    marginLeft: 10,
-  },
-  imgHeader: {
-    width: 40,
-    height: 40,
   },
 });
 

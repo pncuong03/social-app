@@ -16,6 +16,7 @@ import { fetchAdd } from "../context/GroupChatContext";
 import { AuthContext } from "../context/AuthContext";
 import { fetchListFriend } from "../context/FriendContext";
 import NotificationModal from "../components/NotiModel";
+import { removeVietnameseTones } from "../utils/string";
 
 const AddMemberGroup = ({ route }) => {
   const navigation = useNavigation();
@@ -52,14 +53,29 @@ const AddMemberGroup = ({ route }) => {
     }
   };
 
+  // const onSearch = (text) => {
+  //   setSearchValue(text);
+  //   if (text.trim() === "") {
+  //     setAvailableMembers(initialMembers);
+  //   } else {
+  //     const filteredMembers = availableMembers.filter((member) =>
+  //       member.fullName.toLowerCase().includes(text.toLowerCase())
+  //     );
+  //     setAvailableMembers(filteredMembers);
+  //   }
+  // };
   const onSearch = (text) => {
     setSearchValue(text);
     if (text.trim() === "") {
       setAvailableMembers(initialMembers);
     } else {
-      const filteredMembers = availableMembers.filter((member) =>
-        member.fullName.toLowerCase().includes(text.toLowerCase())
+      const searchKeywords = removeVietnameseTones(text.toLowerCase()).split(
+        " "
       );
+      const filteredMembers = availableMembers.filter((member) => {
+        const fullName = removeVietnameseTones(member.fullName.toLowerCase());
+        return searchKeywords.every((keyword) => fullName.includes(keyword));
+      });
       setAvailableMembers(filteredMembers);
     }
   };

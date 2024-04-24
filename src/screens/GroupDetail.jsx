@@ -31,7 +31,6 @@ export default function GroupDetail({ route }) {
           const groupInfo = await getGroupInfo(groupId);
           console.log(groupInfo);
           setGroupInfo(groupInfo);
-          setLoading(false);
         } catch (error) {
           console.error("Error:", error);
         }

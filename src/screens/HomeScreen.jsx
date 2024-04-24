@@ -23,11 +23,10 @@ const HomeScreen = () => {
 
     getUserInfo();
   }, []);
-
   return (
     <ScrollView style={styles.homeContainer}>
       <SubHeader data={image} />
-      <Post user={user} />
+      <Post users={user} />
     </ScrollView>
   );
 };

@@ -18,6 +18,23 @@ export const fetchUserGroup = async (groupId, accessToken) => {
   }
 };
 
+export const fetchGroup = async (nameGroup, accessToken) => {
+  try {
+    const response = await instance.get(
+      `${BASE_URL}/group-chat/search?search=${nameGroup}`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
 export const fetchCreate = async (name, userIds, accessToken) => {
   try {
     const response = await instance.post(

@@ -80,7 +80,7 @@ const FriendScreen = () => {
       </View>
       {filteredRequests.map((request) => (
         <View key={request.id} style={styles.friendView}>
-          <Image style={styles.avatar} source={{ uri: request.image }} />
+          <Image style={styles.avatar} source={{ uri: request.imageUrl }} />
           <View style={styles.headerBox}>
             <View
               style={{ flexDirection: "row", justifyContent: "space-between" }}
@@ -89,9 +89,9 @@ const FriendScreen = () => {
                 <Text style={{ fontWeight: "bold", fontSize: 18 }}>
                   {request.fullName}
                 </Text>
-                <Text style={{ fontWeight: 400, fontSize: 16, color: "gray" }}>
+                {/* <Text style={{ fontWeight: 400, fontSize: 16, color: "gray" }}>
                   {request.amount} mutual friend
-                </Text>
+                </Text> */}
               </View>
               <View>
                 <Text style={{ fontWeight: 400, fontSize: 18, color: "gray" }}>
@@ -165,10 +165,10 @@ const styles = StyleSheet.create({
     fontSize: 15,
   },
   avatar: {
-    width: 80,
-    height: 80,
+    width: 70,
+    height: 70,
     marginRight: 4,
-    borderRadius: 10,
+    borderRadius: 15,
   },
   subNav: {
     flexDirection: "row",
