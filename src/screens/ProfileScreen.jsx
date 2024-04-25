@@ -57,14 +57,18 @@ const ProfileScreen = () => {
           backgroundImage: userData.backgroundUrl,
         });
         const postData = await getPostofMe(userInfo.accessToken);
-        setPosts(postData.content);
+        console.log("Post data:", postData);
+        
+        // Filter posts of type "USER"
+        const userPosts = postData.content.filter(post => post.type === "USER");
+        setPosts(userPosts);
       } catch (error) {
         console.error("Error:", error);
       } finally {
         setIsLoading(false);
       }
     };
-
+  
     fetchData();
   }, []);
   return (
