@@ -85,7 +85,7 @@ const SearchGroupMessageScreen = () => {
                   marginRight: 10,
                   borderRadius: 10,
                 }}
-                source={{ uri: group.imageUrl }}
+                source={{ uri: group.img }}
               />
               <View>
                 <Text style={{ fontWeight: "500" }}>{group.name}</Text>

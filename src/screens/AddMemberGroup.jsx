@@ -68,21 +68,21 @@ const AddMemberGroup = ({ route }) => {
   //     setAvailableMembers(filteredMembers);
   //   }
   // };
-  const onSearch = (text) => {
-    setSearchValue(text);
-    if (text.trim() === "") {
-      setAvailableMembers(initialMembers);
-    } else {
-      const searchKeywords = removeVietnameseTones(text.toLowerCase()).split(
-        " "
-      );
-      const filteredMembers = availableMembers.filter((member) => {
-        const fullName = removeVietnameseTones(member.fullName.toLowerCase());
-        return searchKeywords.every((keyword) => fullName.includes(keyword));
-      });
-      setAvailableMembers(filteredMembers);
-    }
-  };
+  // const onSearch = (text) => {
+  //   setSearchValue(text);
+  //   if (text.trim() === "") {
+  //     setAvailableMembers(initialMembers);
+  //   } else {
+  //     const searchKeywords = removeVietnameseTones(text.toLowerCase()).split(
+  //       " "
+  //     );
+  //     const filteredMembers = availableMembers.filter((member) => {
+  //       const fullName = removeVietnameseTones(member.fullName.toLowerCase());
+  //       return searchKeywords.every((keyword) => fullName.includes(keyword));
+  //     });
+  //     setAvailableMembers(filteredMembers);
+  //   }
+  // };
 
   return (
     <ScrollView style={styles.container}>
